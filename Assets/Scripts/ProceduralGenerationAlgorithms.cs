@@ -1,5 +1,6 @@
 using UnityEngine;
-using Systems.Collections.Generic;
+using System.Collections.Generic;
+using System.Collections;
 
 public static class ProceduralGenerationAlgorithms
 {
@@ -20,7 +21,7 @@ public static class ProceduralGenerationAlgorithms
 
 public static class Direction2D
 {
-    public static List<Vecotr2Int> cardinalDirList = new List<Vector2Int>
+    public static List<Vector2Int> cardinalDirList = new List<Vector2Int>
     {
         new Vector2Int(0, 1), //UP
         new Vector2Int(1, 0), //RIGHT
@@ -30,6 +31,6 @@ public static class Direction2D
 
     public static Vector2Int GetRandCardDir()
     {
-        return cardinalDirList[Random.Range(0, cardinalDirList.count)];
+        return cardinalDirList[Random.Range(0, cardinalDirList.Count)];
     }
 }
