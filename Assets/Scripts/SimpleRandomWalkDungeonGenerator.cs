@@ -12,7 +12,7 @@ public class SimpleRandomWalkDungeonGenerator : AbstractDungeonGenerator
     private SimpleRandomWalkSO randomWalkParameters;
 
     [SerializeField]
-    private TileMapVisualizer tilemapVisualizer;
+    protected TileMapVisualizer tilemapVisualizer;
 
     protected override void RunProceduralGeneration()
     {
