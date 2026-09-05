@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26891f4d2fe43d24a86de2b0b5322839, type: 3}
   m_Name: BigDungeon
   m_EditorClassIdentifier: Assembly-CSharp::SimpleRandomWalkSO
-  iterations: 100
+  iterations: 1
   walkLength: 100
   startRandomEachIteration: 1
