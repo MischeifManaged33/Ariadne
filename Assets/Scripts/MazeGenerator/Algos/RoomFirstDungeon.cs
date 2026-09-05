@@ -15,6 +15,9 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private int offset = 1;
     [SerializeField]
     private bool randomWalkRooms = false;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float extraCorridorChance = .25f;
 
     protected override void RunProceduralGeneration()
     {
@@ -45,17 +48,38 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
         HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
+        List<Vector2Int> connectedRooms = new List<Vector2Int>();
+
         var currentRoomCenter = roomCenters[Random.Range(0, roomCenters.Count)];
         roomCenters.Remove(currentRoomCenter);
+        connectedRooms.Add(currentRoomCenter);
 
         while(roomCenters.Count > 0)
         {
             Vector2Int closest = FindClosestPointTo(currentRoomCenter, roomCenters);
             roomCenters.Remove(closest);
+
             HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoomCenter, closest);
-            currentRoomCenter = closest;
             corridors.UnionWith(newCorridor);
+            currentRoomCenter = closest;
+            
         }
+
+        //extra connections
+        foreach(Vector2Int room in connectedRooms)
+        {
+            if (Random.value <= extraCorridorChance)
+            {
+                Vector2Int closest = FindClosestPointTo(room, connectedRooms);
+
+                if (closest != room) {
+                    HashSet<Vector2Int> extraCorridor = CreateCorridor(room, closest);
+
+                    corridors.UnionWith(extraCorridor);
+                }
+            }
+        }
+
         return corridors;
     }
 
@@ -75,7 +99,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             }
             corridor.Add(position);
         }
-        while (position.x > closest.x)
+        while (position.x != closest.x)
         {
             if (closest.x > position.x)
             {
