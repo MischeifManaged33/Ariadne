@@ -25,10 +25,16 @@ public class TileMapVisualizer : MonoBehaviour
         }
     }
 
-    private void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
+    private void PaintSingleTile(
+    Tilemap tilemap,
+    TileBase tile,
+    Vector2Int position)
     {
-        var tilePosition = tilemap.WorldToCell((Vector3Int)position);
-        tilemap.SetTile(tilePosition, tile);
+        Vector3Int cellPosition = tilemap.WorldToCell(
+            new Vector3(position.x, position.y, 0)
+        );
+
+        tilemap.SetTile(cellPosition, tile);
     }
 
     internal void PaintSingleBasicWall(Vector2Int position, string binaryType)
@@ -99,6 +105,20 @@ public class TileMapVisualizer : MonoBehaviour
         {
             PaintSingleTile(wallTilemap, tile, position);
         }
+    }
+
+    private Vector3Int PositionToCell(Vector2Int position)
+    {
+        return floorTilemap.WorldToCell(
+            new Vector3(position.x, position.y, 0)
+        );
+    }
+
+    public Vector3 GetFloorWorldPosition(Vector2Int position)
+    {
+        Vector3Int cellPosition = PositionToCell(position);
+
+        return floorTilemap.GetCellCenterWorld(cellPosition);
     }
 
     public void Clear()

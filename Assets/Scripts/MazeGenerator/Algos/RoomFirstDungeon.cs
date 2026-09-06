@@ -78,6 +78,17 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         tilemapVisualizer.PaintFloorTiles(floor);
         BasicWallPlacer.CreateWalls(floor, tilemapVisualizer);
+
+        tilemapVisualizer.Clear();
+
+        tilemapVisualizer.PaintFloorTiles(floor);
+
+        BasicWallPlacer.CreateWalls(
+            floor,
+            tilemapVisualizer
+        );
+
+        nodeGenerator.GenerateNodes(floor);
     } 
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
