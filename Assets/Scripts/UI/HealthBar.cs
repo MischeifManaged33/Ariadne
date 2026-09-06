@@ -63,11 +63,6 @@ public class HealthBar : MonoBehaviour
         if (health == null)
             health = FindAnyObjectByType<PlayerHealth>();
 
-        if (health == null) {
-            Debug.LogWarning($"{nameof(HealthBar)} on '{name}' found no {nameof(PlayerHealth)} to track.", this);
-            return;
-        }
-
         health.HealthChanged += OnHealthChanged;
         health.Damaged += OnDamaged;
 

@@ -43,7 +43,7 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         }
 
         if (background == null)
-            Debug.LogError($"{nameof(VirtualJoystick)} on '{name}' has no background assigned.", this);
+            Debug.LogError("No background assigned.", this);
         else
             _restPosition = background.anchoredPosition;
 
