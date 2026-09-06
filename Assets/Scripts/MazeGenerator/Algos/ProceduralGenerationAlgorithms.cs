@@ -48,7 +48,7 @@ public static class ProceduralGenerationAlgorithms
                 {
                     if (room.size.x >= minWidth * 2)
                     {
-                        SplitVertically(minHeight, roomsQueue, room);
+                        SplitVertically(minWidth, roomsQueue, room);
                     }
                     else if (room.size.y >= minHeight * 2)
                     {

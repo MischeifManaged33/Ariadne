@@ -15,6 +15,9 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private int offset = 1;
     [SerializeField]
     private bool randomWalkRooms = false;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float extraCorridorChance = .25f;
 
     protected override void RunProceduralGeneration()
     {
@@ -45,18 +48,112 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
         HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
-        var currentRoomCenter = roomCenters[Random.Range(0, roomCenters.Count)];
-        roomCenters.Remove(currentRoomCenter);
+        List<Vector2Int> connectedRooms = new List<Vector2Int>();
 
-        while(roomCenters.Count > 0)
+        // Keep track of existing connections
+        HashSet<(Vector2Int, Vector2Int)> connections =
+            new HashSet<(Vector2Int, Vector2Int)>();
+
+        // Pick a starting room
+        Vector2Int currentRoom =
+            roomCenters[Random.Range(0, roomCenters.Count)];
+
+        connectedRooms.Add(currentRoom);
+        roomCenters.Remove(currentRoom);
+
+        // Build the main connected network
+        while (roomCenters.Count > 0)
         {
-            Vector2Int closest = FindClosestPointTo(currentRoomCenter, roomCenters);
-            roomCenters.Remove(closest);
-            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoomCenter, closest);
-            currentRoomCenter = closest;
+            float closestDistance = float.MaxValue;
+            Vector2Int closestRoom = Vector2Int.zero;
+            Vector2Int closestConnectedRoom = Vector2Int.zero;
+
+            foreach (Vector2Int connectedRoom in connectedRooms)
+            {
+                foreach (Vector2Int unconnectedRoom in roomCenters)
+                {
+                    float distance =
+                        Vector2Int.Distance(connectedRoom, unconnectedRoom);
+
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestConnectedRoom = connectedRoom;
+                        closestRoom = unconnectedRoom;
+                    }
+                }
+            }
+
+            // Create corridor
+            HashSet<Vector2Int> newCorridor =
+                CreateCorridor(closestConnectedRoom, closestRoom);
+
             corridors.UnionWith(newCorridor);
+
+            // Remember this connection
+            connections.Add((closestConnectedRoom, closestRoom));
+            connections.Add((closestRoom, closestConnectedRoom));
+
+            // Add room to network
+            connectedRooms.Add(closestRoom);
+            roomCenters.Remove(closestRoom);
         }
+
+        // Add extra corridors
+        foreach (Vector2Int room in connectedRooms)
+        {
+            if (Random.value > extraCorridorChance)
+                continue;
+
+            Vector2Int closestRoom = FindClosestUnconnectedRoom(
+                room,
+                connectedRooms,
+                connections
+            );
+
+            if (closestRoom != room)
+            {
+                HashSet<Vector2Int> extraCorridor =
+                    CreateCorridor(room, closestRoom);
+
+                corridors.UnionWith(extraCorridor);
+
+                connections.Add((room, closestRoom));
+                connections.Add((closestRoom, room));
+            }
+        }
+
         return corridors;
+    }
+
+    private Vector2Int FindClosestUnconnectedRoom(
+    Vector2Int currentRoom,
+    List<Vector2Int> rooms,
+    HashSet<(Vector2Int, Vector2Int)> connections)
+    {
+        Vector2Int closest = currentRoom;
+        float distance = float.MaxValue;
+
+        foreach (Vector2Int room in rooms)
+        {
+            if (room == currentRoom)
+                continue;
+
+            // Don't connect rooms that already have a corridor
+            if (connections.Contains((currentRoom, room)))
+                continue;
+
+            float currentDistance =
+                Vector2.Distance(currentRoom, room);
+
+            if (currentDistance < distance)
+            {
+                distance = currentDistance;
+                closest = room;
+            }
+        }
+
+        return closest;
     }
 
     private HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int closest)
@@ -75,12 +172,12 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             }
             corridor.Add(position);
         }
-        while (position.x > closest.x)
+        while (position.x != closest.x)
         {
             if (closest.x > position.x)
             {
                 position += Vector2Int.right;
-            } else if (closest.x < position.x)
+            } else
             {
                 position += Vector2Int.left;
             }
