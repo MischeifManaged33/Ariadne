@@ -18,6 +18,14 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     [Range(0f, 1f)]
     private float extraCorridorChance = .25f;
+    [SerializeField]
+    private GameObject player;
+    [SerializeField]
+    private GameObject goal;
+
+    private Vector2Int startRoom;
+    private Vector2Int goalRoom;
+
 
     protected override void RunProceduralGeneration()
     {
@@ -37,13 +45,23 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
 
-        HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
+
+        HashSet<Vector2Int> corridors = ConnectRooms(new List<Vector2Int>(roomCenters));
         floor.UnionWith(corridors);
+
+
+        var rand = Random.Range(0, roomCenters.Count);
+
+        startRoom = roomCenters[rand];
+
+        goalRoom = roomCenters[Random.Range(0, roomCenters.Count)];
+
+        player.transform.position = new Vector3(startRoom.x, startRoom.y, 0);
+        goal.transform.position = new Vector3(goalRoom.x, goalRoom.y, 0);
 
         tilemapVisualizer.PaintFloorTiles(floor);
         BasicWallPlacer.CreateWalls(floor, tilemapVisualizer);
-
-    }
+    } 
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
