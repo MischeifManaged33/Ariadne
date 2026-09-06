@@ -18,6 +18,31 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     [Range(0f, 1f)]
     private float extraCorridorChance = .25f;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float deadEndChance = 0.3f;
+    [SerializeField]
+    private int minDeadEndLength = 3;
+    [SerializeField]
+    private int maxDeadEndLength = 8;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float branchChance = 0.25f;
+    [SerializeField]
+    private int minBranchLength = 3;
+    [SerializeField]
+    private int maxBranchLength = 7;
+    [SerializeField]
+    private GameObject player;
+    [SerializeField]
+    private GameObject goal;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float corridorWindiness = 0.3f;
+
+    private Vector2Int startRoom;
+    private Vector2Int goalRoom;
+
 
     protected override void RunProceduralGeneration()
     {
@@ -37,13 +62,23 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
 
-        HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
+
+        HashSet<Vector2Int> corridors = ConnectRooms(new List<Vector2Int>(roomCenters));
         floor.UnionWith(corridors);
+
+
+        var rand = Random.Range(0, roomCenters.Count);
+
+        startRoom = roomCenters[rand];
+
+        goalRoom = roomCenters[Random.Range(0, roomCenters.Count)];
+
+        player.transform.position = new Vector3(startRoom.x, startRoom.y, 0);
+        goal.transform.position = new Vector3(goalRoom.x, goalRoom.y, 0);
 
         tilemapVisualizer.PaintFloorTiles(floor);
         BasicWallPlacer.CreateWalls(floor, tilemapVisualizer);
-
-    }
+    } 
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
@@ -123,6 +158,41 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             }
         }
 
+        foreach (Vector2Int room in connectedRooms)
+        {
+            if (Random.value > deadEndChance)
+                continue;
+
+            int length = Random.Range(
+                minDeadEndLength,
+                maxDeadEndLength + 1
+            );
+
+            HashSet<Vector2Int> deadEnd = CreateDeadEnd(room, length);
+
+            corridors.UnionWith(deadEnd);
+        }
+
+        foreach (Vector2Int room in connectedRooms)
+        {
+            if (Random.value > branchChance)
+                continue;
+
+            int length = Random.Range(
+                minBranchLength,
+                maxBranchLength + 1
+            );
+
+            Vector2Int direction = Direction2D.GetRandCardDir();
+
+            Vector2Int branchStart = room + direction;
+
+            HashSet<Vector2Int> branch =
+                CreateBranch(branchStart, length);
+
+            corridors.UnionWith(branch);
+        }
+
         return corridors;
     }
 
@@ -156,34 +226,125 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         return closest;
     }
 
-    private HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int closest)
+    private HashSet<Vector2Int> CreateCorridor(
+    Vector2Int currentRoomCenter,
+    Vector2Int closest)
     {
         HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
-        var position = currentRoomCenter;
+
+        Vector2Int position = currentRoomCenter;
+
         corridor.Add(position);
-        while(position.y != closest.y)
+
+        while (position != closest)
         {
-            if(closest.y > position.y)
+            Vector2Int direction;
+
+            // Determine the directions that move us toward the target
+            Vector2Int horizontalDirection = closest.x > position.x
+                ? Vector2Int.right
+                : Vector2Int.left;
+
+            Vector2Int verticalDirection = closest.y > position.y
+                ? Vector2Int.up
+                : Vector2Int.down;
+
+            bool canMoveHorizontal = position.x != closest.x;
+            bool canMoveVertical = position.y != closest.y;
+
+            // If we're already aligned, we have to move in that direction
+            if (!canMoveHorizontal)
             {
-                position += Vector2Int.up;
-            } else if (closest.y < position.y)
-            {
-                position += Vector2Int.down;
+                direction = verticalDirection;
             }
+            else if (!canMoveVertical)
+            {
+                direction = horizontalDirection;
+            }
+            else
+            {
+                // Occasionally prioritize changing direction
+                if (Random.value < corridorWindiness)
+                {
+                    // Pick one of the two directions toward the target
+                    direction = Random.value < 0.5f
+                        ? horizontalDirection
+                        : verticalDirection;
+                }
+                else
+                {
+                    // Favor the direction with the greater distance
+                    int xDistance = Mathf.Abs(closest.x - position.x);
+                    int yDistance = Mathf.Abs(closest.y - position.y);
+
+                    if (xDistance > yDistance)
+                        direction = horizontalDirection;
+                    else
+                        direction = verticalDirection;
+                }
+            }
+
+            position += direction;
             corridor.Add(position);
         }
-        while (position.x != closest.x)
-        {
-            if (closest.x > position.x)
-            {
-                position += Vector2Int.right;
-            } else
-            {
-                position += Vector2Int.left;
-            }
-            corridor.Add(position);
-        }
+
         return corridor;
+    }
+
+    private HashSet<Vector2Int> CreateDeadEnd(Vector2Int startPosition,int length)
+    {
+        HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
+
+        Vector2Int position = startPosition;
+
+        corridor.Add(position);
+
+        Vector2Int direction = Direction2D.GetRandCardDir();
+
+        for (int i = 0; i < length; i++)
+        {
+            position += direction;
+            corridor.Add(position);
+        }
+
+        return corridor;
+    }
+
+    private HashSet<Vector2Int> CreateBranch(
+    Vector2Int startPosition,
+    int length)
+    {
+        HashSet<Vector2Int> branch = new HashSet<Vector2Int>();
+
+        Vector2Int position = startPosition;
+
+        branch.Add(position);
+
+        Vector2Int previousDirection = Direction2D.GetRandCardDir();
+
+        for (int i = 0; i < length; i++)
+        {
+            Vector2Int direction;
+
+            // Usually continue in the same direction
+            if (Random.value < 0.7f)
+            {
+                direction = previousDirection;
+            }
+            else
+            {
+                // Occasionally turn
+                direction = Direction2D.GetRandCardDir();
+            }
+
+            position += direction;
+
+            branch.Add(position);
+
+            previousDirection = direction;
+        }
+
+        return branch;
     }
 
     private Vector2Int FindClosestPointTo(Vector2Int currentRoomCenter, List<Vector2Int> roomCenters)
