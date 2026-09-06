@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4062931421506081253}
   - component: {fileID: 5876401872424265576}
   - component: {fileID: 8715693700292202620}
+  - component: {fileID: 8722761945180072055}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -225,3 +226,26 @@ MonoBehaviour:
   joystick: {fileID: 0}
   acceleration: 60
   isometricYScale: 0.5
+--- !u!114 &8722761945180072055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6437766836771635124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c4164bba562544d866215675198f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  invulnerabilityTime: 0.5
+  spriteRenderer: {fileID: 1886216216860548809}
+  hitFlashColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  hitFlashDuration: 0.12
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealed:
+    m_PersistentCalls:
+      m_Calls: []
