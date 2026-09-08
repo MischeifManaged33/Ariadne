@@ -1,5 +1,13 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+public enum JoystickRole
+{
+    Move,
+    Aim
+}
 
 [RequireComponent(typeof(RectTransform))]
 public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
@@ -18,16 +26,26 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     [Header("Movement")]
     [SerializeField]
+    private JoystickRole role = JoystickRole.Move;
+    [SerializeField]
     private bool floating = true;
     [SerializeField]
     private bool hideWhenIdle = true;
     [SerializeField]
     private bool mobileOnly = false;
 
-    // Most recent used joystick
-    public static VirtualJoystick Active { get; private set; }
+    private static readonly Dictionary<JoystickRole, VirtualJoystick> Sticks = new();
+
+    public static VirtualJoystick Get(JoystickRole role) => Sticks.TryGetValue(role, out var stick) ? stick : null;
+    public static VirtualJoystick Move => Get(JoystickRole.Move);
+    public static VirtualJoystick Aim => Get(JoystickRole.Aim);
 
     public Vector2 Direction { get; private set; }
+    public bool IsPressed { get; private set; }
+    public Vector2 ReleasedDirection { get; private set; }
+
+    public event Action Pressed;
+    public event Action<Vector2> Released;
 
     private RectTransform _root;
     private CanvasGroup _canvasGroup;
@@ -51,14 +69,14 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         if (_canvasGroup == null && background != null)
             _canvasGroup = background.gameObject.AddComponent<CanvasGroup>();
 
-        Active = this;
+        Sticks[role] = this;
         SetVisible(!hideWhenIdle);
     }
 
     private void OnDestroy()
     {
-        if (Active == this)
-            Active = null;
+        if (Get(role) == this)
+            Sticks.Remove(role);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -71,8 +89,12 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
             background.anchoredPosition = local;
         }
 
+        IsPressed = true;
+
         SetVisible(true);
         OnDrag(eventData);
+
+        Pressed?.Invoke();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -94,6 +116,8 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        ReleasedDirection = Direction;
+        IsPressed = false;
         Direction = Vector2.zero;
 
         if (handle != null)
@@ -102,6 +126,8 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
             background.anchoredPosition = _restPosition;
 
         SetVisible(!hideWhenIdle);
+
+        Released?.Invoke(ReleasedDirection);
     }
 
     /// Rescalling due to dead zone
