@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
     {
         var input = _moveAction.ReadValue<Vector2>();
 
-        var stick = joystick != null ? joystick : VirtualJoystick.Active;
+        var stick = joystick != null ? joystick : VirtualJoystick.Move;
         if (stick != null)
             input += stick.Direction;
 
