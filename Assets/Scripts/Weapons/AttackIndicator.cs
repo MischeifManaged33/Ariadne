@@ -154,7 +154,6 @@ public class AttackIndicator : MonoBehaviour
             var degrees = _direction - half + _angle * i / count;
             var radians = degrees * Mathf.Deg2Rad;
 
-            // Swept on the ground plane, then flattened into the isometric view.
             _vertices[i + 1] = new Vector3(
                 Mathf.Cos(radians) * _range,
                 Mathf.Sin(radians) * _range * _yScale,
