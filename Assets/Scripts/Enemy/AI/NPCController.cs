@@ -32,6 +32,12 @@ public class NPCController : MonoBehaviour, IDamagable
     public PlayerController player;
 
     public float speed = 3f;
+    private HitFlash hitFlash;
+
+    private void Awake()
+    {
+        hitFlash = HitFlash.GetOrAdd(gameObject);
+    }
 
     private void Start()
     {
@@ -47,6 +53,8 @@ public class NPCController : MonoBehaviour, IDamagable
 
         float appliedDamage = Mathf.Min(amount, CurrentHealth);
         CurrentHealth -= appliedDamage;
+
+        hitFlash.Flash();
 
         Debug.Log($"{name} took {appliedDamage} damage.");
 

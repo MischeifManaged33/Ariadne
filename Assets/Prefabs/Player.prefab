@@ -385,7 +385,7 @@ MonoBehaviour:
   aimJoystick: {fileID: 0}
   enemyLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   isometricYScale: 0.5
   alwaysShowPointerAim: 1
   tapThreshold: 0.25

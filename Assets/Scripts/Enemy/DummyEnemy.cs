@@ -29,6 +29,7 @@ public class DummyEnemy : MonoBehaviour, IDamagable
     public float Normalized => maxHealth > 0f ? CurrentHealth / maxHealth : 0f;
     public bool IsAlive => CurrentHealth > 0f;
     private bool _dead;
+    private HitFlash _hitFlash;
 
     private void Reset()
     {
@@ -39,6 +40,8 @@ public class DummyEnemy : MonoBehaviour, IDamagable
     {
 
         Anchor(GetComponent<Rigidbody2D>());
+
+        _hitFlash = HitFlash.GetOrAdd(gameObject);
 
         CurrentHealth = maxHealth;
     }
@@ -55,6 +58,8 @@ public class DummyEnemy : MonoBehaviour, IDamagable
 
         var applied = Mathf.Min(amount, CurrentHealth);
         CurrentHealth -= applied;
+
+        _hitFlash.Flash();
 
         Damaged?.Invoke(applied);
         RaiseHealthChanged();
