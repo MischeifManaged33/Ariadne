@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Goal : MonoBehaviour
 {
@@ -6,7 +7,7 @@ public class Goal : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player reached the goal!");
+            SceneManager.LoadScene(3);
         }
     }
 }
