@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -73,6 +74,11 @@ public class PlayerHealth : MonoBehaviour
             return 0f;
 
         CurrentHealth -= applied;
+
+        if (CurrentHealth <= 0)
+        {
+            SceneManager.LoadScene(4);
+        }
 
         _invulnerableUntil = Time.time + invulnerabilityTime;
         _flashUntil = Time.time + hitFlashDuration;
