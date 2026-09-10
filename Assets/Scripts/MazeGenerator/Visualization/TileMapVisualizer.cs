@@ -10,7 +10,8 @@ public class TileMapVisualizer : MonoBehaviour
     private Tilemap floorTilemap, wallTilemap;
     [SerializeField]
     private TileBase floorTile, wallTop, wallSideRight, wallSideLeft, wallBottom, wallFull, wallInnerCornerDownLeft, wallInnerCornerDownRight, wallDiagonalCornerDownRight, wallDiagonalCornerDownLeft, wallDiagonalCornerUpRight, wallDiagonalCornerUpLeft;
-
+    [SerializeField]
+    private TileBase isometricWallTile;
 
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {
@@ -30,12 +31,41 @@ public class TileMapVisualizer : MonoBehaviour
     TileBase tile,
     Vector2Int position)
     {
-        Vector3Int cellPosition = tilemap.WorldToCell(
-            new Vector3(position.x, position.y, 0)
-        );
+        Vector3Int cellPosition =
+            new Vector3Int(position.x, position.y, 0);
 
         tilemap.SetTile(cellPosition, tile);
     }
+
+    public void PaintIsometricWalls(HashSet<Vector2Int> floorPositions)
+    {
+        HashSet<Vector2Int> wallPositions = new HashSet<Vector2Int>();
+
+        foreach (Vector2Int floorPosition in floorPositions)
+        {
+            foreach (Vector2Int direction in Direction2D.eightDirList)
+            {
+                Vector2Int neighborPosition =
+                    floorPosition + direction;
+
+                // Only put a wall where there is no floor.
+                if (!floorPositions.Contains(neighborPosition))
+                {
+                    wallPositions.Add(neighborPosition);
+                }
+            }
+        }
+
+        foreach (Vector2Int wallPosition in wallPositions)
+        {
+            PaintSingleTile(
+                wallTilemap,
+                isometricWallTile,
+                wallPosition
+            );
+        }
+    }
+
 
     internal void PaintSingleBasicWall(Vector2Int position, string binaryType)
     {
@@ -116,7 +146,8 @@ public class TileMapVisualizer : MonoBehaviour
 
     public Vector3 GetFloorWorldPosition(Vector2Int position)
     {
-        Vector3Int cellPosition = PositionToCell(position);
+        Vector3Int cellPosition =
+            new Vector3Int(position.x, position.y, 0);
 
         return floorTilemap.GetCellCenterWorld(cellPosition);
     }

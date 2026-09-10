@@ -25,10 +25,7 @@ public class SimpleRandomWalkDungeonGenerator : AbstractDungeonGenerator
 
         tilemapVisualizer.PaintFloorTiles(floorPositions);
 
-        BasicWallPlacer.CreateWalls(
-            floorPositions,
-            tilemapVisualizer
-        );
+        tilemapVisualizer.PaintIsometricWalls(floorPositions);
 
         nodeGenerator.GenerateNodes(floorPositions);
     }

@@ -5,10 +5,15 @@ public class NodeGenerator : MonoBehaviour
 {
     [SerializeField]
     private GameObject nodePrefab;
+
     [SerializeField]
     private TileMapVisualizer tilemapVisualizer;
 
-    private Dictionary<Vector2Int, Node> nodes = new Dictionary<Vector2Int, Node> ();
+    [SerializeField]
+    private Transform nodeParent;
+
+    private Dictionary<Vector2Int, Node> nodes =
+        new Dictionary<Vector2Int, Node>();
 
     public void GenerateNodes(HashSet<Vector2Int> floorPositions)
     {
@@ -25,11 +30,22 @@ public class NodeGenerator : MonoBehaviour
                 nodePrefab,
                 worldPosition,
                 Quaternion.identity,
-                transform
+                nodeParent
             );
 
             Node node = nodeObject.GetComponent<Node>();
 
+            if (node == null)
+            {
+                Debug.LogError(
+                    "The node prefab does not have a Node component!"
+                );
+
+                Destroy(nodeObject);
+                continue;
+            }
+
+            node.connections.Clear();
             nodes.Add(position, node);
         }
 
@@ -37,23 +53,38 @@ public class NodeGenerator : MonoBehaviour
         {
             Node currentNode = nodes[position];
 
-            foreach (Vector2Int direction in Direction2D.cardinalDirList)
+            foreach (Vector2Int direction
+                     in Direction2D.cardinalDirList)
             {
-                Vector2Int neighborPosition = position + direction;
+                Vector2Int neighborPosition =
+                    position + direction;
 
-                if (nodes.ContainsKey(neighborPosition))
+                if (nodes.TryGetValue(
+                    neighborPosition,
+                    out Node neighborNode))
                 {
-                    currentNode.connections.Add(nodes[neighborPosition]);
+                    currentNode.connections.Add(neighborNode);
                 }
             }
         }
     }
 
-    private void ClearNodes ()
+    private void ClearNodes()
     {
-        foreach (Node node in nodes.Values)
+        // Remove every child beneath Generated Nodes.
+        for (int i = nodeParent.childCount - 1; i >= 0; i--)
         {
-            Destroy(node.gameObject);
+            GameObject nodeObject =
+                nodeParent.GetChild(i).gameObject;
+
+            if (Application.isPlaying)
+            {
+                Destroy(nodeObject);
+            }
+            else
+            {
+                DestroyImmediate(nodeObject);
+            }
         }
 
         nodes.Clear();
