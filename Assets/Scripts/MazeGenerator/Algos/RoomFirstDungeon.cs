@@ -101,17 +101,42 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         nodeGenerator.GenerateNodes(floor);
 
         int roomCount = 0;
+        int corridorCount = 0;
 
         foreach (DungeonRegion region in dungeonRegions)
         {
             if (region.Type == DungeonRegionType.Room)
                 roomCount++;
+            else if (region.Type == DungeonRegionType.Corridor)
+                corridorCount++;
         }
 
         Debug.Log(
-            $"Tracked {roomCount} individual rooms."
+            $"Tracked {roomCount} rooms and " +
+            $"{corridorCount} corridors."
         );
     } 
+
+    private void RegisterCorridor(HashSet<Vector2Int> corridorFloor)
+    {
+        if (corridorFloor.Count == 0)
+            return;
+
+        int totalX = 0;
+        int totalY = 0;
+
+        foreach (Vector2Int position in corridorFloor)
+        {
+            totalX += position.x;
+            totalY += position.y;
+        }
+
+        Vector2Int corridorCenter = new Vector2Int(Mathf.RoundToInt((float)totalX / corridorFloor.Count), Mathf.RoundToInt((float)totalY / corridorFloor.Count));
+
+        DungeonRegion corridorRegion = new DungeonRegion(DungeonRegionType.Corridor, corridorFloor, corridorCenter);
+
+        dungeonRegions.Add(corridorRegion);
+    }
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
@@ -157,6 +182,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 CreateCorridor(closestConnectedRoom, closestRoom);
 
             corridors.UnionWith(newCorridor);
+            RegisterCorridor(newCorridor);
 
             // Remember this connection
             connections.Add((closestConnectedRoom, closestRoom));
@@ -185,6 +211,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                     CreateCorridor(room, closestRoom);
 
                 corridors.UnionWith(extraCorridor);
+                RegisterCorridor(extraCorridor);
 
                 connections.Add((room, closestRoom));
                 connections.Add((closestRoom, room));
@@ -204,6 +231,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             HashSet<Vector2Int> deadEnd = CreateDeadEnd(room, length);
 
             corridors.UnionWith(deadEnd);
+            RegisterCorridor(deadEnd);
         }
 
         foreach (Vector2Int room in connectedRooms)
@@ -224,6 +252,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 CreateBranch(branchStart, length);
 
             corridors.UnionWith(branch);
+            RegisterCorridor(branch);
         }
 
         return corridors;
