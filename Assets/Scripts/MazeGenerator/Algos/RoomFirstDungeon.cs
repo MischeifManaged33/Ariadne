@@ -41,6 +41,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private float corridorWindiness = 0.3f;
     private DungeonRegion currentPlayerRegion;
     private HashSet<Vector2Int> permanentFloorPositions = new HashSet<Vector2Int>();
+    private bool isRegenerating;
 
     private List<DungeonRegion> dungeonRegions = new List<DungeonRegion>();
     private Vector2Int startRoom;
@@ -149,8 +150,12 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
     private void TrackPlayerRegion()
     {
-        if (player == null || dungeonRegions.Count == 0)
+        if (isRegenerating ||
+        player == null ||
+        dungeonRegions.Count == 0)
+        {
             return;
+        }
 
         Vector2Int playerCell = tilemapVisualizer.GetFloorCellPosition(player.transform.position);
 
@@ -190,25 +195,114 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
     private void PrepareForRegeneration()
     {
-        int visitedRooms = 0;
-        int visitedCorridors = 0;
+        isRegenerating = true;
 
-        foreach (DungeonRegion region in dungeonRegions)
+        try
         {
-            if (!region.Visited)
-                continue;
+            List<dungeonRegions> visitedRegions = new List<DungeonRegion>();
 
-            if (region.Type == DungeonRegionType.Room)
-                visitedRooms++;
+            foreach (DungeonRegion region in dungeonRegions)
+            {
+                if (region.Visited)
+                    visitedRegions.Add(region);
+            }
+
+            dungeonRegions.Clear();
+            dungeonRegions.AddRange(visitedRegions);
+
+            List<BoundsInt> newRoomBounds = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPos, new Vector3Int(dungeonWifth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
+
+            newRoomBounds.RemoveAll(RoomOverlapsPermanentFloor);
+
+            HashSet<Vector2Int> newFloor = CreateSimpleRooms(newRoomBounds);
+
+            List<Vector2Int> newRoomCenters = new List<Vector2Int>();
+            
+            foreach (BoundsInt room in newRoomBounds)
+            {
+                Vector2Int center = (Vector2Int)Vector3Int.RoundToInt(room.center);
+                newRoomCenters.Add(center);
+            }
+
+            if (newRoomCenters.Count > 0)
+            {
+                HashSet<Vector2Int> newCorridors = ConnectRooms(new List<Vector2Int>(newRoomCenters));
+
+                newFloor.UnionWith(newCorridors);
+
+                foreach (DungeonRegion region in visitedRegions)
+                {
+                    if (region.Type != DungeonRegionType.Room)
+                        continue;
+
+                    Vector2Int closestNewRoom = FindClosestCenter(region.Center, newRoomCenters);
+
+                    HashSet<Vector2Int> connection = CreateCorridor(region.Center, closestNewRoom);
+
+                    newFloor.UnionWith(connection);
+                    RegisterCorridor(connection);
+                }
+            }
             else
-                visitedCorridors++;
+            {
+                Debug.LogWarning("No space for remaining replacement rooms");
+            }
+            HashSet<Vector2Int> completeFloor = new HashSet<Vector2Int>(permanentFloorPositions);
+
+            completeFloor.UnionWith(newFloor);
+
+            tilemapVisualizer.Clear();
+
+            tilemapVisualizer.PaintFloorTiles(completeFloor);
+
+            BasicWallPlacer.CreateWalls(completeFloor, tilemapVisualizer);
+
+            Debug.Log(
+                $"Regenerated dungeon. Preserved " +
+                $"{permanentFloorPositions.Count} tiles and " +
+                $"generated {newFloor.Count} replacement tiles."
+            );
+        } finally
+        {
+            isRegenerating = false;
+        }        
+    }
+
+    private bool RoomOverlapsPermanentFloor(BoundsInt room)
+    {
+        for (int col = offset; col < reeom.size.x - offset; col++)
+        {
+            for (int row = offset; row < room.size.y - offset; row++)
+            {
+                Vector2Int position = (Vector2Int)room.min + new Vector2Int(col, row);
+
+                if (permanentFloorPositions.Contains(position))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private Vector2Int FindClosestCenter(
+    Vector2Int position,
+    List<Vector2Int> centers)
+    {
+        Vector2Int closest = centers[0];
+        float closestDistance = float.MaxValue;
+
+        foreach (Vector2Int center in centers)
+        {
+            float distance =
+                Vector2Int.Distance(position, center);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = center;
+            }
         }
 
-        Debug.Log(
-            $"Preserving {visitedRooms} visited rooms, " +
-            $"{visitedCorridors} visited corridors, and " +
-            $"{permanentFloorPositions.Count} floor tiles."
-        );
+        return closest;
     }
 
     private void RegisterCorridor(HashSet<Vector2Int> corridorFloor)
