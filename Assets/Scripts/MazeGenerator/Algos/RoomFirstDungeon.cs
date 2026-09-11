@@ -40,6 +40,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [Range(0f, 1f)]
     private float corridorWindiness = 0.3f;
 
+    private List<DungeonRegion> dungeonRegions = new List<DungeonRegion>();
     private Vector2Int startRoom;
     private Vector2Int goalRoom;
 
@@ -51,6 +52,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
     private void CreateRooms()
     {
+        dungeonRegions.Clear();
         tilemapVisualizer.Clear();
 
         var roomList =
@@ -97,6 +99,18 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         tilemapVisualizer.PaintIsometricWalls(floor);
 
         nodeGenerator.GenerateNodes(floor);
+
+        int roomCount = 0;
+
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (region.Type == DungeonRegionType.Room)
+                roomCount++;
+        }
+
+        Debug.Log(
+            $"Tracked {roomCount} individual rooms."
+        );
     } 
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
@@ -383,20 +397,51 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         return closest;
     }
 
-    private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList)
+    private HashSet<Vector2Int> CreateSimpleRooms(
+    List<BoundsInt> roomList)
     {
-        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
-        foreach (var room in roomList)
+        HashSet<Vector2Int> completeRoomFloor =
+            new HashSet<Vector2Int>();
+
+        foreach (BoundsInt room in roomList)
         {
-            for (int col = offset; col < room.size.x - offset; col++)
+            HashSet<Vector2Int> individualRoomFloor =
+                new HashSet<Vector2Int>();
+
+            for (
+                int col = offset;
+                col < room.size.x - offset;
+                col++)
             {
-                for (int row = offset; row < room.size.y - offset; row++)
+                for (
+                    int row = offset;
+                    row < room.size.y - offset;
+                    row++)
                 {
-                    Vector2Int position = (Vector2Int)room.min + new Vector2Int(col, row);
-                    floor.Add(position);
+                    Vector2Int position =
+                        (Vector2Int)room.min +
+                        new Vector2Int(col, row);
+
+                    individualRoomFloor.Add(position);
+                    completeRoomFloor.Add(position);
                 }
             }
+
+            Vector2Int roomCenter =
+                (Vector2Int)Vector3Int.RoundToInt(
+                    room.center
+                );
+
+            DungeonRegion roomRegion =
+                new DungeonRegion(
+                    DungeonRegionType.Room,
+                    individualRoomFloor,
+                    roomCenter
+                );
+
+            dungeonRegions.Add(roomRegion);
         }
-        return floor;
+
+        return completeRoomFloor;
     }
 }
