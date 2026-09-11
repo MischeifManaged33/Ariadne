@@ -51,7 +51,17 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
     private void CreateRooms()
     {
-        var roomList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPos, new Vector3Int(dungeonWidth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
+        tilemapVisualizer.Clear();
+
+        var roomList =
+            ProceduralGenerationAlgorithms.BinarySpacePartitioning(
+                new BoundsInt(
+                    (Vector3Int)startPos,
+                    new Vector3Int(dungeonWidth, dungeonHeight, 1)
+                ),
+                minRoomWidth,
+                minRoomHeight
+            );
 
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
         floor = CreateSimpleRooms(roomList);
@@ -73,8 +83,9 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         goalRoom = roomCenters[Random.Range(0, roomCenters.Count)];
 
-        player.transform.position = new Vector3(startRoom.x, startRoom.y, 0);
-        goal.transform.position = new Vector3(goalRoom.x, goalRoom.y, 0);
+        player.transform.position = tilemapVisualizer.GetFloorWorldPosition(startRoom);
+
+        goal.transform.position = tilemapVisualizer.GetFloorWorldPosition(goalRoom); ;
 
         tilemapVisualizer.PaintFloorTiles(floor);
         BasicWallPlacer.CreateWalls(floor, tilemapVisualizer);
@@ -83,10 +94,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         tilemapVisualizer.PaintFloorTiles(floor);
 
-        BasicWallPlacer.CreateWalls(
-            floor,
-            tilemapVisualizer
-        );
+        tilemapVisualizer.PaintIsometricWalls(floor);
 
         nodeGenerator.GenerateNodes(floor);
     } 
