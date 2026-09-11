@@ -40,6 +40,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [Range(0f, 1f)]
     private float corridorWindiness = 0.3f;
     private DungeonRegion currentPlayerRegion;
+    private HashSet<Vector2Int> permanentFloorPositions = new HashSet<Vector2Int>();
 
     private List<DungeonRegion> dungeonRegions = new List<DungeonRegion>();
     private Vector2Int startRoom;
@@ -54,7 +55,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private void CreateRooms()
     {
         dungeonRegions.Clear();
-        tilemapVisualizer.Clear();
+        permanentFloorPositions.Clear();
         dungeonRegions.Clear();
         currentPlayerRegion = null;
 
@@ -164,20 +165,50 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         currentPlayerRegion = newRegion;
         currentPlayerRegion.Visited = true;
 
+        permanentFloorPositions.UnionWith(currentPlayerRegion.FloorPositions);
+
         Debug.Log(
         $"Player entered {currentPlayerRegion.Type} " +
         $"at {currentPlayerRegion.Center}"
     );
 
         if (previousRegion != null &&
-       previousRegion.Type == DungeonRegionType.Room &&
-       currentPlayerRegion.Type ==
-           DungeonRegionType.Corridor)
+    previousRegion.Type == DungeonRegionType.Room &&
+    currentPlayerRegion.Type ==
+        DungeonRegionType.Corridor)
         {
             Debug.Log(
-                $"Player left room at {previousRegion.Center}"
+                $"REGENERATION POINT: Player left room " +
+                $"{previousRegion.Center}. " +
+                $"{permanentFloorPositions.Count} tiles " +
+                $"must be preserved."
             );
+
+            PrepareForRegeneration();
         }
+    }
+
+    private void PrepareForRegeneration()
+    {
+        int visitedRooms = 0;
+        int visitedCorridors = 0;
+
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (!region.Visited)
+                continue;
+
+            if (region.Type == DungeonRegionType.Room)
+                visitedRooms++;
+            else
+                visitedCorridors++;
+        }
+
+        Debug.Log(
+            $"Preserving {visitedRooms} visited rooms, " +
+            $"{visitedCorridors} visited corridors, and " +
+            $"{permanentFloorPositions.Count} floor tiles."
+        );
     }
 
     private void RegisterCorridor(HashSet<Vector2Int> corridorFloor)
