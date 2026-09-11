@@ -39,6 +39,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     [Range(0f, 1f)]
     private float corridorWindiness = 0.3f;
+    private DungeonRegion currentPlayerRegion;
 
     private List<DungeonRegion> dungeonRegions = new List<DungeonRegion>();
     private Vector2Int startRoom;
@@ -54,6 +55,8 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     {
         dungeonRegions.Clear();
         tilemapVisualizer.Clear();
+        dungeonRegions.Clear();
+        currentPlayerRegion = null;
 
         var roomList =
             ProceduralGenerationAlgorithms.BinarySpacePartitioning(
@@ -116,6 +119,66 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             $"{corridorCount} corridors."
         );
     } 
+
+    private DungeonRegion FindRegionAtPosition (Vector2Int position)
+    {
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (region.Type == DungeonRegionType.Room && region.Contains(position))
+            {
+                return region;
+            }
+        }
+
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (region.Type == DungeonRegionType.Corridor && region.Contains(position))
+            {
+                return region;
+            }
+        }
+
+        return null;
+    }
+
+    private void Update()
+    {
+        TrackPlayerRegion();
+    }
+
+    private void TrackPlayerRegion()
+    {
+        if (player == null || dungeonRegions.Count == 0)
+            return;
+
+        Vector2Int playerCell = tilemapVisualizer.GetFloorCellPosition(player.transform.position);
+
+        DungeonRegion newRegion = FindRegionAtPosition(playerCell);
+
+        if (newRegion == null)
+            return;
+        if (newRegion == currentPlayerRegion)
+            return;
+
+        DungeonRegion previousRegion = currentPlayerRegion;
+        currentPlayerRegion = newRegion;
+        currentPlayerRegion.Visited = true;
+
+        Debug.Log(
+        $"Player entered {currentPlayerRegion.Type} " +
+        $"at {currentPlayerRegion.Center}"
+    );
+
+        if (previousRegion != null &&
+       previousRegion.Type == DungeonRegionType.Room &&
+       currentPlayerRegion.Type ==
+           DungeonRegionType.Corridor)
+        {
+            Debug.Log(
+                $"Player left room at {previousRegion.Center}"
+            );
+        }
+    }
 
     private void RegisterCorridor(HashSet<Vector2Int> corridorFloor)
     {

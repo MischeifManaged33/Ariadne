@@ -13,6 +13,7 @@ public class TileMapVisualizer : MonoBehaviour
     [SerializeField]
     private TileBase isometricWallTile;
 
+
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {
         PaintTiles(floorPositions, floorTilemap, floorTile);
@@ -150,6 +151,18 @@ public class TileMapVisualizer : MonoBehaviour
             new Vector3Int(position.x, position.y, 0);
 
         return floorTilemap.GetCellCenterWorld(cellPosition);
+    }
+
+    public Vector2Int GetFloorCellPosition(
+    Vector3 worldPosition)
+    {
+        Vector3Int cellPosition =
+            floorTilemap.WorldToCell(worldPosition);
+
+        return new Vector2Int(
+            cellPosition.x,
+            cellPosition.y
+        );
     }
 
     public void Clear()
