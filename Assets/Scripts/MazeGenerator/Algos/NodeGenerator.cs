@@ -71,7 +71,6 @@ public class NodeGenerator : MonoBehaviour
 
     private void ClearNodes()
     {
-        // Remove every child beneath Generated Nodes.
         for (int i = nodeParent.childCount - 1; i >= 0; i--)
         {
             GameObject nodeObject =
@@ -79,6 +78,9 @@ public class NodeGenerator : MonoBehaviour
 
             if (Application.isPlaying)
             {
+                // FindObjectsOfType will immediately stop
+                // returning this node.
+                nodeObject.SetActive(false);
                 Destroy(nodeObject);
             }
             else

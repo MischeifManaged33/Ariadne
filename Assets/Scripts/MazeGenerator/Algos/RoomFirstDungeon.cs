@@ -37,9 +37,16 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     private GameObject goal;
     [SerializeField]
+    [Range(0, 2)]
+    private int corridorRadius = 1;
+    [SerializeField]
     [Range(0f, 1f)]
     private float corridorWindiness = 0.3f;
+    private DungeonRegion currentPlayerRegion;
+    private HashSet<Vector2Int> permanentFloorPositions = new HashSet<Vector2Int>();
+    private bool isRegenerating;
 
+    private List<DungeonRegion> dungeonRegions = new List<DungeonRegion>();
     private Vector2Int startRoom;
     private Vector2Int goalRoom;
 
@@ -49,9 +56,31 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         CreateRooms();
     }
 
+    private void AddWideCorridorTile(
+    HashSet<Vector2Int> corridor,
+    Vector2Int center)
+    {
+        for (int x = -corridorRadius;
+             x <= corridorRadius;
+             x++)
+        {
+            for (int y = -corridorRadius;
+                 y <= corridorRadius;
+                 y++)
+            {
+                corridor.Add(
+                    center + new Vector2Int(x, y)
+                );
+            }
+        }
+    }
+
     private void CreateRooms()
     {
         tilemapVisualizer.Clear();
+        permanentFloorPositions.Clear();
+        dungeonRegions.Clear();
+        currentPlayerRegion = null;
 
         var roomList =
             ProceduralGenerationAlgorithms.BinarySpacePartitioning(
@@ -88,16 +117,247 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         goal.transform.position = tilemapVisualizer.GetFloorWorldPosition(goalRoom); ;
 
         tilemapVisualizer.PaintFloorTiles(floor);
-        BasicWallPlacer.CreateWalls(floor, tilemapVisualizer);
-
-        tilemapVisualizer.Clear();
-
-        tilemapVisualizer.PaintFloorTiles(floor);
 
         tilemapVisualizer.PaintIsometricWalls(floor);
 
         nodeGenerator.GenerateNodes(floor);
+
+        int roomCount = 0;
+        int corridorCount = 0;
+
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (region.Type == DungeonRegionType.Room)
+                roomCount++;
+            else if (region.Type == DungeonRegionType.Corridor)
+                corridorCount++;
+        }
+
+        Debug.Log(
+            $"Tracked {roomCount} rooms and " +
+            $"{corridorCount} corridors."
+        );
     } 
+
+    private DungeonRegion FindRegionAtPosition (Vector2Int position)
+    {
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (region.Type == DungeonRegionType.Room && region.Contains(position))
+            {
+                return region;
+            }
+        }
+
+        foreach (DungeonRegion region in dungeonRegions)
+        {
+            if (region.Type == DungeonRegionType.Corridor && region.Contains(position))
+            {
+                return region;
+            }
+        }
+
+        return null;
+    }
+
+    private void Update()
+    {
+        TrackPlayerRegion();
+    }
+
+    private void TrackPlayerRegion()
+    {
+        if (isRegenerating ||
+        player == null ||
+        dungeonRegions.Count == 0)
+        {
+            return;
+        }
+
+        Vector2Int playerCell = tilemapVisualizer.GetFloorCellPosition(player.transform.position);
+
+        DungeonRegion newRegion = FindRegionAtPosition(playerCell);
+
+        if (newRegion == null)
+            return;
+        if (newRegion == currentPlayerRegion)
+            return;
+
+        DungeonRegion previousRegion = currentPlayerRegion;
+        currentPlayerRegion = newRegion;
+        currentPlayerRegion.Visited = true;
+
+        permanentFloorPositions.UnionWith(currentPlayerRegion.FloorPositions);
+
+        Debug.Log(
+        $"Player entered {currentPlayerRegion.Type} " +
+        $"at {currentPlayerRegion.Center}"
+    );
+
+        if (previousRegion != null &&
+    previousRegion.Type == DungeonRegionType.Room &&
+    currentPlayerRegion.Type ==
+        DungeonRegionType.Corridor)
+        {
+            Debug.Log(
+                $"REGENERATION POINT: Player left room " +
+                $"{previousRegion.Center}. " +
+                $"{permanentFloorPositions.Count} tiles " +
+                $"must be preserved."
+            );
+
+            PrepareForRegeneration();
+        }
+    }
+
+    private void PrepareForRegeneration()
+    {
+        isRegenerating = true;
+
+        try
+        {
+            List<DungeonRegion> visitedRegions = new List<DungeonRegion>();
+
+            foreach (DungeonRegion region in dungeonRegions)
+            {
+                if (region.Visited)
+                    visitedRegions.Add(region);
+            }
+
+            dungeonRegions.Clear();
+            dungeonRegions.AddRange(visitedRegions);
+
+            List<BoundsInt> newRoomBounds = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPos, new Vector3Int(dungeonWidth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
+
+            newRoomBounds.RemoveAll(RoomOverlapsPermanentFloor);
+
+            HashSet<Vector2Int> newFloor = CreateSimpleRooms(newRoomBounds);
+
+            List<Vector2Int> newRoomCenters = new List<Vector2Int>();
+            
+            foreach (BoundsInt room in newRoomBounds)
+            {
+                Vector2Int center = (Vector2Int)Vector3Int.RoundToInt(room.center);
+                newRoomCenters.Add(center);
+            }
+
+            if (newRoomCenters.Count > 0)
+            {
+                HashSet<Vector2Int> newCorridors = ConnectRooms(new List<Vector2Int>(newRoomCenters));
+
+                newFloor.UnionWith(newCorridors);
+
+                foreach (DungeonRegion region in visitedRegions)
+                {
+                    if (region.Type != DungeonRegionType.Room)
+                        continue;
+
+                    Vector2Int closestNewRoom = FindClosestCenter(region.Center, newRoomCenters);
+
+                    HashSet<Vector2Int> connection = CreateCorridor(region.Center, closestNewRoom);
+
+                    newFloor.UnionWith(connection);
+                    RegisterCorridor(connection);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No space for remaining replacement rooms");
+            }
+            HashSet<Vector2Int> completeFloor = new HashSet<Vector2Int>(permanentFloorPositions);
+
+            completeFloor.UnionWith(newFloor);
+
+            tilemapVisualizer.Clear();
+
+            tilemapVisualizer.PaintFloorTiles(
+                completeFloor
+            );
+
+            tilemapVisualizer.PaintIsometricWalls(
+                completeFloor
+            );
+
+            nodeGenerator.GenerateNodes(
+    completeFloor
+);
+
+            NPCController[] npcs =
+                FindObjectsOfType<NPCController>();
+
+            foreach (NPCController npc in npcs)
+            {
+                npc.RefreshAfterNodeRegeneration();
+            }
+
+            Debug.Log(
+                $"Regenerated dungeon with " +
+                $"{completeFloor.Count} total floor tiles. " +
+                $"{permanentFloorPositions.Count} are permanent."
+            );
+        } finally
+        {
+            isRegenerating = false;
+        }        
+    }
+
+    private bool RoomOverlapsPermanentFloor(BoundsInt room)
+    {
+        for (int col = offset; col < room.size.x - offset; col++)
+        {
+            for (int row = offset; row < room.size.y - offset; row++)
+            {
+                Vector2Int position = (Vector2Int)room.min + new Vector2Int(col, row);
+
+                if (permanentFloorPositions.Contains(position))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private Vector2Int FindClosestCenter(
+    Vector2Int position,
+    List<Vector2Int> centers)
+    {
+        Vector2Int closest = centers[0];
+        float closestDistance = float.MaxValue;
+
+        foreach (Vector2Int center in centers)
+        {
+            float distance =
+                Vector2Int.Distance(position, center);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = center;
+            }
+        }
+
+        return closest;
+    }
+
+    private void RegisterCorridor(HashSet<Vector2Int> corridorFloor)
+    {
+        if (corridorFloor.Count == 0)
+            return;
+
+        int totalX = 0;
+        int totalY = 0;
+
+        foreach (Vector2Int position in corridorFloor)
+        {
+            totalX += position.x;
+            totalY += position.y;
+        }
+
+        Vector2Int corridorCenter = new Vector2Int(Mathf.RoundToInt((float)totalX / corridorFloor.Count), Mathf.RoundToInt((float)totalY / corridorFloor.Count));
+
+        DungeonRegion corridorRegion = new DungeonRegion(DungeonRegionType.Corridor, corridorFloor, corridorCenter);
+
+        dungeonRegions.Add(corridorRegion);
+    }
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
@@ -143,6 +403,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 CreateCorridor(closestConnectedRoom, closestRoom);
 
             corridors.UnionWith(newCorridor);
+            RegisterCorridor(newCorridor);
 
             // Remember this connection
             connections.Add((closestConnectedRoom, closestRoom));
@@ -171,6 +432,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                     CreateCorridor(room, closestRoom);
 
                 corridors.UnionWith(extraCorridor);
+                RegisterCorridor(extraCorridor);
 
                 connections.Add((room, closestRoom));
                 connections.Add((closestRoom, room));
@@ -190,6 +452,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             HashSet<Vector2Int> deadEnd = CreateDeadEnd(room, length);
 
             corridors.UnionWith(deadEnd);
+            RegisterCorridor(deadEnd);
         }
 
         foreach (Vector2Int room in connectedRooms)
@@ -210,6 +473,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 CreateBranch(branchStart, length);
 
             corridors.UnionWith(branch);
+            RegisterCorridor(branch);
         }
 
         return corridors;
@@ -253,7 +517,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         Vector2Int position = currentRoomCenter;
 
-        corridor.Add(position);
+        AddWideCorridorTile(corridor, position);
 
         while (position != closest)
         {
@@ -304,7 +568,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             }
 
             position += direction;
-            corridor.Add(position);
+            AddWideCorridorTile(corridor, position);
         }
 
         return corridor;
@@ -316,14 +580,14 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         Vector2Int position = startPosition;
 
-        corridor.Add(position);
+        AddWideCorridorTile(corridor, position);
 
         Vector2Int direction = Direction2D.GetRandCardDir();
 
         for (int i = 0; i < length; i++)
         {
             position += direction;
-            corridor.Add(position);
+            AddWideCorridorTile(corridor, position);
         }
 
         return corridor;
@@ -337,7 +601,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         Vector2Int position = startPosition;
 
-        branch.Add(position);
+        AddWideCorridorTile(branch, position);
 
         Vector2Int previousDirection = Direction2D.GetRandCardDir();
 
@@ -358,7 +622,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
             position += direction;
 
-            branch.Add(position);
+            AddWideCorridorTile(branch, position);
 
             previousDirection = direction;
         }
@@ -383,20 +647,51 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         return closest;
     }
 
-    private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList)
+    private HashSet<Vector2Int> CreateSimpleRooms(
+    List<BoundsInt> roomList)
     {
-        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
-        foreach (var room in roomList)
+        HashSet<Vector2Int> completeRoomFloor =
+            new HashSet<Vector2Int>();
+
+        foreach (BoundsInt room in roomList)
         {
-            for (int col = offset; col < room.size.x - offset; col++)
+            HashSet<Vector2Int> individualRoomFloor =
+                new HashSet<Vector2Int>();
+
+            for (
+                int col = offset;
+                col < room.size.x - offset;
+                col++)
             {
-                for (int row = offset; row < room.size.y - offset; row++)
+                for (
+                    int row = offset;
+                    row < room.size.y - offset;
+                    row++)
                 {
-                    Vector2Int position = (Vector2Int)room.min + new Vector2Int(col, row);
-                    floor.Add(position);
+                    Vector2Int position =
+                        (Vector2Int)room.min +
+                        new Vector2Int(col, row);
+
+                    individualRoomFloor.Add(position);
+                    completeRoomFloor.Add(position);
                 }
             }
+
+            Vector2Int roomCenter =
+                (Vector2Int)Vector3Int.RoundToInt(
+                    room.center
+                );
+
+            DungeonRegion roomRegion =
+                new DungeonRegion(
+                    DungeonRegionType.Room,
+                    individualRoomFloor,
+                    roomCenter
+                );
+
+            dungeonRegions.Add(roomRegion);
         }
-        return floor;
+
+        return completeRoomFloor;
     }
 }
