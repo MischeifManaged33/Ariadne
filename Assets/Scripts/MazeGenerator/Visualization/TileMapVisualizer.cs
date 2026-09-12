@@ -13,6 +13,10 @@ public class TileMapVisualizer : MonoBehaviour
     [SerializeField]
     private TileBase isometricWallTile;
     private int paintedWallCount;
+    [SerializeField]
+    private Tilemap[] upperWallTilemaps;
+    [SerializeField]
+    private float wallLayerSpacing = 0.5f;
 
 
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
@@ -31,6 +35,30 @@ public class TileMapVisualizer : MonoBehaviour
     public void ResetWallPaintCount()
     {
         paintedWallCount = 0;
+    }
+
+    private void PositionUpperWallLayers()
+    {
+        if (upperWallTilemaps == null)
+            return;
+
+        Vector3 basePosition = wallTilemap.transform.localPosition;
+
+        for (int i = 0; i < upperWallTilemaps.Length; i++)
+        {
+            Tilemap upperLayer = upperWallTilemaps[i];
+
+            if (upperLayer == null)
+                continue;
+
+            Vector3 layerPosition = basePosition;
+
+            layerPosition.y += wallLayerSpacing * (i + 1);
+
+            layerPosition.z = upperLayer.transform.localPosition.z;
+
+            upperLayer.transform.localPosition = layerPosition;
+        }
     }
 
     public int GetPaintedWallCount()
@@ -56,6 +84,7 @@ public class TileMapVisualizer : MonoBehaviour
 
     public void PaintIsometricWalls(HashSet<Vector2Int> floorPositions)
     {
+        PositionUpperWallLayers();
         HashSet<Vector2Int> wallPositions = new HashSet<Vector2Int>();
 
         foreach (Vector2Int floorPosition in floorPositions)
@@ -75,11 +104,25 @@ public class TileMapVisualizer : MonoBehaviour
 
         foreach (Vector2Int wallPosition in wallPositions)
         {
+            // Ground-level wall with collision.
             PaintSingleTile(
                 wallTilemap,
                 isometricWallTile,
                 wallPosition
             );
+
+            // Additional visual wall layers.
+            foreach (Tilemap upperWallTilemap in upperWallTilemaps)
+            {
+                if (upperWallTilemap == null)
+                    continue;
+
+                PaintSingleTile(
+                    upperWallTilemap,
+                    isometricWallTile,
+                    wallPosition
+                );
+            }
         }
     }
 
@@ -204,5 +247,13 @@ public class TileMapVisualizer : MonoBehaviour
     {
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
+
+        foreach (Tilemap upperWallTilemap in upperWallTilemaps)
+        {
+            if (upperWallTilemap != null)
+            {
+                upperWallTilemap.ClearAllTiles();
+            }
+        }
     }
 }
