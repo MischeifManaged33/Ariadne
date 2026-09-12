@@ -256,6 +256,18 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 completeFloor
             );
 
+            nodeGenerator.GenerateNodes(
+    completeFloor
+);
+
+            NPCController[] npcs =
+                FindObjectsOfType<NPCController>();
+
+            foreach (NPCController npc in npcs)
+            {
+                npc.RefreshAfterNodeRegeneration();
+            }
+
             Debug.Log(
                 $"Regenerated dungeon with " +
                 $"{completeFloor.Count} total floor tiles. " +
