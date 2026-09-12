@@ -37,6 +37,9 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     private GameObject goal;
     [SerializeField]
+    [Range(0, 2)]
+    private int corridorRadius = 1;
+    [SerializeField]
     [Range(0f, 1f)]
     private float corridorWindiness = 0.3f;
     private DungeonRegion currentPlayerRegion;
@@ -51,6 +54,25 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     protected override void RunProceduralGeneration()
     {
         CreateRooms();
+    }
+
+    private void AddWideCorridorTile(
+    HashSet<Vector2Int> corridor,
+    Vector2Int center)
+    {
+        for (int x = -corridorRadius;
+             x <= corridorRadius;
+             x++)
+        {
+            for (int y = -corridorRadius;
+                 y <= corridorRadius;
+                 y++)
+            {
+                corridor.Add(
+                    center + new Vector2Int(x, y)
+                );
+            }
+        }
     }
 
     private void CreateRooms()
@@ -495,7 +517,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         Vector2Int position = currentRoomCenter;
 
-        corridor.Add(position);
+        AddWideCorridorTile(corridor, position);
 
         while (position != closest)
         {
@@ -546,7 +568,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             }
 
             position += direction;
-            corridor.Add(position);
+            AddWideCorridorTile(corridor, position);
         }
 
         return corridor;
@@ -558,14 +580,14 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         Vector2Int position = startPosition;
 
-        corridor.Add(position);
+        AddWideCorridorTile(corridor, position);
 
         Vector2Int direction = Direction2D.GetRandCardDir();
 
         for (int i = 0; i < length; i++)
         {
             position += direction;
-            corridor.Add(position);
+            AddWideCorridorTile(corridor, position);
         }
 
         return corridor;
@@ -579,7 +601,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         Vector2Int position = startPosition;
 
-        branch.Add(position);
+        AddWideCorridorTile(branch, position);
 
         Vector2Int previousDirection = Direction2D.GetRandCardDir();
 
@@ -600,7 +622,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
             position += direction;
 
-            branch.Add(position);
+            AddWideCorridorTile(branch, position);
 
             previousDirection = direction;
         }
