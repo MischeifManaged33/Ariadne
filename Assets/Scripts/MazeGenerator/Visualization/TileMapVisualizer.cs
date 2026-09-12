@@ -12,6 +12,8 @@ public class TileMapVisualizer : MonoBehaviour
     private TileBase floorTile, wallTop, wallSideRight, wallSideLeft, wallBottom, wallFull, wallInnerCornerDownLeft, wallInnerCornerDownRight, wallDiagonalCornerDownRight, wallDiagonalCornerDownLeft, wallDiagonalCornerUpRight, wallDiagonalCornerUpLeft;
     [SerializeField]
     private TileBase isometricWallTile;
+    private int paintedWallCount;
+
 
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {
@@ -24,6 +26,21 @@ public class TileMapVisualizer : MonoBehaviour
         {
             PaintSingleTile(tilemap, tile, position);
         }
+    }
+
+    public void ResetWallPaintCount()
+    {
+        paintedWallCount = 0;
+    }
+
+    public int GetPaintedWallCount()
+    {
+        return paintedWallCount;
+    }
+
+    public void RefreshWallTiles()
+    {
+        wallTilemap.RefreshAllTiles();
     }
 
     private void PaintSingleTile(
@@ -88,10 +105,23 @@ public class TileMapVisualizer : MonoBehaviour
             tile = wallFull;
         }
 
+        if (tile == null)
+        {
+            Debug.LogWarning(
+                $"No basic wall tile matched binary type {binaryType}"
+            );
+        }
 
         if (tile != null)
         {
             PaintSingleTile(wallTilemap, tile, position);
+            paintedWallCount++;
+        }
+        else
+        {
+            Debug.LogWarning(
+                $"No basic wall matched {binaryType}"
+            );
         }
     }
 
@@ -134,6 +164,7 @@ public class TileMapVisualizer : MonoBehaviour
         if (tile != null)
         {
             PaintSingleTile(wallTilemap, tile, position);
+            paintedWallCount++;
         }
     }
 
@@ -150,6 +181,23 @@ public class TileMapVisualizer : MonoBehaviour
             new Vector3Int(position.x, position.y, 0);
 
         return floorTilemap.GetCellCenterWorld(cellPosition);
+    }
+
+    public Vector2Int GetFloorCellPosition(
+    Vector3 worldPosition)
+    {
+        Vector3Int cellPosition =
+            floorTilemap.WorldToCell(worldPosition);
+
+        return new Vector2Int(
+            cellPosition.x,
+            cellPosition.y
+        );
+    }
+
+    public int GetWallTileCount()
+    {
+        return wallTilemap.GetUsedTilesCount();
     }
 
     public void Clear()

@@ -18,6 +18,9 @@ public class Node : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (connections == null)
+            return;
+
         Gizmos.color = Color.blue;
 
         foreach (Node connection in connections)

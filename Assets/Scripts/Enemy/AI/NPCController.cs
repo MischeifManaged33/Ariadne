@@ -44,6 +44,22 @@ public class NPCController : MonoBehaviour, IDamagable
         CurrentHealth = maxHealth;
     }
 
+    public void RefreshAfterNodeRegeneration()
+    {
+        path.Clear();
+
+        if (AStarManager.instance == null)
+        {
+            currentNode = null;
+            return;
+        }
+
+        currentNode =
+            AStarManager.instance.FindNearestNode(
+                transform.position
+            );
+    }
+
     public float TakeDamage(float amount)
     {
         if (amount <= 0f || !IsAlive)

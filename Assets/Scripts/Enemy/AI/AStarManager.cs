@@ -15,11 +15,7 @@ public class AStarManager : MonoBehaviour
     {
         if (start == null || end == null)
         {
-            Debug.LogWarning(
-                $"Cannot generate path. Start: {start}, End: {end}"
-            );
-
-            return null;
+            return new List<Node>();
         }
 
         List<Node> openSet = new List<Node>();
@@ -82,7 +78,7 @@ public class AStarManager : MonoBehaviour
             }
         }
 
-        return null;
+        return new List<Node>();
     }
 
     public Node FindNearestNode(Vector2 pos)
