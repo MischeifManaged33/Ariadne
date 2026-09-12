@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4999293420261818400}
   - component: {fileID: 2397193276221081996}
   - component: {fileID: 4199570926347566761}
-  - component: {fileID: 6887155426112431497}
+  - component: {fileID: 4725162736288356320}
   m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
@@ -130,7 +130,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -138,10 +138,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!60 &4199570926347566761
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -192,7 +192,7 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 1
---- !u!114 &6887155426112431497
+--- !u!114 &4725162736288356320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -201,8 +201,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1344685983993724717}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9361dde40e4720a428a91ac0d23f89a5, type: 3}
+  m_Script: {fileID: 11500000, guid: ba5d8106f5d26714fbc625419388c854, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  damage: 10
-  attackInterval: 1
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  maxHealth: 50
+  destroyOnDeath: 1
+  destroyDelay: 0
+  knockbackSpeed: 6
+  knockbackDuration: 0.15
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  isometricYScale: 0.5
+  wallSkin: 0.02

@@ -188,6 +188,10 @@ public class PlayerWeapon : MonoBehaviour
                 continue;
 
             target.TakeDamage(equippedWeapon.damage);
+
+            // Knockback logic
+            if (target is IKnockbackable knockable)
+                knockable.ApplyKnockback(groundDirection);
         }
 
         if (indicator != null)

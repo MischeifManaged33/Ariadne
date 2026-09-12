@@ -34331,7 +34331,7 @@ MonoBehaviour:
   weaponPivot: {fileID: 527955256}
   weaponRenderer: {fileID: 1029541182}
   indicator: {fileID: 0}
-  player: {fileID: 0}
+  player: {fileID: 877033973}
   aimJoystick: {fileID: 0}
   enemyLayers:
     serializedVersion: 2
@@ -99264,6 +99264,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 877033972}
+    - target: {fileID: 4999293420261818400, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
