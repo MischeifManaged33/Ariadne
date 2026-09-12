@@ -55,7 +55,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
     private void CreateRooms()
     {
-        dungeonRegions.Clear();
+        tilemapVisualizer.Clear();
         permanentFloorPositions.Clear();
         dungeonRegions.Clear();
         currentPlayerRegion = null;
@@ -93,11 +93,6 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         player.transform.position = tilemapVisualizer.GetFloorWorldPosition(startRoom);
 
         goal.transform.position = tilemapVisualizer.GetFloorWorldPosition(goalRoom); ;
-
-        tilemapVisualizer.PaintFloorTiles(floor);
-        BasicWallPlacer.CreateWalls(floor, tilemapVisualizer);
-
-        tilemapVisualizer.Clear();
 
         tilemapVisualizer.PaintFloorTiles(floor);
 
@@ -199,7 +194,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         try
         {
-            List<dungeonRegions> visitedRegions = new List<DungeonRegion>();
+            List<DungeonRegion> visitedRegions = new List<DungeonRegion>();
 
             foreach (DungeonRegion region in dungeonRegions)
             {
@@ -210,7 +205,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             dungeonRegions.Clear();
             dungeonRegions.AddRange(visitedRegions);
 
-            List<BoundsInt> newRoomBounds = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPos, new Vector3Int(dungeonWifth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
+            List<BoundsInt> newRoomBounds = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPos, new Vector3Int(dungeonWidth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
 
             newRoomBounds.RemoveAll(RoomOverlapsPermanentFloor);
 
@@ -253,14 +248,18 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
             tilemapVisualizer.Clear();
 
-            tilemapVisualizer.PaintFloorTiles(completeFloor);
+            tilemapVisualizer.PaintFloorTiles(
+                completeFloor
+            );
 
-            BasicWallPlacer.CreateWalls(completeFloor, tilemapVisualizer);
+            tilemapVisualizer.PaintIsometricWalls(
+                completeFloor
+            );
 
             Debug.Log(
-                $"Regenerated dungeon. Preserved " +
-                $"{permanentFloorPositions.Count} tiles and " +
-                $"generated {newFloor.Count} replacement tiles."
+                $"Regenerated dungeon with " +
+                $"{completeFloor.Count} total floor tiles. " +
+                $"{permanentFloorPositions.Count} are permanent."
             );
         } finally
         {
@@ -270,7 +269,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
     private bool RoomOverlapsPermanentFloor(BoundsInt room)
     {
-        for (int col = offset; col < reeom.size.x - offset; col++)
+        for (int col = offset; col < room.size.x - offset; col++)
         {
             for (int row = offset; row < room.size.y - offset; row++)
             {

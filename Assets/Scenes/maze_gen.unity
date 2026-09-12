@@ -17556,6 +17556,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1344685983993724717, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4243705261637928819, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.9235573
@@ -20033,6 +20037,10 @@ PrefabInstance:
     - target: {fileID: 1344685983993724717, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
       propertyPath: m_Name
       value: Enemy (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1344685983993724717, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4243705261637928819, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
       propertyPath: m_LocalPosition.x
@@ -77338,17 +77346,17 @@ MonoBehaviour:
   floorTilemap: {fileID: 1272037369}
   wallTilemap: {fileID: 1864491332}
   floorTile: {fileID: 11400000, guid: 48ecf2a4a2f6f304ca841aae37b3d69d, type: 2}
-  wallTop: {fileID: 0}
-  wallSideRight: {fileID: 0}
-  wallSideLeft: {fileID: 0}
-  wallBottom: {fileID: 0}
-  wallFull: {fileID: 0}
-  wallInnerCornerDownLeft: {fileID: 0}
-  wallInnerCornerDownRight: {fileID: 0}
-  wallDiagonalCornerDownRight: {fileID: 0}
-  wallDiagonalCornerDownLeft: {fileID: 0}
-  wallDiagonalCornerUpRight: {fileID: 0}
-  wallDiagonalCornerUpLeft: {fileID: 0}
+  wallTop: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallSideRight: {fileID: 11400000, guid: 9c7c25fdf3da52344a443c4e50c247e9, type: 2}
+  wallSideLeft: {fileID: 11400000, guid: 122803e78bca82545ad13f09089af137, type: 2}
+  wallBottom: {fileID: 11400000, guid: 16da160cbdc365140979b92a1809815a, type: 2}
+  wallFull: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallInnerCornerDownLeft: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallInnerCornerDownRight: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallDiagonalCornerDownRight: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallDiagonalCornerDownLeft: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallDiagonalCornerUpRight: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
+  wallDiagonalCornerUpLeft: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
   isometricWallTile: {fileID: 11400000, guid: aca32a81154c8cd45a6bc36ce99da499, type: 2}
 --- !u!4 &1695574581
 Transform:
@@ -99100,6 +99108,10 @@ PrefabInstance:
     - target: {fileID: 1344685983993724717, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
       propertyPath: m_Name
       value: Triangle
+      objectReference: {fileID: 0}
+    - target: {fileID: 1344685983993724717, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4243705261637928819, guid: 13c59a4e492d18b4fbc45fd2e7c5eb42, type: 3}
       propertyPath: m_LocalPosition.x

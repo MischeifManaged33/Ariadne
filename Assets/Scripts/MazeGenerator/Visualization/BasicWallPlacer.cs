@@ -5,13 +5,39 @@ using System;
 
 public static class BasicWallPlacer
 {
-    public static void CreateWalls(HashSet<Vector2Int> floorPositions, TileMapVisualizer tilemapVisualizer)
+    public static void CreateWalls(
+    HashSet<Vector2Int> floorPositions,
+    TileMapVisualizer tilemapVisualizer)
     {
-        var basicWallPositions = FindWallsInDirections(floorPositions, Direction2D.cardinalDirList);
-        var cornerWallPositions = FindWallsInDirections(floorPositions, Direction2D.diagonalDirList);
+        var basicWallPositions =
+            FindWallsInDirections(
+                floorPositions,
+                Direction2D.cardinalDirList
+            );
 
-        CreateBasicWall(tilemapVisualizer, basicWallPositions, floorPositions);
-        CreateCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions);
+        var cornerWallPositions =
+            FindWallsInDirections(
+                floorPositions,
+                Direction2D.diagonalDirList
+            );
+
+        Debug.Log(
+            $"Wall placer received {floorPositions.Count} floors. " +
+            $"Found {basicWallPositions.Count} basic walls and " +
+            $"{cornerWallPositions.Count} corner walls."
+        );
+
+        CreateBasicWall(
+            tilemapVisualizer,
+            basicWallPositions,
+            floorPositions
+        );
+
+        CreateCornerWalls(
+            tilemapVisualizer,
+            cornerWallPositions,
+            floorPositions
+        );
     }
 
     private static void CreateCornerWalls(TileMapVisualizer tilemapVisualizer, HashSet<Vector2Int> cornerWallPositions, HashSet<Vector2Int> floorPositions)
