@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(BossPathfinder))]
 public class Minotaur : MonoBehaviour, IDamagable
 {
     [Header("Health")]
@@ -12,15 +13,32 @@ public class Minotaur : MonoBehaviour, IDamagable
     private float maxHealth = 1000f;
 
     [Header("Phases")]
+    [SerializeField]
     private BossPhase[] phases = {
+        new BossPhase(1f, 1.5f, 1f)
     };
 
-    [Header("Target")]
+    [Header("Targeting")]
     [SerializeField]
     private Transform target;
-    [Tooltip("Delay before the first move is picked")]
+    [SerializeField, Range(0.1f, 1f)]
+    private float isometricYScale = Isometric.DefaultYScale;
     [SerializeField, Min(0f)]
     private float startDelay = 1f;
+
+    [Header("Idle")]
+    [SerializeField, Min(0f)]
+    private float idleMinDistance = 2.5f;
+    [SerializeField, Min(0f)]
+    private float idleMaxDistance = 6f;
+    [SerializeField, Range(0.1f, 3f)]
+    private float idleSpeedMultiplier = 0.8f;
+    [SerializeField]
+    private bool idleStrafe = true;
+    [SerializeField, Min(0.1f)]
+    private float idleStrafeInterval = 1.6f;
+    [SerializeField, Min(0.1f)]
+    private float idleStrafeReach = 1.5f;
 
     [Header("Death")]
     [SerializeField]
@@ -53,12 +71,19 @@ public class Minotaur : MonoBehaviour, IDamagable
     public BossMove CurrentMove { get; private set; }
     public bool IsTransitioning { get; private set; }
     public Transform Target => target;
+    public BossPathfinder Mover { get; private set; }
+    public float YScale => isometricYScale;
+    public Vector2 Position => transform.position;
+    public Vector2 Facing { get; private set; } = Vector2.down;
 
+    public Vector2 TargetPosition => target != null ? (Vector2)target.position : Position;
+
+    // Ranges are ground space, so a target above or below reads as far as one beside
     public float DistanceToTarget =>
-        target != null ? Vector2.Distance(transform.position, target.position) : Mathf.Infinity;
+        target != null ? Isometric.GroundDistance(Position, TargetPosition, isometricYScale) : Mathf.Infinity;
 
     public Vector2 DirectionToTarget =>
-        target != null ? ((Vector2)(target.position - transform.position)).normalized : Vector2.zero;
+        target != null ? Isometric.GroundDirection(Position, TargetPosition, isometricYScale) : Vector2.zero;
 
     private readonly List<BossMove> _usable = new();
     private readonly List<float> _weights = new();
@@ -67,6 +92,9 @@ public class Minotaur : MonoBehaviour, IDamagable
     private Coroutine _fightRoutine;
     private Coroutine _moveRoutine;
     private int _pendingPhase;
+    private float _strafeFlipTime;
+    private float _strafeSign = 1f;
+    private bool _moveActive;
     private bool _dead;
 
     private void Awake()
@@ -76,6 +104,7 @@ public class Minotaur : MonoBehaviour, IDamagable
 
         _moves = GetComponentsInChildren<BossMove>(true);
         _hitFlash = HitFlash.GetOrAdd(gameObject);
+        Mover = GetComponent<BossPathfinder>();
 
         CurrentHealth = maxHealth;
     }
@@ -122,6 +151,12 @@ public class Minotaur : MonoBehaviour, IDamagable
         return applied;
     }
 
+    public void FaceTowards(Vector2 groundDirection)
+    {
+        if (groundDirection.sqrMagnitude > 0.0001f)
+            Facing = groundDirection.normalized;
+    }
+
     public float Heal(float amount)
     {
         if (amount <= 0f || !IsAlive)
@@ -152,21 +187,95 @@ public class Minotaur : MonoBehaviour, IDamagable
 
             var move = SelectMove();
             if (move == null) {
+                // Nothing is usable yet, so shuffle around instead of standing there
+                IdleStep();
                 yield return null;
                 continue;
             }
 
             yield return RunMove(move);
-            yield return new WaitForSeconds(CurrentPhase.MoveInterval);
+            yield return Idle(CurrentPhase.MoveInterval);
         }
+    }
+
+    // Holds the preferred distance between moves, walking in or backing off as the target moves
+    private IEnumerator Idle(float duration)
+    {
+        var deadline = Time.time + Mathf.Max(0f, duration);
+
+        while (Time.time < deadline) {
+            IdleStep();
+            yield return null;
+        }
+
+        if (Mover != null)
+            Mover.Stop();
+    }
+
+    private void IdleStep()
+    {
+        if (Mover == null || target == null || IsTransitioning)
+            return;
+
+        var direction = DirectionToTarget;
+        if (direction == Vector2.zero) {
+            Mover.Stop();
+            return;
+        }
+
+        FaceTowards(direction);
+
+        var distance = DistanceToTarget;
+
+        if (distance > idleMaxDistance) {
+            Mover.SetDestination(TargetPosition, idleSpeedMultiplier);
+            return;
+        }
+
+        if (distance < idleMinDistance) {
+            // Back off to the near edge of the band, staying on the side it is already on
+            var retreat = TargetPosition + Isometric.ToScreen(-direction * idleMinDistance, isometricYScale);
+            Mover.SetDestination(retreat, idleSpeedMultiplier);
+            return;
+        }
+
+        if (!idleStrafe) {
+            Mover.Stop();
+            return;
+        }
+
+        if (Time.time >= _strafeFlipTime) {
+            _strafeFlipTime = Time.time + idleStrafeInterval;
+            _strafeSign = UnityEngine.Random.value < 0.5f ? -1f : 1f;
+        }
+
+        var sideways = new Vector2(-direction.y, direction.x) * (_strafeSign * idleStrafeReach);
+        var destination = Position + Isometric.ToScreen(sideways, isometricYScale);
+
+        // A shuffle is not worth pathing around a wall for, so turn around instead
+        if (!Mover.HasClearWalk(destination)) {
+            _strafeSign = -_strafeSign;
+            _strafeFlipTime = Time.time + idleStrafeInterval;
+            destination = Position - Isometric.ToScreen(sideways, isometricYScale);
+        }
+
+        if (Mover.HasClearWalk(destination))
+            Mover.SetDestination(destination, idleSpeedMultiplier);
+        else
+            Mover.Stop();
     }
 
     private IEnumerator RunMove(BossMove move)
     {
+        // Idle walking stops here, a move steers itself from now on
+        if (Mover != null)
+            Mover.Stop();
+
         CurrentMove = move;
+        _moveActive = true;
         _moveRoutine = StartCoroutine(MoveRoutine(move));
 
-        while (_moveRoutine != null) {
+        while (_moveActive) {
             if (_pendingPhase != PhaseIndex) {
                 CancelMove();
                 yield break;
@@ -183,14 +292,20 @@ public class Minotaur : MonoBehaviour, IDamagable
         move.BeginCooldown();
         CurrentMove = null;
         _moveRoutine = null;
+        _moveActive = false;
     }
 
     private void CancelMove()
     {
+        _moveActive = false;
+
         if (_moveRoutine != null) {
             StopCoroutine(_moveRoutine);
             _moveRoutine = null;
         }
+
+        if (Mover != null)
+            Mover.Stop();
 
         if (CurrentMove != null) {
             CurrentMove.Cancel();
@@ -201,6 +316,9 @@ public class Minotaur : MonoBehaviour, IDamagable
 
     private IEnumerator EnterPhase(int index)
     {
+        if (Mover != null)
+            Mover.Stop();
+
         PhaseIndex = Mathf.Clamp(index, 0, phases.Length - 1);
         IsTransitioning = true;
 
@@ -226,7 +344,7 @@ public class Minotaur : MonoBehaviour, IDamagable
             if (move == null || !move.isActiveAndEnabled)
                 continue;
 
-            var weight = move.GetWeight(PhaseIndex);
+            var weight = move.GetSelectionWeight(this, PhaseIndex, distance);
             if (weight <= 0f || !move.CanUse(this, distance))
                 continue;
 
@@ -262,7 +380,23 @@ public class Minotaur : MonoBehaviour, IDamagable
 
     private void Die()
     {
+        if (_dead)
+            return;
 
+        _dead = true;
+
+        CancelMove();
+
+        if (_fightRoutine != null) {
+            StopCoroutine(_fightRoutine);
+            _fightRoutine = null;
+        }
+
+        onDied?.Invoke();
+        Died?.Invoke();
+
+        if (destroyOnDeath)
+            Destroy(gameObject, destroyDelay);
     }
 
     private void RaiseHealthChanged() => HealthChanged?.Invoke(CurrentHealth, maxHealth);
