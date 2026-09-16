@@ -47,8 +47,14 @@ TagManager:
   - name: Wall
     uniqueID: 2027013127
     locked: 0
+  - name: Enemy
+    uniqueID: 632217233
+    locked: 0
   - name: Player
     uniqueID: 3027823411
+    locked: 0
+  - name: Decor
+    uniqueID: 1429553387
     locked: 0
   m_RenderingLayers:
   - Default

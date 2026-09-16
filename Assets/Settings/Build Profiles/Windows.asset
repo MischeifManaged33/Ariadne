@@ -20,8 +20,11 @@ MonoBehaviour:
     rid: 4474770570798170184
   m_ActivePlatformGuid: 
   m_AdditionalPlatformBuildSettings: []
-  m_OverrideGlobalSceneList: 0
-  m_Scenes: []
+  m_OverrideGlobalSceneList: 1
+  m_Scenes:
+  - m_enabled: 1
+    m_path: Assets/Scenes/BossTest.unity
+    m_guid: 045204c16fcc5774cb2d1bbf13d83aa0
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
