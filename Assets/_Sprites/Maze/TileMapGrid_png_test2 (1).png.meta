@@ -137,6 +137,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -145,9 +158,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1819
+        y: 1680
         width: 281
-        height: 141
+        height: 280
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,10 +179,10 @@ TextureImporter:
       name: left_wall_light
       rect:
         serializedVersion: 2
-        x: 559
-        y: 1703
-        width: 234
-        height: 257
+        x: 560
+        y: 1680
+        width: 280
+        height: 280
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -188,10 +201,10 @@ TextureImporter:
       name: left_wall_dark
       rect:
         serializedVersion: 2
-        x: 839
-        y: 1703
-        width: 234
-        height: 257
+        x: 840
+        y: 1680
+        width: 280
+        height: 280
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,10 +223,10 @@ TextureImporter:
       name: right_wall_dark
       rect:
         serializedVersion: 2
-        x: 1167
-        y: 1703
-        width: 234
-        height: 257
+        x: 1120
+        y: 1680
+        width: 280
+        height: 280
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,10 +245,10 @@ TextureImporter:
       name: right_wall_light
       rect:
         serializedVersion: 2
-        x: 1447
-        y: 1703
-        width: 234
-        height: 257
+        x: 1400
+        y: 1680
+        width: 280
+        height: 280
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -251,33 +264,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: grey_cube
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1402
-        width: 280
-        height: 280
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 606b4a222558b19d0800000000000000
-      internalID: -2802499755292969466
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: TileMapGrid_png_test2 (1)_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 1402
+        y: 1400
         width: 280
         height: 280
       alignment: 0
@@ -298,7 +289,7 @@ TextureImporter:
       name: skinny_right_wall_light
       rect:
         serializedVersion: 2
-        x: 562
+        x: 560
         y: 1400
         width: 280
         height: 280
@@ -321,7 +312,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 840
-        y: 1401
+        y: 1400
         width: 280
         height: 280
       alignment: 0
@@ -342,7 +333,7 @@ TextureImporter:
       name: skinny_left_wall_dark
       rect:
         serializedVersion: 2
-        x: 1119
+        x: 1120
         y: 1401
         width: 280
         height: 280
@@ -364,7 +355,7 @@ TextureImporter:
       name: skinny_left_wall_light
       rect:
         serializedVersion: 2
-        x: 1399
+        x: 1400
         y: 1400
         width: 280
         height: 280
@@ -386,8 +377,8 @@ TextureImporter:
       name: void_cube
       rect:
         serializedVersion: 2
-        x: 2
-        y: 1121
+        x: 0
+        y: 1120
         width: 280
         height: 280
       alignment: 0
@@ -408,8 +399,8 @@ TextureImporter:
       name: floor_depth
       rect:
         serializedVersion: 2
-        x: 281
-        y: 1121
+        x: 280
+        y: 1120
         width: 280
         height: 280
       alignment: 0
@@ -430,8 +421,8 @@ TextureImporter:
       name: cube_light
       rect:
         serializedVersion: 2
-        x: 561
-        y: 1124
+        x: 560
+        y: 1120
         width: 280
         height: 280
       alignment: 0
@@ -452,7 +443,7 @@ TextureImporter:
       name: cube_dark
       rect:
         serializedVersion: 2
-        x: 842
+        x: 840
         y: 1120
         width: 280
         height: 280
@@ -474,7 +465,7 @@ TextureImporter:
       name: short_floor
       rect:
         serializedVersion: 2
-        x: 1121
+        x: 1120
         y: 1120
         width: 280
         height: 280
@@ -497,7 +488,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 847
+        y: 840
         width: 280
         height: 280
       alignment: 0
@@ -519,7 +510,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 280
-        y: 845
+        y: 840
         width: 280
         height: 280
       alignment: 0
@@ -540,8 +531,8 @@ TextureImporter:
       name: stair_right
       rect:
         serializedVersion: 2
-        x: 561
-        y: 843
+        x: 560
+        y: 840
         width: 280
         height: 280
       alignment: 0
@@ -562,8 +553,8 @@ TextureImporter:
       name: stair_left
       rect:
         serializedVersion: 2
-        x: 841
-        y: 840
+        x: 840
+        y: 842
         width: 280
         height: 280
       alignment: 0
@@ -584,7 +575,7 @@ TextureImporter:
       name: podium
       rect:
         serializedVersion: 2
-        x: 841
+        x: 840
         y: 281
         width: 280
         height: 280
@@ -606,8 +597,8 @@ TextureImporter:
       name: bare_cube
       rect:
         serializedVersion: 2
-        x: 1121
-        y: 281
+        x: 1120
+        y: 280
         width: 280
         height: 280
       alignment: 0
@@ -651,7 +642,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1400
-        y: 706
+        y: 700
         width: 280
         height: 560
       alignment: 0
