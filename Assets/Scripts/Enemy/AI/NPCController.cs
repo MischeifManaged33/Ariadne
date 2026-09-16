@@ -224,4 +224,10 @@ public class NPCController : MonoBehaviour
         currentState = newState;
         path.Clear();
     }
+
+    public void SetPlayer(
+    PlayerController newPlayer)
+    {
+        player = newPlayer;
+    }
 }

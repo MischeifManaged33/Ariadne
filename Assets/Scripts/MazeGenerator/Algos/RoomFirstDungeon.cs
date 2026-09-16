@@ -37,6 +37,9 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     private GameObject goal;
     [SerializeField]
+    private GameObject enemyPrefab;
+    private GameObject spawnedEnemy;
+    [SerializeField]
     [Range(0, 2)]
     private int corridorRadius = 1;
     [SerializeField]
@@ -108,19 +111,38 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         var rand = Random.Range(0, roomCenters.Count);
 
-        startRoom = roomCenters[rand];
+        int startRoomIndex =
+    Random.Range(0, roomCenters.Count);
 
-        goalRoom = roomCenters[Random.Range(0, roomCenters.Count)];
+        startRoom = roomCenters[startRoomIndex];
 
-        player.transform.position = tilemapVisualizer.GetFloorWorldPosition(startRoom);
+        // Select from one fewer room.
+        int goalRoomIndex =
+            Random.Range(0, roomCenters.Count - 1);
 
-        goal.transform.position = tilemapVisualizer.GetFloorWorldPosition(goalRoom); ;
+        // Skip over the player's room.
+        if (goalRoomIndex >= startRoomIndex)
+        {
+            goalRoomIndex++;
+        }
+
+        goalRoom = roomCenters[goalRoomIndex];
+
+        player.transform.position =
+    tilemapVisualizer.GetFloorWorldPosition(
+        startRoom
+    );
+
+        MoveGoal(roomCenters);
+
 
         tilemapVisualizer.PaintFloorTiles(floor);
 
         tilemapVisualizer.PaintIsometricWalls(floor);
 
         nodeGenerator.GenerateNodes(floor);
+
+        SpawnEnemy(roomCenters);
 
         int roomCount = 0;
         int corridorCount = 0;
@@ -137,9 +159,102 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             $"Tracked {roomCount} rooms and " +
             $"{corridorCount} corridors."
         );
-    } 
+    }
 
-    private DungeonRegion FindRegionAtPosition (Vector2Int position)
+    private void SpawnEnemy(
+    List<Vector2Int> availableRoomCenters)
+    {
+        if (enemyPrefab == null)
+        {
+            Debug.LogError(
+                "No Enemy Prefab is assigned."
+            );
+
+            return;
+        }
+
+        if (availableRoomCenters == null ||
+            availableRoomCenters.Count == 0)
+        {
+            Debug.LogWarning(
+                "No rooms are available for the enemy."
+            );
+
+            return;
+        }
+
+        List<Vector2Int> validEnemyRooms =
+            new List<Vector2Int>();
+
+        foreach (Vector2Int roomCenter
+                 in availableRoomCenters)
+        {
+            // Do not spawn in the player's starting room
+            // or in the goal room.
+            if (roomCenter == startRoom ||
+                roomCenter == goalRoom)
+            {
+                continue;
+            }
+
+            validEnemyRooms.Add(roomCenter);
+        }
+
+        if (validEnemyRooms.Count == 0)
+        {
+            Debug.LogWarning(
+                "No valid enemy room was available."
+            );
+
+            return;
+        }
+
+        Vector2Int enemyRoom =
+            validEnemyRooms[
+                Random.Range(0, validEnemyRooms.Count)
+            ];
+
+        Vector3 enemyWorldPosition =
+            tilemapVisualizer.GetFloorWorldPosition(
+                enemyRoom
+            );
+
+        enemyWorldPosition.z = -0.01f;
+
+        // Remove the previous enemy before making another.
+        if (spawnedEnemy != null)
+        {
+            Destroy(spawnedEnemy);
+        }
+
+        spawnedEnemy = Instantiate(
+            enemyPrefab,
+            enemyWorldPosition,
+            Quaternion.identity
+        );
+
+        NPCController npc =
+    spawnedEnemy.GetComponent<NPCController>();
+
+        if (npc == null)
+        {
+            Debug.LogError(
+                "Enemy prefab has no NPCController."
+            );
+        }
+        else
+        {
+            npc.SetPlayer(
+    player.GetComponent<PlayerController>()
+);
+        }
+
+        Debug.Log(
+            $"Enemy spawned in room {enemyRoom}."
+        );
+    }
+
+    private DungeonRegion FindRegionAtPosition(Vector2Int position)
     {
         foreach (DungeonRegion region in dungeonRegions)
         {
@@ -163,6 +278,61 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private void Update()
     {
         TrackPlayerRegion();
+    }
+
+    private void MoveGoal(
+    List<Vector2Int> availableRoomCenters)
+    {
+        if (goal == null ||
+            availableRoomCenters == null ||
+            availableRoomCenters.Count == 0)
+        {
+            return;
+        }
+
+        List<Vector2Int> validGoalRooms =
+            new List<Vector2Int>();
+
+        foreach (Vector2Int roomCenter
+                 in availableRoomCenters)
+        {
+            // Never place the goal in the original
+            // player starting room.
+            if (roomCenter == startRoom)
+            {
+                continue;
+            }
+
+            validGoalRooms.Add(roomCenter);
+        }
+
+        if (validGoalRooms.Count == 0)
+        {
+            Debug.LogWarning(
+                "No valid room was available for the goal."
+            );
+
+            return;
+        }
+
+        goalRoom =
+            validGoalRooms[
+                Random.Range(0, validGoalRooms.Count)
+            ];
+
+        goal.transform.position =
+            tilemapVisualizer.GetFloorWorldPosition(
+                goalRoom
+            );
+
+        Vector3 goalWorldPosition =
+    tilemapVisualizer.GetFloorWorldPosition(
+        goalRoom
+    );
+
+        goalWorldPosition.z = -.01f;
+
+        goal.transform.position = goalWorldPosition;
     }
 
     private void TrackPlayerRegion()
@@ -234,7 +404,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             HashSet<Vector2Int> newFloor = CreateSimpleRooms(newRoomBounds);
 
             List<Vector2Int> newRoomCenters = new List<Vector2Int>();
-            
+
             foreach (BoundsInt room in newRoomBounds)
             {
                 Vector2Int center = (Vector2Int)Vector3Int.RoundToInt(room.center);
@@ -278,9 +448,13 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 completeFloor
             );
 
+            MoveGoal(newRoomCenters);
+
             nodeGenerator.GenerateNodes(
-    completeFloor
-);
+                completeFloor
+            );
+
+            SpawnEnemy(newRoomCenters);
 
             NPCController[] npcs =
                 FindObjectsOfType<NPCController>();
@@ -295,10 +469,11 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
                 $"{completeFloor.Count} total floor tiles. " +
                 $"{permanentFloorPositions.Count} are permanent."
             );
-        } finally
+        }
+        finally
         {
             isRegenerating = false;
-        }        
+        }
     }
 
     private bool RoomOverlapsPermanentFloor(BoundsInt room)
@@ -574,7 +749,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
         return corridor;
     }
 
-    private HashSet<Vector2Int> CreateDeadEnd(Vector2Int startPosition,int length)
+    private HashSet<Vector2Int> CreateDeadEnd(Vector2Int startPosition, int length)
     {
         HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
 
@@ -637,7 +812,7 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         foreach (var room in roomCenters)
         {
-            float currentDistance = Vector2.Distance(room,  currentRoomCenter);
+            float currentDistance = Vector2.Distance(room, currentRoomCenter);
             if (currentDistance < distance)
             {
                 distance = currentDistance;
