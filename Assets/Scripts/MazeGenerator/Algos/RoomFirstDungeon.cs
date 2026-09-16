@@ -37,6 +37,9 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     private GameObject goal;
     [SerializeField]
+    private GameObject enemyPrefab;
+    private GameObject spawnedEnemy;
+    [SerializeField]
     [Range(0, 2)]
     private int corridorRadius = 1;
     [SerializeField]
@@ -139,6 +142,8 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         nodeGenerator.GenerateNodes(floor);
 
+        SpawnEnemy(roomCenters);
+
         int roomCount = 0;
         int corridorCount = 0;
 
@@ -154,7 +159,100 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             $"Tracked {roomCount} rooms and " +
             $"{corridorCount} corridors."
         );
-    } 
+    }
+
+    private void SpawnEnemy(
+    List<Vector2Int> availableRoomCenters)
+    {
+        if (enemyPrefab == null)
+        {
+            Debug.LogError(
+                "No Enemy Prefab is assigned."
+            );
+
+            return;
+        }
+
+        if (availableRoomCenters == null ||
+            availableRoomCenters.Count == 0)
+        {
+            Debug.LogWarning(
+                "No rooms are available for the enemy."
+            );
+
+            return;
+        }
+
+        List<Vector2Int> validEnemyRooms =
+            new List<Vector2Int>();
+
+        foreach (Vector2Int roomCenter
+                 in availableRoomCenters)
+        {
+            // Do not spawn in the player's starting room
+            // or in the goal room.
+            if (roomCenter == startRoom ||
+                roomCenter == goalRoom)
+            {
+                continue;
+            }
+
+            validEnemyRooms.Add(roomCenter);
+        }
+
+        if (validEnemyRooms.Count == 0)
+        {
+            Debug.LogWarning(
+                "No valid enemy room was available."
+            );
+
+            return;
+        }
+
+        Vector2Int enemyRoom =
+            validEnemyRooms[
+                Random.Range(0, validEnemyRooms.Count)
+            ];
+
+        Vector3 enemyWorldPosition =
+            tilemapVisualizer.GetFloorWorldPosition(
+                enemyRoom
+            );
+
+        enemyWorldPosition.z = -0.01f;
+
+        // Remove the previous enemy before making another.
+        if (spawnedEnemy != null)
+        {
+            Destroy(spawnedEnemy);
+        }
+
+        spawnedEnemy = Instantiate(
+            enemyPrefab,
+            enemyWorldPosition,
+            Quaternion.identity
+        );
+
+        NPCController npc =
+    spawnedEnemy.GetComponent<NPCController>();
+
+        if (npc == null)
+        {
+            Debug.LogError(
+                "Enemy prefab has no NPCController."
+            );
+        }
+        else
+        {
+            npc.SetPlayer(
+    player.GetComponent<PlayerController>()
+);
+        }
+
+        Debug.Log(
+            $"Enemy spawned in room {enemyRoom}."
+        );
+    }
 
     private DungeonRegion FindRegionAtPosition (Vector2Int position)
     {
@@ -353,8 +451,10 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             MoveGoal(newRoomCenters);
 
             nodeGenerator.GenerateNodes(
-    completeFloor
-);
+                completeFloor
+            );
+
+            SpawnEnemy(newRoomCenters);
 
             NPCController[] npcs =
                 FindObjectsOfType<NPCController>();
