@@ -108,13 +108,30 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
 
         var rand = Random.Range(0, roomCenters.Count);
 
-        startRoom = roomCenters[rand];
+        int startRoomIndex =
+    Random.Range(0, roomCenters.Count);
 
-        goalRoom = roomCenters[Random.Range(0, roomCenters.Count)];
+        startRoom = roomCenters[startRoomIndex];
 
-        player.transform.position = tilemapVisualizer.GetFloorWorldPosition(startRoom);
+        // Select from one fewer room.
+        int goalRoomIndex =
+            Random.Range(0, roomCenters.Count - 1);
 
-        goal.transform.position = tilemapVisualizer.GetFloorWorldPosition(goalRoom); ;
+        // Skip over the player's room.
+        if (goalRoomIndex >= startRoomIndex)
+        {
+            goalRoomIndex++;
+        }
+
+        goalRoom = roomCenters[goalRoomIndex];
+
+        player.transform.position =
+    tilemapVisualizer.GetFloorWorldPosition(
+        startRoom
+    );
+
+        MoveGoal(roomCenters);
+
 
         tilemapVisualizer.PaintFloorTiles(floor);
 
@@ -163,6 +180,61 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
     private void Update()
     {
         TrackPlayerRegion();
+    }
+
+    private void MoveGoal(
+    List<Vector2Int> availableRoomCenters)
+    {
+        if (goal == null ||
+            availableRoomCenters == null ||
+            availableRoomCenters.Count == 0)
+        {
+            return;
+        }
+
+        List<Vector2Int> validGoalRooms =
+            new List<Vector2Int>();
+
+        foreach (Vector2Int roomCenter
+                 in availableRoomCenters)
+        {
+            // Never place the goal in the original
+            // player starting room.
+            if (roomCenter == startRoom)
+            {
+                continue;
+            }
+
+            validGoalRooms.Add(roomCenter);
+        }
+
+        if (validGoalRooms.Count == 0)
+        {
+            Debug.LogWarning(
+                "No valid room was available for the goal."
+            );
+
+            return;
+        }
+
+        goalRoom =
+            validGoalRooms[
+                Random.Range(0, validGoalRooms.Count)
+            ];
+
+        goal.transform.position =
+            tilemapVisualizer.GetFloorWorldPosition(
+                goalRoom
+            );
+
+        Vector3 goalWorldPosition =
+    tilemapVisualizer.GetFloorWorldPosition(
+        goalRoom
+    );
+
+        goalWorldPosition.z = -.01f;
+
+        goal.transform.position = goalWorldPosition;
     }
 
     private void TrackPlayerRegion()
@@ -277,6 +349,8 @@ public class RoomFirstDungeon : SimpleRandomWalkDungeonGenerator
             tilemapVisualizer.PaintIsometricWalls(
                 completeFloor
             );
+
+            MoveGoal(newRoomCenters);
 
             nodeGenerator.GenerateNodes(
     completeFloor
