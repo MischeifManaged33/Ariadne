@@ -45630,6 +45630,7 @@ GameObject:
   - component: {fileID: 1055579406}
   - component: {fileID: 1055579409}
   - component: {fileID: 1055579410}
+  - component: {fileID: 1055579411}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -45680,7 +45681,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 3.36
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -45776,6 +45777,29 @@ MonoBehaviour:
   lookAheadSmoothTime: 0.35
   idleLookAhead: 0.4
   lookAheadYScale: 0.5
+--- !u!114 &1055579411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055579405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0bcd4ff926e3242893096f08fca928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TransparentWalls
+  player: {fileID: 877033978}
+  mainCamera: {fileID: 1055579407}
+  wallTilemaps:
+  - {fileID: 1864491332}
+  - {fileID: 1572456691}
+  - {fileID: 161324135}
+  - {fileID: 1219843487}
+  - {fileID: 1430908867}
+  fadeAlpha: 0
+  foregroundBufferPixels: 50
+  foregroundDepthPixels: 150
 --- !u!1 &1057959798
 GameObject:
   m_ObjectHideFlags: 0
@@ -99946,7 +99970,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1267143885
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 337e34ed5c84fd549be32be7622249cd, type: 3}
