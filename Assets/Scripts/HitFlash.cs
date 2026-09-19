@@ -31,6 +31,17 @@ public class HitFlash : MonoBehaviour
 
     public void Flash() => _flashUntil = Time.time + flashDuration;
 
+    public void SetBaseAlpha(float alpha)
+    {
+        if (Mathf.Approximately(_baseColor.a, alpha))
+            return;
+
+        _baseColor.a = alpha;
+
+        if (spriteRenderer != null && Time.time >= _flashUntil)
+            spriteRenderer.color = _baseColor;
+    }
+
     private void Update()
     {
         if (spriteRenderer == null || flashDuration <= 0f)
