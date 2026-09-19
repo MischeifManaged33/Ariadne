@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private Player player;
     [SerializeField]
     private VirtualJoystick joystick;
+    [SerializeField]
+    private Animator animator;
 
     [Header("Movement")]
     [SerializeField, Min(0f)]
@@ -21,11 +23,27 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private InputAction _moveAction;
     private Vector2 _velocity;
+    private Vector2 lastMoveDirection = Vector2.down;
 
     private void Reset()
     {
         player = GetComponent<Player>();
         ConfigureBody(GetComponent<Rigidbody2D>());
+    }
+
+    private void UpdateAnimation(Vector2 movement)
+    {
+        animator.SetFloat("MoveX",  movement.x);
+        animator.SetFloat("MoveY", movement.y);
+        animator.SetFloat("Speed", movement.sqrMagnitude);
+
+        if (movement.sqrMagnitude > 0.01f)
+        {
+            lastMoveDirection = movement.normalized;
+
+            animator.SetFloat("LastMoveX", lastMoveDirection.x);
+            animator.SetFloat("LastMoveY", lastMoveDirection.y);
+        }
     }
 
     private void Awake()
@@ -68,6 +86,8 @@ public class PlayerController : MonoBehaviour
             ? Vector2.MoveTowards(_velocity, target, acceleration * Time.fixedDeltaTime) : target;
 
         _rigidbody.linearVelocity = _velocity;
+
+        UpdateAnimation(input);
 
         if (player != null)
             player.OnMovementUpdated(_velocity);
