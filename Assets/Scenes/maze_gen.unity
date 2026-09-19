@@ -40025,15 +40025,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2489163345958607776, guid: 116e7aa88c2593c4c827ee698ad56871, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.08
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2489163345958607776, guid: 116e7aa88c2593c4c827ee698ad56871, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.08
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2489163345958607776, guid: 116e7aa88c2593c4c827ee698ad56871, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.08
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2489163345958607776, guid: 116e7aa88c2593c4c827ee698ad56871, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40241,7 +40241,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 7.4, y: 7.4}
+    oldSize: {x: 0.925, y: 0.925}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -40344,7 +40344,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1267143885
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 337e34ed5c84fd549be32be7622249cd, type: 3}
@@ -40368,7 +40368,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.46, y: 13.6, z: 0}
-  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 527955256}
