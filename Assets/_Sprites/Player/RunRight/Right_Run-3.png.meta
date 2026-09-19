@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 94fe7f991cf8aac47b93a3249b75767e
+guid: 69c520b01b6e74042bf42e145e908bb5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5235845572988806406
-    second: Theseus_Idle-3_0
+      213: -1039049844358592152
+    second: Right_Run-3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Theseus_Idle-3_0
+      name: Right_Run-3_0
       rect:
         serializedVersion: 2
-        x: 217
-        y: 102
-        width: 530
-        height: 846
+        x: 214
+        y: 93
+        width: 556
+        height: 853
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: afa533b213a8657b0800000000000000
-      internalID: -5235845572988806406
+      spriteID: 869c413fbad8491f0800000000000000
+      internalID: -1039049844358592152
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Theseus_Idle-3_0: -5235845572988806406
+      Right_Run-3_0: -1039049844358592152
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
