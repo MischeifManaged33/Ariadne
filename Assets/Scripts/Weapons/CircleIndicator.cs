@@ -1,34 +1,28 @@
 using UnityEngine;
 
-// Line shaped attack indicator that can be aimed
+// Circle shapped attack indicator that get filled
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class LineIndicator : MonoBehaviour
+public class CircleIndicator : MonoBehaviour
 {
     [Header("Shape")]
-    [SerializeField, Range(2, 64)]
-    private int segments = 12;
+    [SerializeField, Range(8, 96)]
+    private int segments = 48;
     [SerializeField, Min(0.01f)]
-    private float width = 0.22f;
+    private float ringWidth = 0.12f;
     [SerializeField]
     private Material material;
 
-    [Header("Falloff")]
-    [Tooltip("Fraction of the length that stays solid before it starts fading")]
-    [SerializeField, Range(0f, 1f)]
-    private float solidFraction = 0.25f;
-    [Tooltip("Higher fades out sooner")]
-    [SerializeField, Range(0.1f, 8f)]
-    private float falloffCurve = 1.6f;
-
     [Header("UI")]
     [SerializeField]
-    private Color tint = new Color(1f, 0.8f, 0.45f, 0.55f);
+    private Color ringColor = new Color(1f, 0.3f, 0.3f, 0.8f);
+    [SerializeField]
+    private Color fillColor = new Color(1f, 0.3f, 0.3f, 0.3f);
     [SerializeField]
     private Color flashColor = new Color(1f, 1f, 1f, 0.9f);
     [SerializeField, Min(0f)]
-    private float fadeSpeed = 16f;
+    private float fadeSpeed = 12f;
     [SerializeField, Min(0f)]
-    private float flashDuration = 0.12f;
+    private float flashDuration = 0.15f;
 
     [Header("Sorting")]
     [SerializeField]
@@ -44,27 +38,28 @@ public class LineIndicator : MonoBehaviour
 
     private Vector3[] _vertices;
     private Color[] _colors;
-    private float[] _falloff;
 
-    private float _length;
-    private float _width;
+    private float _radius = -1f;
+    private float _fill = -1f;
     private float _yScale = 1f;
-    private float _heading = float.NaN;
     private int _builtSegments;
 
     private bool _visible;
     private float _alpha;
     private float _flashRemaining;
 
-    private Color _appliedTint;
+    private Color _appliedFill;
+    private Color _appliedRing;
     private bool _tinted;
+
+    private int RingStart => _builtSegments + 2;
 
     private void Awake()
     {
         _filter = GetComponent<MeshFilter>();
         _renderer = GetComponent<MeshRenderer>();
 
-        _mesh = new Mesh { name = "Indicator Line" };
+        _mesh = new Mesh { name = "Indicator Circle" };
         _mesh.MarkDynamic();
         _filter.sharedMesh = _mesh;
 
@@ -80,25 +75,23 @@ public class LineIndicator : MonoBehaviour
             Destroy(_mesh);
     }
 
-    public void Aim(Vector2 origin, Vector2 groundDirection, float length, float yScale)
+    public void Aim(Vector2 centre, float radius, float fill, float yScale)
     {
-        transform.position = new Vector3(origin.x, origin.y, transform.position.z);
+        transform.position = new Vector3(centre.x, centre.y, transform.position.z);
         transform.rotation = Quaternion.identity;
         NeutralizeParentScale();
 
-        var heading = Mathf.Atan2(groundDirection.y, groundDirection.x) * Mathf.Rad2Deg;
+        var clamped = Mathf.Clamp01(fill);
 
-        if (!Mathf.Approximately(length, _length) || !Mathf.Approximately(width, _width) ||
-            !Mathf.Approximately(yScale, _yScale) || !Mathf.Approximately(heading, _heading) ||
-            _builtSegments != segments) {
-            _length = length;
-            _width = width;
+        if (!Mathf.Approximately(radius, _radius) || !Mathf.Approximately(clamped, _fill) ||
+            !Mathf.Approximately(yScale, _yScale) || _builtSegments != segments) {
+            _radius = radius;
+            _fill = clamped;
             _yScale = yScale;
-            _heading = heading;
             Rebuild();
         }
 
-        _renderer.sortingOrder = Mathf.RoundToInt(-origin.y * sortingPrecision) + sortingOffset;
+        _renderer.sortingOrder = Mathf.RoundToInt(-centre.y * sortingPrecision) + sortingOffset;
     }
 
     public void SetVisible(bool visible) => _visible = visible;
@@ -119,110 +112,114 @@ public class LineIndicator : MonoBehaviour
         if (!showing)
             return;
 
-        var color = tint;
+        var fill = fillColor;
+        var ring = ringColor;
         var alpha = _alpha;
 
         if (_flashRemaining > 0f && flashDuration > 0f) {
             var t = _flashRemaining / flashDuration;
-            color = Color.Lerp(color, flashColor, t);
+            fill = Color.Lerp(fill, flashColor, t);
+            ring = Color.Lerp(ring, flashColor, t);
             alpha = Mathf.Max(alpha, t);
         }
 
-        color.a *= alpha;
-        ApplyTint(color);
+        fill.a *= alpha;
+        ring.a *= alpha;
+
+        ApplyTint(fill, ring);
     }
 
-    private void ApplyTint(Color color)
+    private void ApplyTint(Color fill, Color ring)
     {
         if (_colors == null || _colors.Length == 0)
             return;
 
-        if (_tinted && color == _appliedTint)
+        // Uploading the colour buffer is the expensive half of the draw, and the
+        // tint only actually moves while it is fading in or flashing
+        if (_tinted && fill == _appliedFill && ring == _appliedRing)
             return;
 
         _tinted = true;
-        _appliedTint = color;
+        _appliedFill = fill;
+        _appliedRing = ring;
 
-        for (var i = 0; i < _colors.Length; i++) {
-            var vertex = color;
-            vertex.a *= _falloff != null && i < _falloff.Length ? _falloff[i] : 1f;
-            _colors[i] = vertex;
-        }
+        var ringStart = RingStart;
+
+        for (var i = 0; i < _colors.Length; i++)
+            _colors[i] = i < ringStart ? fill : ring;
 
         _mesh.colors = _colors;
     }
 
     private void Rebuild()
     {
-        var count = Mathf.Max(2, segments);
-        var vertexCount = (count + 1) * 2;
+        var count = Mathf.Max(8, segments);
+
+        var vertexCount = count + 2 + (count + 1) * 2;
 
         if (_vertices == null || _vertices.Length != vertexCount) {
             _vertices = new Vector3[vertexCount];
             _colors = new Color[vertexCount];
-            _falloff = new float[vertexCount];
             _mesh.Clear();
             _builtSegments = 0;
             _tinted = false;
         }
 
-        var radians = _heading * Mathf.Deg2Rad;
-        var along = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-        var side = new Vector2(-along.y, along.x) * (_width * 0.5f);
+        var fillRadius = _radius * _fill;
+        var innerRadius = Mathf.Max(0f, _radius - ringWidth);
+        var ringStart = count + 2;
+
+        _vertices[0] = Vector3.zero;
 
         for (var i = 0; i <= count; i++) {
-            var t = (float)i / count;
-            var centre = along * (t * _length);
+            var radians = Mathf.PI * 2f * i / count;
+            var unit = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
 
             // Built on the ground then squashed, so it lies flat like the floor
-            var left = Isometric.ToScreen(centre + side, _yScale);
-            var right = Isometric.ToScreen(centre - side, _yScale);
-
-            _vertices[i * 2] = new Vector3(left.x, left.y, 0f);
-            _vertices[i * 2 + 1] = new Vector3(right.x, right.y, 0f);
-
-            var fade = Falloff(t);
-            _falloff[i * 2] = fade;
-            _falloff[i * 2 + 1] = fade;
+            _vertices[i + 1] = Flatten(unit * fillRadius);
+            _vertices[ringStart + i * 2] = Flatten(unit * _radius);
+            _vertices[ringStart + i * 2 + 1] = Flatten(unit * innerRadius);
         }
 
         _mesh.vertices = _vertices;
 
         if (_builtSegments != count) {
-            var triangles = new int[count * 6];
+            var triangles = new int[count * 9];
 
             for (var i = 0; i < count; i++) {
-                var vertex = i * 2;
-                var triangle = i * 6;
+                var disc = i * 3;
 
-                triangles[triangle] = vertex;
-                triangles[triangle + 1] = vertex + 2;
-                triangles[triangle + 2] = vertex + 1;
-                triangles[triangle + 3] = vertex + 1;
-                triangles[triangle + 4] = vertex + 2;
-                triangles[triangle + 5] = vertex + 3;
+                triangles[disc] = 0;
+                triangles[disc + 1] = i + 1;
+                triangles[disc + 2] = i + 2;
+
+                var band = count * 3 + i * 6;
+                var outer = ringStart + i * 2;
+
+                triangles[band] = outer;
+                triangles[band + 1] = outer + 2;
+                triangles[band + 2] = outer + 1;
+                triangles[band + 3] = outer + 1;
+                triangles[band + 4] = outer + 2;
+                triangles[band + 5] = outer + 3;
             }
 
             _mesh.triangles = triangles;
             _builtSegments = count;
 
-            ApplyTint(Color.clear);
+            ApplyTint(Color.clear, Color.clear);
         }
 
-        _mesh.RecalculateBounds();
+        _mesh.bounds = new Bounds(Vector3.zero, new Vector3(_radius * 2f, _radius * 2f * _yScale, 0f));
     }
 
-    private float Falloff(float t)
+    private Vector3 Flatten(Vector2 ground)
     {
-        if (t <= solidFraction)
-            return 1f;
+        var screen = Isometric.ToScreen(ground, _yScale);
 
-        var span = 1f - solidFraction;
-        if (span <= 0.0001f)
-            return 0f;
-
-        return Mathf.Pow(1f - (t - solidFraction) / span, falloffCurve);
+        return new Vector3(screen.x, screen.y, 0f);
     }
+
     private void NeutralizeParentScale()
     {
         var parent = transform.parent;
@@ -239,5 +236,4 @@ public class LineIndicator : MonoBehaviour
             Mathf.Approximately(scale.y, 0f) ? 1f : 1f / scale.y,
             Mathf.Approximately(scale.z, 0f) ? 1f : 1f / scale.z);
     }
-
 }

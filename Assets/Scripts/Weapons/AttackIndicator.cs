@@ -49,6 +49,9 @@ public class AttackIndicator : MonoBehaviour
     private float _alpha;
     private float _flashRemaining;
 
+    private Color _appliedTint;
+    private bool _tinted;
+
     private void Awake()
     {
         _filter = GetComponent<MeshFilter>();
@@ -126,6 +129,12 @@ public class AttackIndicator : MonoBehaviour
         if (_colors == null || _colors.Length == 0)
             return;
 
+        if (_tinted && tint == _appliedTint)
+            return;
+
+        _tinted = true;
+        _appliedTint = tint;
+
         var rim = tint;
         rim.a *= edgeFade;
 
@@ -145,6 +154,7 @@ public class AttackIndicator : MonoBehaviour
             _colors = new Color[count + 2];
             _mesh.Clear();
             _builtSegments = 0;
+            _tinted = false;
         }
 
         _vertices[0] = Vector3.zero;
@@ -179,8 +189,6 @@ public class AttackIndicator : MonoBehaviour
 
         _mesh.RecalculateBounds();
     }
-    // The mesh is built in world units, so a scaled parent would stretch the
-    // drawing away from the zone the attack actually tests
     private void NeutralizeParentScale()
     {
         var parent = transform.parent;

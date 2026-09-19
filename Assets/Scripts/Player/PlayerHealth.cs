@@ -28,6 +28,7 @@ public class PlayerHealth : MonoBehaviour
     public event Action<float, float> HealthChanged;
     public event Action<float> Damaged;
     public event Action<float> Healed;
+    public static PlayerHealth Current { get; private set; }
 
     // Properties
     public float MaxHealth => maxHealth;
@@ -46,12 +47,20 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
+        Current = this;
+
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (spriteRenderer != null)
             _baseColor = spriteRenderer.color;
 
         CurrentHealth = maxHealth;
+    }
+
+    private void OnDestroy()
+    {
+        if (Current == this)
+            Current = null;
     }
 
     private void Start()
