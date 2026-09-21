@@ -26,6 +26,34 @@ public class Minotaur : MonoBehaviour, IDamagable
     [SerializeField, Min(0f)]
     private float startDelay = 1f;
 
+    [Header("Line of Vision")]
+    [SerializeField, Min(0f)]
+    private float sightRange = 9f;
+    [SerializeField]
+    private LayerMask sightBlockers;
+    [SerializeField, Min(0.02f)]
+    private float scanInterval = 0.15f;
+
+    [Header("Wander")]
+    [SerializeField]
+    private Transform homeAnchor;
+    [SerializeField, Min(0f)]
+    private float wanderRadius = 5f;
+    [SerializeField, Min(0.1f)]
+    private float wanderStep = 3f;
+    [SerializeField, Min(0f)]
+    private float wanderPauseMin = 0.4f;
+    [SerializeField, Min(0f)]
+    private float wanderPauseMax = 1.6f;
+    [SerializeField, Range(0.1f, 3f)]
+    private float wanderSpeedMultiplier = 0.6f;
+    [SerializeField, Min(0.1f)]
+    private float wanderLegTimeout = 4f;
+    [SerializeField, Min(0.05f)]
+    private float wanderArriveDistance = 0.35f;
+    [SerializeField, Range(1, 24)]
+    private int wanderAttempts = 8;
+
     [Header("Idle")]
     [SerializeField, Min(0f)]
     private float idleMinDistance = 2.5f;
@@ -52,8 +80,11 @@ public class Minotaur : MonoBehaviour, IDamagable
     [SerializeField]
     private UnityEvent<int> onPhaseChanged;
     [SerializeField]
+    private UnityEvent onAggro;
+    [SerializeField]
     private UnityEvent onDied;
 
+    public event Action Aggroed;
     public event Action<float, float> HealthChanged;
     public event Action<float> Damaged;
     public event Action<float> Healed;
@@ -76,6 +107,11 @@ public class Minotaur : MonoBehaviour, IDamagable
     public Vector2 Position => transform.position;
     public Vector2 Facing { get; private set; } = Vector2.down;
 
+    // Latches on the first sighting and never clears, so the fight cannot be walked away from
+    public bool IsAggro { get; private set; }
+    public bool CanSeeTarget { get; private set; }
+    public Vector2 Home => homeAnchor != null ? (Vector2)homeAnchor.position : _home;
+
     public Vector2 TargetPosition => target != null ? (Vector2)target.position : Position;
 
     // Ranges are ground space, so a target above or below reads as far as one beside
@@ -97,6 +133,18 @@ public class Minotaur : MonoBehaviour, IDamagable
     private bool _moveActive;
     private bool _dead;
 
+    private Vector2 _home;
+    private Vector2 _wanderPoint;
+    private float _wanderPauseUntil;
+    private float _wanderLegDeadline;
+    private bool _hasWanderPoint;
+    private float _nextScanTime;
+
+    private void Reset()
+    {
+        sightBlockers = LayerMask.GetMask("Walls");
+    }
+
     private void Awake()
     {
         if (phases == null || phases.Length == 0)
@@ -105,6 +153,11 @@ public class Minotaur : MonoBehaviour, IDamagable
         _moves = GetComponentsInChildren<BossMove>(true);
         _hitFlash = HitFlash.GetOrAdd(gameObject);
         Mover = GetComponent<BossPathfinder>();
+
+        if (sightBlockers.value == 0)
+            sightBlockers = LayerMask.GetMask("Walls");
+
+        _home = transform.position;
 
         CurrentHealth = maxHealth;
     }
@@ -127,6 +180,12 @@ public class Minotaur : MonoBehaviour, IDamagable
         _fightRoutine = StartCoroutine(RunFight());
     }
 
+    private void Update()
+    {
+        if (IsAlive)
+            Scan();
+    }
+
     public float TakeDamage(float amount)
     {
         if (amount <= 0f || !IsAlive)
@@ -134,6 +193,8 @@ public class Minotaur : MonoBehaviour, IDamagable
 
         var applied = Mathf.Min(amount, CurrentHealth);
         CurrentHealth -= applied;
+
+        Aggro();
 
         _hitFlash.Flash();
 
@@ -177,6 +238,19 @@ public class Minotaur : MonoBehaviour, IDamagable
     // transition when gated, otherwise pick a move to run
     private IEnumerator RunFight()
     {
+        while (IsAlive && !IsAggro) {
+            WanderStep();
+            yield return null;
+        }
+
+        if (!IsAlive)
+            yield break;
+
+        _hasWanderPoint = false;
+
+        if (Mover != null)
+            Mover.Stop();
+
         yield return new WaitForSeconds(startDelay);
 
         while (IsAlive) {
@@ -187,7 +261,6 @@ public class Minotaur : MonoBehaviour, IDamagable
 
             var move = SelectMove();
             if (move == null) {
-                // Nothing is usable yet, so shuffle around instead of standing there
                 IdleStep();
                 yield return null;
                 continue;
@@ -196,6 +269,113 @@ public class Minotaur : MonoBehaviour, IDamagable
             yield return RunMove(move);
             yield return Idle(CurrentPhase.MoveInterval);
         }
+    }
+
+    // One way aggro
+    public void Aggro()
+    {
+        if (IsAggro || !IsAlive)
+            return;
+
+        IsAggro = true;
+
+        _hasWanderPoint = false;
+
+        if (Mover != null)
+            Mover.Stop();
+
+        onAggro?.Invoke();
+        Aggroed?.Invoke();
+    }
+
+    private void Scan()
+    {
+        if (Time.time < _nextScanTime)
+            return;
+
+        _nextScanTime = Time.time + scanInterval;
+
+        CanSeeTarget = LookForTarget();
+
+        if (CanSeeTarget)
+            Aggro();
+    }
+
+    private bool LookForTarget()
+    {
+        if (target == null)
+            return false;
+
+        if (DistanceToTarget > sightRange)
+            return false;
+
+        if (sightBlockers.value == 0)
+            return true;
+
+        return Physics2D.Linecast(Position, TargetPosition, sightBlockers).collider == null;
+    }
+
+    private void WanderStep()
+    {
+        if (Mover == null)
+            return;
+
+        if (Time.time < _wanderPauseUntil) {
+            Mover.Stop();
+            return;
+        }
+
+        if (_hasWanderPoint) {
+            var arrived = Mover.GroundDistanceTo(_wanderPoint) <= wanderArriveDistance;
+
+            if (arrived || Time.time >= _wanderLegDeadline) {
+                _hasWanderPoint = false;
+                Mover.Stop();
+                _wanderPauseUntil = Time.time + UnityEngine.Random.Range(wanderPauseMin, wanderPauseMax);
+                return;
+            }
+
+            Mover.SetDestination(_wanderPoint, wanderSpeedMultiplier);
+            return;
+        }
+
+        if (!PickWanderPoint(out _wanderPoint)) {
+            _wanderPauseUntil = Time.time + Mathf.Max(0.1f, wanderPauseMin);
+            Mover.Stop();
+            return;
+        }
+
+        _hasWanderPoint = true;
+        _wanderLegDeadline = Time.time + wanderLegTimeout;
+    }
+
+    private bool PickWanderPoint(out Vector2 point)
+    {
+        var position = Position;
+        var home = Home;
+        var fromHome = Isometric.GroundDistance(home, position, isometricYScale);
+
+        for (var attempt = 0; attempt < wanderAttempts; attempt++) {
+            var direction = UnityEngine.Random.insideUnitCircle;
+            if (direction.sqrMagnitude <= 0.0001f)
+                continue;
+
+            var ground = direction.normalized * UnityEngine.Random.Range(wanderStep * 0.35f, wanderStep);
+            var candidate = position + Isometric.ToScreen(ground, isometricYScale);
+            var candidateFromHome = Isometric.GroundDistance(home, candidate, isometricYScale);
+
+            // Allowed to leave the leash only while heading back towards it
+            if (candidateFromHome > wanderRadius && candidateFromHome >= fromHome)
+                continue;
+            if (!Mover.HasClearWalk(candidate))
+                continue;
+
+            point = candidate;
+            return true;
+        }
+
+        point = position;
+        return false;
     }
 
     // Holds the preferred distance between moves, walking in or backing off as the target moves
@@ -233,7 +413,6 @@ public class Minotaur : MonoBehaviour, IDamagable
         }
 
         if (distance < idleMinDistance) {
-            // Back off to the near edge of the band, staying on the side it is already on
             var retreat = TargetPosition + Isometric.ToScreen(-direction * idleMinDistance, isometricYScale);
             Mover.SetDestination(retreat, idleSpeedMultiplier);
             return;
@@ -252,7 +431,6 @@ public class Minotaur : MonoBehaviour, IDamagable
         var sideways = new Vector2(-direction.y, direction.x) * (_strafeSign * idleStrafeReach);
         var destination = Position + Isometric.ToScreen(sideways, isometricYScale);
 
-        // A shuffle is not worth pathing around a wall for, so turn around instead
         if (!Mover.HasClearWalk(destination)) {
             _strafeSign = -_strafeSign;
             _strafeFlipTime = Time.time + idleStrafeInterval;
@@ -267,7 +445,6 @@ public class Minotaur : MonoBehaviour, IDamagable
 
     private IEnumerator RunMove(BossMove move)
     {
-        // Idle walking stops here, a move steers itself from now on
         if (Mover != null)
             Mover.Stop();
 
@@ -405,5 +582,38 @@ public class Minotaur : MonoBehaviour, IDamagable
     {
         if (Application.isPlaying)
             CurrentHealth = Mathf.Min(CurrentHealth, maxHealth);
+
+        if (wanderPauseMax < wanderPauseMin)
+            wanderPauseMax = wanderPauseMin;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        var position = Application.isPlaying ? Position : (Vector2)transform.position;
+        var home = Application.isPlaying ? Home
+            : homeAnchor != null ? (Vector2)homeAnchor.position : (Vector2)transform.position;
+
+        DrawGroundCircle(position, sightRange, new Color(1f, 0.85f, 0.3f, 0.8f));
+        DrawGroundCircle(home, wanderRadius, new Color(0.3f, 0.8f, 1f, 0.5f));
+    }
+
+    private void DrawGroundCircle(Vector2 centre, float radius, Color color)
+    {
+        if (radius <= 0f)
+            return;
+
+        Gizmos.color = color;
+
+        var previous = centre + new Vector2(radius, 0f);
+
+        for (var i = 1; i <= 32; i++) {
+            var radians = Mathf.PI * 2f * i / 32f;
+            var point = centre + new Vector2(
+                Mathf.Cos(radians) * radius,
+                Mathf.Sin(radians) * radius * isometricYScale);
+
+            Gizmos.DrawLine(previous, point);
+            previous = point;
+        }
     }
 }
