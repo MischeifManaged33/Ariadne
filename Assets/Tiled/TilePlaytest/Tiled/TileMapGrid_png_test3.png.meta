@@ -1,0 +1,1235 @@
+fileFormatVersion: 2
+guid: df4ff19190034934e837e790b9052c4b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -583226418523120879
+    second: TileMapGrid_png_test3_0
+  - first:
+      213: -7888498594990048597
+    second: TileMapGrid_png_test3_1
+  - first:
+      213: 863363084824665117
+    second: TileMapGrid_png_test3_2
+  - first:
+      213: 4715703446351758566
+    second: TileMapGrid_png_test3_3
+  - first:
+      213: -9019324586666448333
+    second: TileMapGrid_png_test3_4
+  - first:
+      213: 2501282328782059450
+    second: TileMapGrid_png_test3_5
+  - first:
+      213: -2124536106176756424
+    second: TileMapGrid_png_test3_6
+  - first:
+      213: -2170344766361656144
+    second: TileMapGrid_png_test3_7
+  - first:
+      213: -4666047941633959030
+    second: TileMapGrid_png_test3_8
+  - first:
+      213: 483755962939745364
+    second: TileMapGrid_png_test3_9
+  - first:
+      213: -5038471485431085531
+    second: TileMapGrid_png_test3_10
+  - first:
+      213: 2857796724330712509
+    second: TileMapGrid_png_test3_11
+  - first:
+      213: 4212243385955393694
+    second: TileMapGrid_png_test3_12
+  - first:
+      213: -388458905940844359
+    second: TileMapGrid_png_test3_13
+  - first:
+      213: -8460497649126187277
+    second: TileMapGrid_png_test3_14
+  - first:
+      213: 4827344060711687651
+    second: TileMapGrid_png_test3_15
+  - first:
+      213: 6843364284107314450
+    second: TileMapGrid_png_test3_16
+  - first:
+      213: -1359656914080464504
+    second: TileMapGrid_png_test3_17
+  - first:
+      213: 1669042576100805303
+    second: TileMapGrid_png_test3_18
+  - first:
+      213: -2581091013642881765
+    second: TileMapGrid_png_test3_19
+  - first:
+      213: 1690713537732637288
+    second: TileMapGrid_png_test3_20
+  - first:
+      213: -4337342257589244234
+    second: TileMapGrid_png_test3_21
+  - first:
+      213: 5370720549786184780
+    second: TileMapGrid_png_test3_22
+  - first:
+      213: -270517092057134807
+    second: TileMapGrid_png_test3_23
+  - first:
+      213: -3219622808121287797
+    second: TileMapGrid_png_test3_24
+  - first:
+      213: -6630250429233329442
+    second: TileMapGrid_png_test3_25
+  - first:
+      213: 4468819260560340305
+    second: TileMapGrid_png_test3_26
+  - first:
+      213: -835252098041737998
+    second: TileMapGrid_png_test3_27
+  - first:
+      213: 3865028575669812932
+    second: TileMapGrid_png_test3_28
+  - first:
+      213: -2199964987110932320
+    second: TileMapGrid_png_test3_29
+  - first:
+      213: 3774937574665126947
+    second: TileMapGrid_png_test3_30
+  - first:
+      213: 546459992571931808
+    second: TileMapGrid_png_test3_31
+  - first:
+      213: 1808826149230542031
+    second: TileMapGrid_png_test3_32
+  - first:
+      213: 2105504302921150959
+    second: TileMapGrid_png_test3_33
+  - first:
+      213: 2607120031577715440
+    second: TileMapGrid_png_test3_34
+  - first:
+      213: -6870521627249812539
+    second: TileMapGrid_png_test3_35
+  - first:
+      213: -5584187467025460525
+    second: TileMapGrid_png_test3_36
+  - first:
+      213: -6538678659491087057
+    second: TileMapGrid_png_test3_37
+  - first:
+      213: -9108137585138699460
+    second: TileMapGrid_png_test3_38
+  - first:
+      213: 5920270887881676661
+    second: TileMapGrid_png_test3_39
+  - first:
+      213: 6267926223170759830
+    second: TileMapGrid_png_test3_40
+  - first:
+      213: -4343304684861618197
+    second: TileMapGrid_png_test3_41
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4059
+        width: 281
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11b5e4499a6f7e7f0800000000000000
+      internalID: -583226418523120879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_1
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 3943
+        width: 234
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baa337aa25c668290800000000000000
+      internalID: -7888498594990048597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_2
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 3943
+        width: 234
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1cd82fb6284bfb00800000000000000
+      internalID: 863363084824665117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_3
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 3943
+        width: 234
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e4c1e1bc4b817140800000000000000
+      internalID: 4715703446351758566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_4
+      rect:
+        serializedVersion: 2
+        x: 1447
+        y: 3919
+        width: 794
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33aacc9231ce4d280800000000000000
+      internalID: -9019324586666448333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_5
+      rect:
+        serializedVersion: 2
+        x: 3639
+        y: 3943
+        width: 234
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab73402960756b220800000000000000
+      internalID: 2501282328782059450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_6
+      rect:
+        serializedVersion: 2
+        x: 3967
+        y: 3943
+        width: 233
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 835c7deeaa12482e0800000000000000
+      internalID: -2124536106176756424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1399
+        width: 2241
+        height: 2522
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b4a2e81fe261e1e0800000000000000
+      internalID: -2170344766361656144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_8
+      rect:
+        serializedVersion: 2
+        x: 2295
+        y: 3540
+        width: 170
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8b17fd6e1ede3fb0800000000000000
+      internalID: -4666047941633959030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_9
+      rect:
+        serializedVersion: 2
+        x: 2582
+        y: 3543
+        width: 162
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45420093c75a6b600800000000000000
+      internalID: 483755962939745364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_10
+      rect:
+        serializedVersion: 2
+        x: 2799
+        y: 3493
+        width: 282
+        height: 263
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52602f301e0c31ab0800000000000000
+      internalID: -5038471485431085531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_11
+      rect:
+        serializedVersion: 2
+        x: 3639
+        y: 3405
+        width: 561
+        height: 492
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbdc102cafee8a720800000000000000
+      internalID: 2857796724330712509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_12
+      rect:
+        serializedVersion: 2
+        x: 2311
+        y: 3252
+        width: 129
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e902c57ca05e47a30800000000000000
+      internalID: 4212243385955393694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_13
+      rect:
+        serializedVersion: 2
+        x: 2561
+        y: 3138
+        width: 32
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b02f85eeaaeb9af0800000000000000
+      internalID: -388458905940844359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_14
+      rect:
+        serializedVersion: 2
+        x: 3006
+        y: 3138
+        width: 32
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fe5ec8b636469a80800000000000000
+      internalID: -8460497649126187277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_15
+      rect:
+        serializedVersion: 2
+        x: 3731
+        y: 3104
+        width: 378
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e5df4bc8db2ef240800000000000000
+      internalID: 4827344060711687651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_16
+      rect:
+        serializedVersion: 2
+        x: 2621
+        y: 2987
+        width: 75
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 215dfc60f8388fe50800000000000000
+      internalID: 6843364284107314450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_17
+      rect:
+        serializedVersion: 2
+        x: 3639
+        y: 2263
+        width: 561
+        height: 818
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88184db8d37812de0800000000000000
+      internalID: -1359656914080464504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_18
+      rect:
+        serializedVersion: 2
+        x: 2331
+        y: 1679
+        width: 98
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bacd774161a92710800000000000000
+      internalID: 1669042576100805303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_19
+      rect:
+        serializedVersion: 2
+        x: 2519
+        y: 1444
+        width: 842
+        height: 517
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b15fcd6f56f1e2cd0800000000000000
+      internalID: -2581091013642881765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_20
+      rect:
+        serializedVersion: 2
+        x: 3639
+        y: 1679
+        width: 561
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8627f79310f967710800000000000000
+      internalID: 1690713537732637288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_21
+      rect:
+        serializedVersion: 2
+        x: 3639
+        y: 1399
+        width: 561
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6be2a1b623aaec3c0800000000000000
+      internalID: -4337342257589244234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_22
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 1293
+        width: 93
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4c65ed72e1a88a40800000000000000
+      internalID: 5370720549786184780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_23
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 887
+        width: 234
+        height: 490
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9294346532eee3cf0800000000000000
+      internalID: -270517092057134807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_24
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 863
+        width: 562
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8b5f234d1a9153d0800000000000000
+      internalID: -3219622808121287797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_25
+      rect:
+        serializedVersion: 2
+        x: 1399
+        y: 887
+        width: 234
+        height: 490
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eda8aa9fc5e9cf3a0800000000000000
+      internalID: -6630250429233329442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_26
+      rect:
+        serializedVersion: 2
+        x: 2891
+        y: 1119
+        width: 378
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1557f1fc07f640e30800000000000000
+      internalID: 4468819260560340305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_27
+      rect:
+        serializedVersion: 2
+        x: 3730
+        y: 1118
+        width: 380
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fc825664a69864f0800000000000000
+      internalID: -835252098041737998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_28
+      rect:
+        serializedVersion: 2
+        x: 1679
+        y: 863
+        width: 186
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ce7883030753a530800000000000000
+      internalID: 3865028575669812932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_29
+      rect:
+        serializedVersion: 2
+        x: 2055
+        y: 839
+        width: 186
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a0c4f800872871e0800000000000000
+      internalID: -2199964987110932320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_30
+      rect:
+        serializedVersion: 2
+        x: 2611
+        y: 839
+        width: 98
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 324803349b5436430800000000000000
+      internalID: 3774937574665126947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_31
+      rect:
+        serializedVersion: 2
+        x: 2799
+        y: 863
+        width: 282
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ac663dc77a659700800000000000000
+      internalID: 546459992571931808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_32
+      rect:
+        serializedVersion: 2
+        x: 3706
+        y: 559
+        width: 404
+        height: 516
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fccf2559ccd3a1910800000000000000
+      internalID: 1808826149230542031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_33
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 279
+        width: 562
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe1fba01201483d10800000000000000
+      internalID: 2105504302921150959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_34
+      rect:
+        serializedVersion: 2
+        x: 1491
+        y: 559
+        width: 98
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f2bef80bd95e2420800000000000000
+      internalID: 2607120031577715440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_35
+      rect:
+        serializedVersion: 2
+        x: 1679
+        y: 290
+        width: 1122
+        height: 551
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cbd22a4bf007a0a0800000000000000
+      internalID: -6870521627249812539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_36
+      rect:
+        serializedVersion: 2
+        x: 2847
+        y: 279
+        width: 186
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d252c4c51bf082b0800000000000000
+      internalID: -5584187467025460525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_37
+      rect:
+        serializedVersion: 2
+        x: 3079
+        y: 566
+        width: 282
+        height: 229
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2d3b901762f145a0800000000000000
+      internalID: -6538678659491087057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_38
+      rect:
+        serializedVersion: 2
+        x: 3451
+        y: 559
+        width: 123
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c337c609f15699180800000000000000
+      internalID: -9108137585138699460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_39
+      rect:
+        serializedVersion: 2
+        x: 3079
+        y: 324
+        width: 282
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 577164e6107092250800000000000000
+      internalID: 5920270887881676661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_40
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 0
+        width: 562
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69ce27ae0b52cf650800000000000000
+      internalID: 6267926223170759830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileMapGrid_png_test3_41
+      rect:
+        serializedVersion: 2
+        x: 2051
+        y: 0
+        width: 378
+        height: 235
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be78883a66b79b3c0800000000000000
+      internalID: -4343304684861618197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      TileMapGrid_png_test3_0: -583226418523120879
+      TileMapGrid_png_test3_1: -7888498594990048597
+      TileMapGrid_png_test3_10: -5038471485431085531
+      TileMapGrid_png_test3_11: 2857796724330712509
+      TileMapGrid_png_test3_12: 4212243385955393694
+      TileMapGrid_png_test3_13: -388458905940844359
+      TileMapGrid_png_test3_14: -8460497649126187277
+      TileMapGrid_png_test3_15: 4827344060711687651
+      TileMapGrid_png_test3_16: 6843364284107314450
+      TileMapGrid_png_test3_17: -1359656914080464504
+      TileMapGrid_png_test3_18: 1669042576100805303
+      TileMapGrid_png_test3_19: -2581091013642881765
+      TileMapGrid_png_test3_2: 863363084824665117
+      TileMapGrid_png_test3_20: 1690713537732637288
+      TileMapGrid_png_test3_21: -4337342257589244234
+      TileMapGrid_png_test3_22: 5370720549786184780
+      TileMapGrid_png_test3_23: -270517092057134807
+      TileMapGrid_png_test3_24: -3219622808121287797
+      TileMapGrid_png_test3_25: -6630250429233329442
+      TileMapGrid_png_test3_26: 4468819260560340305
+      TileMapGrid_png_test3_27: -835252098041737998
+      TileMapGrid_png_test3_28: 3865028575669812932
+      TileMapGrid_png_test3_29: -2199964987110932320
+      TileMapGrid_png_test3_3: 4715703446351758566
+      TileMapGrid_png_test3_30: 3774937574665126947
+      TileMapGrid_png_test3_31: 546459992571931808
+      TileMapGrid_png_test3_32: 1808826149230542031
+      TileMapGrid_png_test3_33: 2105504302921150959
+      TileMapGrid_png_test3_34: 2607120031577715440
+      TileMapGrid_png_test3_35: -6870521627249812539
+      TileMapGrid_png_test3_36: -5584187467025460525
+      TileMapGrid_png_test3_37: -6538678659491087057
+      TileMapGrid_png_test3_38: -9108137585138699460
+      TileMapGrid_png_test3_39: 5920270887881676661
+      TileMapGrid_png_test3_4: -9019324586666448333
+      TileMapGrid_png_test3_40: 6267926223170759830
+      TileMapGrid_png_test3_41: -4343304684861618197
+      TileMapGrid_png_test3_5: 2501282328782059450
+      TileMapGrid_png_test3_6: -2124536106176756424
+      TileMapGrid_png_test3_7: -2170344766361656144
+      TileMapGrid_png_test3_8: -4666047941633959030
+      TileMapGrid_png_test3_9: 483755962939745364
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
