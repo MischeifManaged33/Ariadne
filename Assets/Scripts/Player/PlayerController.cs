@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 _velocity;
     private Vector2 lastMoveDirection = Vector2.down;
 
+    public Vector2 CurrentInput { get; private set; }
+
     private void Reset()
     {
         player = GetComponent<Player>();
@@ -77,6 +79,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         var input = ReadInput();
+        CurrentInput = input;
 
         var speed = player != null ? player.MoveSpeed : 5f;
         var target = new Vector2(input.x, input.y * isometricYScale) * speed;
