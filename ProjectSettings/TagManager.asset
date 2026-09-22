@@ -50,11 +50,17 @@ TagManager:
   - name: Enemy
     uniqueID: 632217233
     locked: 0
-  - name: Player
-    uniqueID: 3027823411
-    locked: 0
   - name: Decor
     uniqueID: 1429553387
+    locked: 0
+  - name: Plate
+    uniqueID: 2265296491
+    locked: 0
+  - name: Block
+    uniqueID: 725097597
+    locked: 0
+  - name: Player
+    uniqueID: 3027823411
     locked: 0
   m_RenderingLayers:
   - Default

@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 lastMoveDirection = Vector2.down;
 
     public Vector2 CurrentInput { get; private set; }
+    public Vector2 CurrentVelocity => _velocity;
 
     private void Reset()
     {
