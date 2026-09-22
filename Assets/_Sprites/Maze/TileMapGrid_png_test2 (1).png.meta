@@ -625,7 +625,7 @@ TextureImporter:
         height: 840
       alignment: 9
       pivot: {x: 0.4854089, y: 0.10603392}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 280, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
@@ -659,6 +659,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PillerBottom
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 280
+        height: 281
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05f658a6c5b63054e9c4e92239221f02
+      internalID: 1131173321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -673,6 +695,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      PillerBottom: 1131173321
       TileMapGrid_png_test2 (1)_6: 179525456
       bare_cube: -634305263
       black_wall: 1590459741
