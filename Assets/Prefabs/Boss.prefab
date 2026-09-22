@@ -147,7 +147,7 @@ Transform:
   m_GameObject: {fileID: 5910907604388181261}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.07, y: -2.6802, z: 0}
+  m_LocalPosition: {x: -3.09, y: -2.6802, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2.0819273}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -311,7 +311,7 @@ MonoBehaviour:
   cooldown: 2
   outOfRangeWeight: 0.15
   minRange: 0
-  maxRange: 3.5
+  maxRange: 5
   damage: 30
   arc: 150
   windup: 0.8
@@ -403,7 +403,7 @@ MonoBehaviour:
   cooldown: 1.5
   outOfRangeWeight: 0
   minRange: 0
-  maxRange: 2.5
+  maxRange: 3.5
   damage: 18
   arc: 120
   windup: 0.45
@@ -453,7 +453,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.04269123, y: -0.6363772}
+  m_Offset: {x: 0.04269123, y: -0.85973376}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -463,7 +463,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.81902647, y: 1.2152312}
+  m_Size: {x: 0.81902647, y: 0.7685181}
   m_EdgeRadius: 0
 --- !u!1 &6527149062573953775
 GameObject:
@@ -605,7 +605,7 @@ Transform:
   m_GameObject: {fileID: 8342971255992450521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -0.58, z: 0}
+  m_LocalPosition: {x: 0.03, y: -1.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
