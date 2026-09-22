@@ -64,11 +64,13 @@ public class PuzzleBlock : MonoBehaviour
     }
 
     public void Initialize(
-        PuzzleManager manager,
-        Vector3Int startingCell)
+    PuzzleManager manager,
+    Vector3Int startingCell)
     {
         puzzleManager = manager;
         Cell = startingCell;
+        IsMoving = false;
+        nextPushTime = 0f;
     }
 
     public void SetCell(Vector3Int cell)

@@ -43,6 +43,7 @@ public class PuzzleManager : MonoBehaviour
     private readonly HashSet<Vector3Int> walkableCells = new();
     private readonly Dictionary<Vector3Int, PuzzleBlock> blocksByCell = new();
     private readonly Dictionary<Vector3Int, PuzzlePlate> platesByCell = new();
+    private readonly Dictionary<PuzzleBlock, Vector3Int> startingBlockCells = new();
 
     private string[] layoutRows;
     private bool puzzleSolved;
@@ -54,6 +55,11 @@ public class PuzzleManager : MonoBehaviour
 
     private void BuildPuzzle()
     {
+        walkableCells.Clear();
+        blocksByCell.Clear();
+        platesByCell.Clear();
+        startingBlockCells.Clear();
+
         if (grid == null)
         {
             Debug.LogError("PuzzleManager needs a Grid.");
@@ -159,7 +165,37 @@ public class PuzzleManager : MonoBehaviour
         );
 
         block.Initialize(this, cell);
+
         blocksByCell.Add(cell, block);
+        startingBlockCells.Add(block, cell);
+    }
+
+    public void ResetPuzzle()
+    {
+        // Stop any blocks currently animating.
+        StopAllCoroutines();
+
+        blocksByCell.Clear();
+
+        foreach (
+            KeyValuePair<PuzzleBlock, Vector3Int> entry
+            in startingBlockCells)
+        {
+            PuzzleBlock block = entry.Key;
+            Vector3Int startingCell = entry.Value;
+
+            if (block == null)
+                continue;
+
+            block.Initialize(this, startingCell);
+            block.transform.position = CellToWorld(startingCell);
+
+            blocksByCell.Add(startingCell, block);
+        }
+
+        UpdatePressurePlates();
+
+        Debug.Log("Puzzle reset.");
     }
 
     private void SpawnPlate(Vector3Int cell)
