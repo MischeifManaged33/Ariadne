@@ -13,12 +13,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
-    [Header("Sorting")]
-    [SerializeField]
-    private bool sortByDepth = true;
-    [SerializeField, Min(1f)]
-    private float sortingPrecision = 16f;
-
     // Hash for animator
     private static readonly int MoveXHash = Animator.StringToHash("MoveX");
     private static readonly int MoveYHash = Animator.StringToHash("MoveY");
@@ -41,12 +35,6 @@ public class Player : MonoBehaviour
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
-    }
-
-    private void LateUpdate()
-    {
-        if (sortByDepth && spriteRenderer != null)
-            spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * sortingPrecision);
     }
 
 

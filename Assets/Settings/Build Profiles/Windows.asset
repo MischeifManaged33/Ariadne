@@ -22,9 +22,12 @@ MonoBehaviour:
   m_AdditionalPlatformBuildSettings: []
   m_OverrideGlobalSceneList: 1
   m_Scenes:
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/Scenes/BossTest.unity
     m_guid: 045204c16fcc5774cb2d1bbf13d83aa0
+  - m_enabled: 1
+    m_path: Assets/Scenes/TestLevel.unity
+    m_guid: 7fc4d196f497a354bba2cabb3c3fff64
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
