@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     protected virtual void Start()
     {
         RaiseHealthChanged();
-    }
+    } 
 
     protected virtual void FixedUpdate()
     {
