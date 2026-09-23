@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 7405922173783178614}
   - component: {fileID: 2581880639867805479}
   - component: {fileID: 7577772476803814645}
+  - component: {fileID: 7229840113556218044}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -389,6 +390,29 @@ MonoBehaviour:
   isometricYScale: 0.5
   alwaysShowPointerAim: 1
   tapThreshold: 0.25
+--- !u!114 &7229840113556218044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6319265570091660172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4506fb4d73cc3aae18a6ef670f0ed69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Footsteps
+  footstep:
+    Guid:
+      Data1: 1054501757
+      Data2: 1259216871
+      Data3: -462573427
+      Data4: 656471162
+    Path: event:/SFX/Player/Footsteps
+  strideLength: 2.5
+  minInterval: 0.15
+  stepOnFirstMove: 1
+  isometricYScale: 0.5
 --- !u!1 &8462676818140494945
 GameObject:
   m_ObjectHideFlags: 0
