@@ -81,12 +81,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1.4322624, y: 3.2412071}
-      - {x: -2.8437958, y: 2.5798874}
-      - {x: -2.876544, y: 1.0890844}
-      - {x: -1.4270988, y: 0.38577282}
-      - {x: -0.04416883, y: 1.067097}
-      - {x: -0.01662159, y: 2.520855}
+    - - {x: -0.72618866, y: 1.7754402}
+      - {x: -1.4137802, y: 1.4716225}
+      - {x: -1.4644041, y: -0.010242701}
+      - {x: -0.023896694, y: -0.6956786}
+      - {x: 1.3679711, y: -0.032226324}
+      - {x: 1.381813, y: 1.4001617}
+      - {x: -0.043435097, y: 2.100788}
   m_UseDelaunayMesh: 1
 --- !u!50 &8560362668429413600
 Rigidbody2D:
@@ -206,7 +207,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 725097597
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -634305263, guid: 40a7d16d90cebe74fac9c9080d837dc0, type: 3}

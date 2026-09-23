@@ -86,7 +86,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (CurrentHealth <= 0)
         {
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene("Loser");
         }
 
         _invulnerableUntil = Time.time + invulnerabilityTime;
