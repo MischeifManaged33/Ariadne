@@ -28,6 +28,18 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/TestLevel.unity
     m_guid: 7fc4d196f497a354bba2cabb3c3fff64
+  - m_enabled: 1
+    m_path: Assets/Scenes/Playtest.unity
+    m_guid: 02e2a9f6014ab7f4889bb2ce484fcb2e
+  - m_enabled: 1
+    m_path: Assets/Scenes/Winner.unity
+    m_guid: 43d9b733f67c90e4999463061077b0c4
+  - m_enabled: 1
+    m_path: Assets/Scenes/Menu.unity
+    m_guid: df471a6e3d88a174ab91ef003ffdbc8e
+  - m_enabled: 1
+    m_path: Assets/Scenes/Loser.unity
+    m_guid: ddacf4a1ccc4f614cba20832a472b104
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
