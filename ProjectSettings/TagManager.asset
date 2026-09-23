@@ -50,6 +50,9 @@ TagManager:
   - name: Wall
     uniqueID: 2027013127
     locked: 0
+  - name: WallDecor
+    uniqueID: 3183167243
+    locked: 0
   - name: Enemy
     uniqueID: 632217233
     locked: 0
@@ -64,6 +67,9 @@ TagManager:
     locked: 0
   - name: Decor
     uniqueID: 1429553387
+    locked: 0
+  - name: TopDecor
+    uniqueID: 2043864919
     locked: 0
   m_RenderingLayers:
   - Default

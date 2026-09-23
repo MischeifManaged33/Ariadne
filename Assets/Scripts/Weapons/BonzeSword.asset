@@ -16,5 +16,6 @@ MonoBehaviour:
   sprite: {fileID: 0}
   damage: 20
   attackCooldown: 0.5
-  attackRange: 1.2
+  attackRange: 2.3
+  attackAngle: 90
   hitRadius: 0.5
