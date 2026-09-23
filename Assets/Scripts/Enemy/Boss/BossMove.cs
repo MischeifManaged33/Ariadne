@@ -19,6 +19,10 @@ public abstract class BossMove : MonoBehaviour
     [SerializeField, Min(0f)]
     private float maxRange = 20f;
 
+    [Header("Animation")]
+    [SerializeField]
+    private int attackId;
+
     public bool IsOnCooldown => Time.time < _nextUsableTime;
 
     public float MinRange { get => minRange; protected set => minRange = Mathf.Max(0f, value); }
@@ -67,6 +71,18 @@ public abstract class BossMove : MonoBehaviour
     public void BeginCooldown() => _nextUsableTime = Time.time + cooldown;
 
     public void ResetCooldown() => _nextUsableTime = 0f;
+
+    protected void PlayAttack(Minotaur boss, float windup)
+    {
+        if (boss != null && boss.Animation != null)
+            boss.Animation.PlayAttack(attackId, windup);
+    }
+
+    protected void EndAttack(Minotaur boss)
+    {
+        if (boss != null && boss.Animation != null)
+            boss.Animation.EndAttack();
+    }
 
     protected static int ResolveMask(LayerMask mask)
     {

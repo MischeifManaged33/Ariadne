@@ -100,6 +100,7 @@ public abstract class MinotaurMelee : BossMove
 
         Telegraph(boss, direction, true);
         sounds.PlayWindup(Origin(boss));
+        PlayAttack(boss, windup);
 
         yield return new WaitForSeconds(windup);
 
@@ -109,6 +110,7 @@ public abstract class MinotaurMelee : BossMove
             indicator.Flash();
 
         Telegraph(boss, direction, false);
+        EndAttack(boss);
         yield return new WaitForSeconds(recovery);
     }
 

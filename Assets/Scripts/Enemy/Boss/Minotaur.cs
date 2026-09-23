@@ -103,6 +103,7 @@ public class Minotaur : MonoBehaviour, IDamagable
     public bool IsTransitioning { get; private set; }
     public Transform Target => target;
     public BossPathfinder Mover { get; private set; }
+    public MinotaurAnimator Animation { get; private set; }
     public float YScale => isometricYScale;
     public Vector2 Position => transform.position;
     public Vector2 Facing { get; private set; } = Vector2.down;
@@ -114,7 +115,6 @@ public class Minotaur : MonoBehaviour, IDamagable
 
     public Vector2 TargetPosition => target != null ? (Vector2)target.position : Position;
 
-    // Ranges are ground space, so a target above or below reads as far as one beside
     public float DistanceToTarget =>
         target != null ? Isometric.GroundDistance(Position, TargetPosition, isometricYScale) : Mathf.Infinity;
 
@@ -153,6 +153,7 @@ public class Minotaur : MonoBehaviour, IDamagable
         _moves = GetComponentsInChildren<BossMove>(true);
         _hitFlash = HitFlash.GetOrAdd(gameObject);
         Mover = GetComponent<BossPathfinder>();
+        Animation = GetComponent<MinotaurAnimator>();
 
         if (sightBlockers.value == 0)
             sightBlockers = LayerMask.GetMask("Walls");
@@ -364,7 +365,6 @@ public class Minotaur : MonoBehaviour, IDamagable
             var candidate = position + Isometric.ToScreen(ground, isometricYScale);
             var candidateFromHome = Isometric.GroundDistance(home, candidate, isometricYScale);
 
-            // Allowed to leave the leash only while heading back towards it
             if (candidateFromHome > wanderRadius && candidateFromHome >= fromHome)
                 continue;
             if (!Mover.HasClearWalk(candidate))
@@ -480,6 +480,9 @@ public class Minotaur : MonoBehaviour, IDamagable
             StopCoroutine(_moveRoutine);
             _moveRoutine = null;
         }
+
+        if (Animation != null)
+            Animation.EndAttack();
 
         if (Mover != null)
             Mover.Stop();
