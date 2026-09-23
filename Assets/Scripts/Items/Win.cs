@@ -7,7 +7,7 @@ public class Goal : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene("Winner");
         }
     }
 }
