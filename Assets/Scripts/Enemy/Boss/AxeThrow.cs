@@ -34,6 +34,10 @@ public class AxeThrow : BossMove
     [SerializeField, Min(0.5f)]
     private float indicatorLength = 4.5f;
 
+    [Header("Audio")]
+    [SerializeField]
+    private AttackSounds sounds = new AttackSounds();
+
     public ThrownAxe ActiveAxe { get; private set; }
     public bool HasAxeInHand => ActiveAxe == null;
 
@@ -70,6 +74,8 @@ public class AxeThrow : BossMove
         var direction = AimDirection(boss, boss.Facing);
 
         var lockTime = windup * (1f - aimLockFraction);
+
+        sounds.PlayWindup(Origin(boss));
 
         for (var elapsed = 0f; elapsed < windup; elapsed += Time.deltaTime) {
             if (elapsed < lockTime)
@@ -206,6 +212,8 @@ public class AxeThrow : BossMove
         var origin = Origin(boss);
         var spawn = origin + Isometric.ToScreen(groundDirection * spawnOffset, boss.YScale);
         var position = new Vector3(spawn.x, spawn.y, boss.transform.position.z);
+
+        sounds.PlaySwing(position);
 
         ActiveAxe = Instantiate(axePrefab, position, Quaternion.identity);
 

@@ -24087,10 +24087,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1cf18d3f41f98147acda2ba6e249a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  mazeMusic: {fileID: 8300000, guid: e23196b56aded354ba5a5957fadd876d, type: 3}
-  bossMusic: {fileID: 8300000, guid: afeb48fe7e9505c4a9c0a1ba92dc6ce5, type: 3}
+  banks:
+  - Master
+  - Master.strings
+  loadSampleData: 1
+  mazeMusic:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  bossMusic:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  musicBusPath: bus:/Music
+  sfxBusPath: bus:/SFX
   musicVolume: 0.7
-  fadeDuration: 1
+  sfxVolume: 1
 --- !u!4 &2132181297
 Transform:
   m_ObjectHideFlags: 0

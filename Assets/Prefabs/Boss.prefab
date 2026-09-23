@@ -202,7 +202,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5071274906406294528, guid: 7ed7437e67f1f5f4a97acb8ded900a77, type: 3}
@@ -321,6 +321,28 @@ MonoBehaviour:
     m_Bits: 128
   pivot: {fileID: 4612454984724486614}
   indicator: {fileID: 2085833292065338826}
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 1602403349
+        Data2: 1192849187
+        Data3: 1191027348
+        Data4: -1374218044
+      Path: event:/SFX/Minotaur/AxeSwing
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
   approachTimeout: 4
   approachSpeedMultiplier: 1
   approachTightness: 0.7
@@ -358,6 +380,28 @@ MonoBehaviour:
   maxLeadTime: 0.5
   indicator: {fileID: 8356113797552333153}
   indicatorLength: 4.5
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 1602403349
+        Data2: 1192849187
+        Data3: 1191027348
+        Data4: -1374218044
+      Path: event:/SFX/Minotaur/AxeSwing
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
 --- !u!114 &7130976122343417830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +457,28 @@ MonoBehaviour:
     m_Bits: 128
   pivot: {fileID: 4612454984724486614}
   indicator: {fileID: 2085833292065338826}
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 495864901
+        Data2: 1133407231
+        Data3: -1603276893
+        Data4: -1199853952
+      Path: event:/SFX/Minotaur/Slap
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
   approachTimeout: 4
   approachSpeedMultiplier: 1
   approachTightness: 0.7

@@ -33,6 +33,10 @@ public class ThrownAxe : MonoBehaviour
     [SerializeField, Min(1f)]
     private float sortingPrecision = 16f;
 
+    [Header("Audio")]
+    [SerializeField]
+    private AttackSounds sounds = new AttackSounds();
+
     public float Speed => speed;
     public bool IsFlying { get; private set; }
     public bool IsStuck { get; private set; }
@@ -73,6 +77,8 @@ public class ThrownAxe : MonoBehaviour
         IsStuck = false;
 
         transform.rotation = Quaternion.identity;
+
+        sounds.PlaySwingAttached(gameObject);
     }
 
     public void Retrieve()
@@ -136,6 +142,8 @@ public class ThrownAxe : MonoBehaviour
 
     private void Stick(Vector2 point)
     {
+        sounds.PlayImpact(point);
+
         transform.position = new Vector3(point.x, point.y, transform.position.z);
         transform.rotation = Quaternion.Euler(0f, 0f, stuckTilt);
 
