@@ -65,6 +65,9 @@ TagManager:
   - name: Player
     uniqueID: 3027823411
     locked: 0
+  - name: Topwall
+    uniqueID: 573366377
+    locked: 0
   - name: Decor
     uniqueID: 1429553387
     locked: 0
