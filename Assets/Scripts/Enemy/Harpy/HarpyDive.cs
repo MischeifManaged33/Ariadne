@@ -34,6 +34,10 @@ public class HarpyDive : EnemyAbility
     [SerializeField]
     private CircleIndicator indicator;
 
+    [Header("Audio")]
+    [SerializeField]
+    private AttackSounds sounds = new AttackSounds();
+
     private Harpy _harpy;
     private CircleIndicator _runtimeIndicator;
     private WaitForSeconds _recoveryWait;
@@ -71,6 +75,8 @@ public class HarpyDive : EnemyAbility
     {
         var circle = ResolveIndicator();
 
+        sounds.PlayWindup(ai.Position);
+
         for (var elapsed = 0f; elapsed < ascendDuration; elapsed += Time.deltaTime) {
             SetFlight(elapsed / ascendDuration);
             ai.FaceTowards(ai.DirectionToTarget);
@@ -101,6 +107,8 @@ public class HarpyDive : EnemyAbility
 
         // Drop
         var from = ai.Position;
+
+        sounds.PlaySwing(from);
 
         for (var elapsed = 0f; elapsed < diveDuration; elapsed += Time.deltaTime) {
             var t = Mathf.Clamp01(elapsed / diveDuration);
@@ -165,6 +173,8 @@ public class HarpyDive : EnemyAbility
                 continue;
 
             health.TakeDamage(damage);
+            sounds.PlayImpact(candidate.ClosestPoint(mark));
+
             return;
         }
     }

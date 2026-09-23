@@ -673,7 +673,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34cd4fc8a16383e4f9bad85acdea6c77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMusicTrigger
-  bossHealthBar: {fileID: 1732730737}
   returnToMazeMusicOnExit: 1
 --- !u!1 &143315628
 GameObject:
@@ -6571,11 +6570,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -48.6
+      value: 11.4
       objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.5
+      value: 25.1
       objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23553,11 +23552,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4584357468626618083, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
   m_PrefabInstance: {fileID: 940252237}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1732730737 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4411000000000000101, guid: edef8db26f224f0488212d9a77a7a3b7, type: 3}
-  m_PrefabInstance: {fileID: 656993440}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1770662486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24087,10 +24081,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1cf18d3f41f98147acda2ba6e249a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  mazeMusic: {fileID: 8300000, guid: e23196b56aded354ba5a5957fadd876d, type: 3}
-  bossMusic: {fileID: 8300000, guid: afeb48fe7e9505c4a9c0a1ba92dc6ce5, type: 3}
+  banks:
+  - Master
+  - Master.strings
+  mazeMusic:
+    Guid:
+      Data1: -1377166441
+      Data2: 1290346297
+      Data3: -1872850510
+      Data4: 1344020580
+    Path: event:/Music/MazeMusic
+  bossMusic:
+    Guid:
+      Data1: -503810573
+      Data2: 1114845790
+      Data3: 1033197736
+      Data4: -1809787245
+    Path: event:/Music/BossMusic
+  musicBusPath: bus:/Music
+  sfxBusPath: bus:/SFX
   musicVolume: 0.7
-  fadeDuration: 1
+  sfxVolume: 1
 --- !u!4 &2132181297
 Transform:
   m_ObjectHideFlags: 0

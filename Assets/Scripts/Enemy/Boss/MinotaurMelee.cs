@@ -20,6 +20,10 @@ public abstract class MinotaurMelee : BossMove
     [SerializeField]
     protected AttackIndicator indicator;
 
+    [Header("Audio")]
+    [SerializeField]
+    protected AttackSounds sounds = new AttackSounds();
+
     [Header("Approach")]
     [SerializeField, Min(0f)]
     protected float approachTimeout = 4f;
@@ -95,6 +99,8 @@ public abstract class MinotaurMelee : BossMove
         boss.FaceTowards(direction);
 
         Telegraph(boss, direction, true);
+        sounds.PlayWindup(Origin(boss));
+
         yield return new WaitForSeconds(windup);
 
         Strike(boss, direction);
@@ -134,6 +140,8 @@ public abstract class MinotaurMelee : BossMove
         var origin = Origin(boss);
         var half = arc * 0.5f;
 
+        sounds.PlaySwing(origin);
+
         var candidates = Physics2D.OverlapCircleAll(origin, Reach, ResolveMask(targetLayers));
 
         foreach (var candidate in candidates) {
@@ -149,6 +157,8 @@ public abstract class MinotaurMelee : BossMove
                 continue;
 
             health.TakeDamage(damage);
+            sounds.PlayImpact(candidate.ClosestPoint(origin));
+
             return;
         }
     }

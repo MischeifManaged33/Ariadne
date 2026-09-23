@@ -18,4 +18,7 @@ public class WeaponData : ScriptableObject
     [Min(0.1f)] public float attackRange = 1.2f;
     [Range(5f, 360f)] public float attackAngle = 90f;
     [Min(0f)] public float hitRadius = 0.5f;
+
+    [Header("Audio")]
+    public AttackSounds sounds = new AttackSounds();
 }

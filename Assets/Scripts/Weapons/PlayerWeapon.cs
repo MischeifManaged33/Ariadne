@@ -175,9 +175,14 @@ public class PlayerWeapon : MonoBehaviour
         var origin = Origin;
         var halfAngle = equippedWeapon.attackAngle * 0.5f;
 
+        equippedWeapon.sounds.PlaySwing(origin);
+
         var candidates = Physics2D.OverlapCircleAll(origin, equippedWeapon.attackRange, enemyLayers);
 
         _struck.Clear();
+
+        var impactPoint = Vector2.zero;
+        var connected = false;
 
         foreach (var candidate in candidates) {
             var target = candidate.GetComponentInParent<IDamagable>();
@@ -189,10 +194,18 @@ public class PlayerWeapon : MonoBehaviour
 
             target.TakeDamage(equippedWeapon.damage);
 
+            if (!connected) {
+                impactPoint = candidate.ClosestPoint(origin);
+                connected = true;
+            }
+
             // Knockback logic
             if (target is IKnockbackable knockable)
                 knockable.ApplyKnockback(groundDirection);
         }
+
+        if (connected)
+            equippedWeapon.sounds.PlayImpact(impactPoint);
 
         if (indicator != null)
             indicator.Flash();

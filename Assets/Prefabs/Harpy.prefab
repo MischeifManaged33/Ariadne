@@ -317,8 +317,8 @@ MonoBehaviour:
   needsLineOfSight: 1
   ascendDuration: 0.6
   markDuration: 1.2
-  trackFraction: 0.85
-  markRadius: 1.6
+  trackFraction: 0.8
+  markRadius: 2.5
   startFill: 0.12
   hoverSpeed: 4
   diveDuration: 0.22
@@ -328,6 +328,28 @@ MonoBehaviour:
     m_Bits: 128
   recovery: 1
   indicator: {fileID: 8026153396221731732}
+  sounds:
+    windup:
+      Guid:
+        Data1: -33896051
+        Data2: 1205735243
+        Data3: -1372696438
+        Data4: -1192426155
+      Path: event:/SFX/Enemies/HarpyFlap
+    swing:
+      Guid:
+        Data1: -881533275
+        Data2: 1126759142
+        Data3: 1093886101
+        Data4: -394687106
+      Path: event:/SFX/Enemies/HarpyCry
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
 --- !u!61 &867881180752687177
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -362,7 +384,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.14917916, y: 0.13100344}
+  m_Offset: {x: -0.32650793, y: 0.29912516}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -372,5 +394,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.76878464, y: 0.2794751}
+  m_Size: {x: 1.1234419, y: 0.61571854}
   m_EdgeRadius: 0

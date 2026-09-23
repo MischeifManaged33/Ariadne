@@ -9,6 +9,10 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField, Min(0.01f)]
     private float attackInterval = 1f;
 
+    [Header("Audio")]
+    [SerializeField]
+    private AttackSounds sounds = new AttackSounds();
+
     private float nextAttackTime;
 
     private void OnTriggerStay2D(Collider2D other)
@@ -28,6 +32,7 @@ public class EnemyAttack : MonoBehaviour
 
         Debug.Log("Enemy hits you");
         playerHealth.TakeDamage(damage);
+        sounds.PlayImpact(other.ClosestPoint(transform.position));
         nextAttackTime = Time.time + attackInterval;
     }
 }

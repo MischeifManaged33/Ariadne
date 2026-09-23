@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0cd1dbbadfd7e4e8fb799d322735c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  moveSpeed: 9
+  moveSpeed: 10
   spriteRenderer: {fileID: 2630564910986659030}
   animator: {fileID: 6733127777005113617}
 --- !u!114 &7405922173783178614

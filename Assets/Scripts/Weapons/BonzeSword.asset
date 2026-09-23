@@ -19,3 +19,25 @@ MonoBehaviour:
   attackRange: 2.3
   attackAngle: 90
   hitRadius: 0.5
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 937517997
+        Data2: 1108191093
+        Data3: -1354216545
+        Data4: -1055400786
+      Path: event:/SFX/Player/SwordAttack
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
