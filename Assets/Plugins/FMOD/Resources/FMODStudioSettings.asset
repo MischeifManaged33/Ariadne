@@ -313,8 +313,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../AriadneFmod/AriadneFmod.fspro
-  sourceBankPath: ../../AriadneFmod/Build
+  sourceProjectPath: ../AriadneFmod/AriadneFmod.fspro
+  sourceBankPath: ../AriadneFmod/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
