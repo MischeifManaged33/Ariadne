@@ -10,7 +10,8 @@ public class SceneTransition : MonoBehaviour
 
     public void LoadMaze()
     {
-        LoadNum(1);
+        //LoadNum(1);
+        SceneManager.LoadScene("Playtest");
     }
 
     public void LoadMenu()

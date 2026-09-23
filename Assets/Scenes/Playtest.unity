@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34cd4fc8a16383e4f9bad85acdea6c77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMusicTrigger
-  returnToMazeMusicOnExit: 1
+  bossHealthBar: {fileID: 0}
 --- !u!1 &143315628
 GameObject:
   m_ObjectHideFlags: 0
@@ -6570,11 +6570,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.4
+      value: 43.6
       objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.1
+      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.z

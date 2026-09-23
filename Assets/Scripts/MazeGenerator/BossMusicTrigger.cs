@@ -3,8 +3,15 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BossMusicTrigger : MonoBehaviour
 {
-    [SerializeField]
-    private bool returnToMazeMusicOnExit;
+    [SerializeField] private GameObject bossHealthBar;
+
+    private bool activated;
+
+    private void Awake()
+    {
+        if (bossHealthBar != null)
+            bossHealthBar.SetActive(false);
+    }
 
     private void Reset()
     {
@@ -13,20 +20,14 @@ public class BossMusicTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player"))
+        if (activated || !other.CompareTag("Player"))
             return;
+
+        activated = true;
 
         SoundManager.Instance?.PlayBossMusic();
-    }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (!returnToMazeMusicOnExit)
-            return;
-
-        if (!other.CompareTag("Player"))
-            return;
-
-        SoundManager.Instance?.PlayMazeMusic();
+        if (bossHealthBar != null)
+            bossHealthBar.SetActive(true);
     }
 }
