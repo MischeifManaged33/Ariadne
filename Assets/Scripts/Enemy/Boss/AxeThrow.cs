@@ -76,6 +76,7 @@ public class AxeThrow : BossMove
         var lockTime = windup * (1f - aimLockFraction);
 
         sounds.PlayWindup(Origin(boss));
+        PlayAttack(boss, windup);
 
         for (var elapsed = 0f; elapsed < windup; elapsed += Time.deltaTime) {
             if (elapsed < lockTime)
@@ -93,6 +94,7 @@ public class AxeThrow : BossMove
             indicator.Flash();
 
         Telegraph(boss, direction, false);
+        EndAttack(boss);
 
         var deadline = Time.time + aimTimeout;
         while (ActiveAxe != null && ActiveAxe.IsFlying && Time.time < deadline)
