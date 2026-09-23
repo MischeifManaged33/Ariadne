@@ -35,6 +35,8 @@ public class PuzzleManager : MonoBehaviour
     [Header("Movement")]
     [SerializeField, Min(0.01f)]
     private float moveDuration = 0.15f;
+    [SerializeField, Min(0.1f)]
+    private float maximumPushDistance = 1f;
 
     [Header("Events")]
     [SerializeField] private UnityEvent onPuzzleSolved;
@@ -212,10 +214,13 @@ public class PuzzleManager : MonoBehaviour
     }
 
     public bool TryPush(
-        PuzzleBlock block,
-        Vector3Int direction)
+    PuzzleBlock block,
+    Vector3Int direction)
     {
         if (block == null || block.IsMoving)
+            return false;
+
+        if (direction == Vector3Int.zero)
             return false;
 
         Vector3Int destination = block.Cell + direction;
@@ -226,10 +231,7 @@ public class PuzzleManager : MonoBehaviour
         if (blocksByCell.ContainsKey(destination))
             return false;
 
-        StartCoroutine(
-            MoveBlock(block, destination)
-        );
-
+        StartCoroutine(MoveBlock(block, destination));
         return true;
     }
 
@@ -272,16 +274,16 @@ public class PuzzleManager : MonoBehaviour
     }
 
     public Vector3Int GetPushDirection(
-        Vector3Int blockCell,
-        Vector3 playerWorldPosition)
+    Vector3Int blockCell,
+    Vector3 playerWorldPosition)
     {
         Vector3Int[] directions =
         {
-            Vector3Int.right,
-            Vector3Int.left,
-            Vector3Int.up,
-            Vector3Int.down
-        };
+        Vector3Int.right,
+        Vector3Int.left,
+        Vector3Int.up,
+        Vector3Int.down
+    };
 
         float closestDistance = float.PositiveInfinity;
         Vector3Int playerSide = Vector3Int.zero;
@@ -295,8 +297,7 @@ public class PuzzleManager : MonoBehaviour
                 CellToWorld(neighboringCell);
 
             float distance = Vector2.SqrMagnitude(
-                (Vector2)(playerWorldPosition -
-                neighboringPosition)
+                (Vector2)(playerWorldPosition - neighboringPosition)
             );
 
             if (distance < closestDistance)
@@ -304,6 +305,13 @@ public class PuzzleManager : MonoBehaviour
                 closestDistance = distance;
                 playerSide = direction;
             }
+        }
+
+        // Player must be close to one of the four neighboring cells.
+        if (closestDistance >
+            maximumPushDistance * maximumPushDistance)
+        {
+            return Vector3Int.zero;
         }
 
         return -playerSide;
