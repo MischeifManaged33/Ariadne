@@ -409,9 +409,6 @@ MonoBehaviour:
       Data3: -462573427
       Data4: 656471162
     Path: event:/SFX/Player/Footsteps
-  strideLength: 2.5
-  minInterval: 0.15
-  stepOnFirstMove: 1
   isometricYScale: 0.5
 --- !u!1 &8462676818140494945
 GameObject:

@@ -6325,9 +6325,17 @@ PrefabInstance:
       propertyPath: health
       value: 
       objectReference: {fileID: 1621315484}
+    - target: {fileID: 5545280900532836969, guid: edef8db26f224f0488212d9a77a7a3b7, type: 3}
+      propertyPath: mobileOnly
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5611083039754981011, guid: edef8db26f224f0488212d9a77a7a3b7, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143135739473979241, guid: edef8db26f224f0488212d9a77a7a3b7, type: 3}
+      propertyPath: mobileOnly
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
