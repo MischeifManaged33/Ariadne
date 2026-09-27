@@ -118,9 +118,12 @@ MonoBehaviour:
     m_Bits: 64
   wallOvershoot: 0.5
   minDistance: 0.25
+  edgeRefinement: 6
+  edgeThreshold: 0.35
+  maxEdges: 48
   flickerAmount: 0.04
   flickerSpeed: 1.5
-  shade: {r: 0.03396219, g: 0.026307588, b: 0.019928755, a: 1}
+  shade: {r: 0.04150939, g: 0.034029868, b: 0.026550347, a: 1}
   material: {fileID: 0}
   sortingLayer: TopDecor
   sortingOrder: 32000

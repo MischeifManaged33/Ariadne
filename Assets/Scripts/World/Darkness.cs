@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -36,6 +37,14 @@ public class Darkness : MonoBehaviour
     private float wallOvershoot = 0.5f;
     [SerializeField, Min(0.01f)]
     private float minDistance = 0.25f;
+    // A shadow edge lands between two rays, so it would snap a whole ray apart as the
+    // player walks. These close in on the corner that threw it instead
+    [SerializeField, Range(0, 10)]
+    private int edgeRefinement = 6;
+    [SerializeField, Min(0.01f)]
+    private float edgeThreshold = 0.35f;
+    [SerializeField, Range(0, 128)]
+    private int maxEdges = 48;
 
     [Header("Flicker")]
     [SerializeField, Range(0f, 0.5f)]
@@ -67,13 +76,25 @@ public class Darkness : MonoBehaviour
     private Mesh _mesh;
     private Camera _camera;
 
-    private Vector3[] _vertices;
-    private Color[] _colors;
+    private readonly List<Probe> _probes = new();
+    private readonly List<Probe> _fan = new();
+    private readonly List<Vector3> _vertices = new();
+    private readonly List<Color> _colors = new();
+    private readonly List<int> _triangles = new();
 
     private float _displayRadius;
     private float _flickerSeed;
-    private int _builtRays;
+    private float _reach;
     private float _nextSearchTime;
+
+    // One ray of the fan: where it was aimed, and how far it got before a wall stopped it
+    private struct Probe
+    {
+        public float Radians;
+        public Vector2 Direction;
+        public float Distance;
+        public float Length;
+    }
 
     private void Reset()
     {
@@ -157,65 +178,146 @@ public class Darkness : MonoBehaviour
     private void Rebuild(Vector2 origin)
     {
         var count = Mathf.Max(16, rays);
-        var vertexCount = count * 4 + 1;
 
-        if (_vertices == null || _vertices.Length != vertexCount) {
-            _vertices = new Vector3[vertexCount];
-            _colors = new Color[vertexCount];
-            _mesh.Clear();
-            _builtRays = 0;
+        _reach = _displayRadius * Flicker();
+
+        var far = FarRadius(origin, count);
+        var step = Mathf.PI * 2f / count;
+
+        _probes.Clear();
+        for (var i = 0; i < count; i++)
+            _probes.Add(Trace(origin, step * i));
+
+        BuildFan(origin, count, step);
+        BuildMesh(far);
+    }
+
+    private void BuildFan(Vector2 origin, int count, float step)
+    {
+        _fan.Clear();
+
+        var budget = maxEdges;
+
+        for (var i = 0; i < count; i++) {
+            var near = _probes[i];
+            var far = _probes[(i + 1) % count];
+
+            _fan.Add(near);
+
+            if (budget <= 0 || edgeRefinement <= 0)
+                continue;
+            if (Mathf.Abs(near.Distance - far.Distance) <= edgeThreshold)
+                continue;
+
+            budget--;
+            Refine(origin, near, far, step * (i + 1));
+        }
+    }
+
+    private void Refine(Vector2 origin, Probe near, Probe far, float farRadians)
+    {
+        var nearRadians = near.Radians;
+
+        for (var i = 0; i < edgeRefinement; i++) {
+            var middle = (nearRadians + farRadians) * 0.5f;
+            var probe = Trace(origin, middle);
+
+            if (Mathf.Abs(probe.Distance - near.Distance) <= Mathf.Abs(probe.Distance - far.Distance)) {
+                near = probe;
+                nearRadians = middle;
+            }
+            else {
+                far = probe;
+                farRadians = middle;
+            }
         }
 
-        var reach = _displayRadius * Flicker();
-        var far = FarRadius(origin, count);
+        _fan.Add(near);
+        _fan.Add(far);
+    }
 
+    private Probe Trace(Vector2 origin, float radians)
+    {
+        var ground = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+
+        var screen = Isometric.ToScreen(ground * _reach, isometricYScale);
+        var length = screen.magnitude;
+
+        if (length <= Mathf.Epsilon)
+            return new Probe { Radians = radians, Direction = Vector2.right };
+
+        var direction = screen / length;
+
+        return new Probe {
+            Radians = radians,
+            Direction = direction,
+            Distance = CastDistance(origin, direction, length),
+            Length = length
+        };
+    }
+
+    private void BuildMesh(float far)
+    {
         var edge = shade;
         edge.a = darkness;
 
         var lit = shade;
         lit.a = 0f;
 
-        _vertices[0] = Vector3.zero;
-        _colors[0] = lit;
+        _vertices.Clear();
+        _colors.Clear();
+        _triangles.Clear();
 
-        for (var i = 0; i < count; i++) {
-            var radians = Mathf.PI * 2f * i / count;
-            var ground = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+        _vertices.Add(Vector3.zero);
+        _colors.Add(lit);
 
-            var screen = Isometric.ToScreen(ground * reach, isometricYScale);
-            var length = screen.magnitude;
+        foreach (var probe in _fan) {
+            var reached = probe.Length > 0f ? probe.Distance / probe.Length : 0f;
+            var core = Mathf.Min(probe.Distance, probe.Length * coreSize);
 
-            if (length <= Mathf.Epsilon)
-                continue;
-
-            var direction = screen / length;
-            var distance = CastDistance(origin, direction, length);
-            var reached = distance / length;
-
-            var core = Mathf.Min(distance, length * coreSize);
-            var index = i * 4 + 1;
-
-            _vertices[index] = direction * core;
-            _vertices[index + 1] = direction * distance;
-            _vertices[index + 2] = direction * distance;
-            _vertices[index + 3] = direction * far;
+            _vertices.Add(probe.Direction * core);
+            _vertices.Add(probe.Direction * probe.Distance);
+            _vertices.Add(probe.Direction * probe.Distance);
+            _vertices.Add(probe.Direction * far);
 
             var faded = edge;
             faded.a = darkness * Falloff(reached);
 
-            _colors[index] = lit;
-            _colors[index + 1] = faded;
-            _colors[index + 2] = edge;
-            _colors[index + 3] = edge;
+            _colors.Add(lit);
+            _colors.Add(faded);
+            _colors.Add(edge);
+            _colors.Add(edge);
         }
 
-        _mesh.vertices = _vertices;
-        _mesh.colors = _colors;
+        var count = _fan.Count;
 
-        if (_builtRays != count) {
-            _mesh.triangles = BuildTriangles(count);
-            _builtRays = count;
+        for (var i = 0; i < count; i++) {
+            var here = i * 4 + 1;
+            var next = (i + 1) % count * 4 + 1;
+
+            _triangles.Add(0);
+            _triangles.Add(here);
+            _triangles.Add(next);
+
+            _triangles.Add(here);
+            _triangles.Add(here + 1);
+            _triangles.Add(next + 1);
+            _triangles.Add(here);
+            _triangles.Add(next + 1);
+            _triangles.Add(next);
+
+            _triangles.Add(here + 2);
+            _triangles.Add(here + 3);
+            _triangles.Add(next + 3);
+            _triangles.Add(here + 2);
+            _triangles.Add(next + 3);
+            _triangles.Add(next + 2);
         }
+
+        _mesh.Clear();
+        _mesh.SetVertices(_vertices);
+        _mesh.SetColors(_colors);
+        _mesh.SetTriangles(_triangles, 0, false);
 
         _mesh.bounds = new Bounds(Vector3.zero, new Vector3(far * 2f, far * 2f, 0.1f));
     }
@@ -267,37 +369,6 @@ public class Darkness : MonoBehaviour
 
     
         return reach / Mathf.Cos(Mathf.PI / count);
-    }
-
-    private static int[] BuildTriangles(int count)
-    {
-        var triangles = new int[count * 15];
-
-        for (var i = 0; i < count; i++) {
-            var here = i * 4 + 1;
-            var next = (i + 1) % count * 4 + 1;
-            var t = i * 15;
-
-            triangles[t] = 0;
-            triangles[t + 1] = here;
-            triangles[t + 2] = next;
-
-            triangles[t + 3] = here;
-            triangles[t + 4] = here + 1;
-            triangles[t + 5] = next + 1;
-            triangles[t + 6] = here;
-            triangles[t + 7] = next + 1;
-            triangles[t + 8] = next;
-
-            triangles[t + 9] = here + 2;
-            triangles[t + 10] = here + 3;
-            triangles[t + 11] = next + 3;
-            triangles[t + 12] = here + 2;
-            triangles[t + 13] = next + 3;
-            triangles[t + 14] = next + 2;
-        }
-
-        return triangles;
     }
 
     private void OnValidate()
