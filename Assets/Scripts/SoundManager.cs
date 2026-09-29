@@ -228,4 +228,11 @@ public class SoundManager : MonoBehaviour
     {
         RuntimeManager.PauseAllEvents(paused);
     }
+
+    // Pauses gameplay sounds while leaving the music playing
+    public void PauseSfx(bool paused)
+    {
+        if (sfxBus.isValid())
+            sfxBus.setPaused(paused);
+    }
 }

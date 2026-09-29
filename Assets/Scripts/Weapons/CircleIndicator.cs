@@ -43,6 +43,7 @@ public class CircleIndicator : MonoBehaviour
     private float _fill = -1f;
     private float _yScale = 1f;
     private int _builtSegments;
+    private Vector2 _anchor;
 
     private bool _visible;
     private float _alpha;
@@ -77,8 +78,8 @@ public class CircleIndicator : MonoBehaviour
 
     public void Aim(Vector2 centre, float radius, float fill, float yScale)
     {
-        transform.position = new Vector3(centre.x, centre.y, transform.position.z);
-        transform.rotation = Quaternion.identity;
+        _anchor = centre;
+        Pin();
         NeutralizeParentScale();
 
         var clamped = Mathf.Clamp01(fill);
@@ -111,6 +112,8 @@ public class CircleIndicator : MonoBehaviour
 
         if (!showing)
             return;
+
+        Pin();
 
         var fill = fillColor;
         var ring = ringColor;
@@ -211,6 +214,12 @@ public class CircleIndicator : MonoBehaviour
         }
 
         _mesh.bounds = new Bounds(Vector3.zero, new Vector3(_radius * 2f, _radius * 2f * _yScale, 0f));
+    }
+
+    private void Pin()
+    {
+        transform.position = new Vector3(_anchor.x, _anchor.y, transform.position.z);
+        transform.rotation = Quaternion.identity;
     }
 
     private Vector3 Flatten(Vector2 ground)
