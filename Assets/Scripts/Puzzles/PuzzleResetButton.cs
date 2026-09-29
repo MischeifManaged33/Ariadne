@@ -47,7 +47,7 @@ public class PuzzleResetButton : MonoBehaviour
 
     private void Update()
     {
-        if (!playerNearby || isAnimating)
+        if (!playerNearby || isAnimating || PauseMenu.IsPaused)
             return;
 
         if (!interactAction.WasPressedThisFrame())

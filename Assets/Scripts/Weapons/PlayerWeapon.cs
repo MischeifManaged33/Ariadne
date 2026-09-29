@@ -94,6 +94,9 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.IsPaused)
+            return;
+
         if (_boundJoystick == null)
             BindJoystick(aimJoystick != null ? aimJoystick : VirtualJoystick.Aim);
 
@@ -167,7 +170,8 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Attack(Vector2 groundDirection)
     {
-        if (!CanAttack)
+        // Stick releases arrive as UI events, so Update's pause check doesn't cover them
+        if (!CanAttack || PauseMenu.IsPaused)
             return;
 
         _nextAttackTime = Time.time + equippedWeapon.attackCooldown;
