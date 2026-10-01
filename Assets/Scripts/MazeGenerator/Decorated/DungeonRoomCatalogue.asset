@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b83caa361324a445bd426cc2e7ab768, type: 3}
   m_Name: DungeonRoomCatalogue
   m_EditorClassIdentifier: Assembly-CSharp::RoomCatalogue
-  categories: []
+  categories:
+  - categoryName: Puzzle
+    weight: 1
+    designs:
+    - {fileID: 2256521701816142423, guid: b5397710444d11947947ce80b837c76a, type: 3}
