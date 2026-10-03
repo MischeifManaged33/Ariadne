@@ -16,4 +16,4 @@ MonoBehaviour:
   - categoryName: Puzzle
     weight: 1
     designs:
-    - {fileID: 2256521701816142423, guid: b5397710444d11947947ce80b837c76a, type: 3}
+    - {fileID: 6815331865296510707, guid: b84da9842c8dc2744874737d51d0063b, type: 3}

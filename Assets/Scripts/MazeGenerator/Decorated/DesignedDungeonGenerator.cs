@@ -24,6 +24,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [Header("Generation")]
     [SerializeField] private bool generateOnStart = true;
     [SerializeField] private int seed = 12345;
+    [SerializeField] private TileMapVisualizer tilemapVisualizer;
 
     [SerializeField, Min(1)]
     private int layoutAttempts = 30;
@@ -103,7 +104,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
                 return;
             }
 
-            SpawnRooms(layout);
+            SpawnRooms(layout, random);
 
             Debug.Log(
                 $"Placed {layout.Count} rooms. Seed: {seed}",
@@ -289,28 +290,96 @@ public class DesignedDungeonGenerator : MonoBehaviour
         return null;
     }
 
-    private void SpawnRooms(List<PlacedRoom> layout)
+    private void SpawnRooms(
+    List<PlacedRoom> layout,
+    System.Random random)
     {
-        GameObject newRoot =
-            new GameObject("Generated Artist Rooms");
-
-        // Keep room behaviours inactive while positioning.
-        newRoot.SetActive(false);
-
-        foreach (PlacedRoom placement in layout)
+        if (tilemapVisualizer == null ||
+            tilemapVisualizer.FloorTilemap != dungeonFloor)
         {
-            RoomDefinition instance = Instantiate(
-                placement.selected.prefab,
-                newRoot.transform,
-                false
-            );
-
-            instance.PlaceAt(
-                dungeonFloor,
-                placement.destinationAnchor
+            throw new InvalidOperationException(
+                "Assign a TileMapVisualizer that uses " +
+                "the same Dungeon Floor tilemap."
             );
         }
 
+        GameObject newRoot =
+    new GameObject("Generated Artist Rooms");
+
+
+        List<RoomDefinition> instances =
+            new List<RoomDefinition>();
+
+        List<RectInt> bounds =
+            new List<RectInt>();
+
+        HashSet<Vector2Int> corridors;
+
+        try
+        {
+            foreach (PlacedRoom placement in layout)
+            {
+#if UNITY_EDITOR
+RoomDefinition source = placement.selected.prefab;
+
+string prefabPath =
+    UnityEditor.AssetDatabase.GetAssetPath(source.gameObject);
+
+Debug.Log(
+    $"ROOM SOURCE\n" +
+    $"Prefab: {prefabPath}\n" +
+    $"Room component: {source.name}",
+    source
+);
+#endif
+
+                RoomDefinition instance = Instantiate(
+                    placement.selected.prefab,
+                    newRoot.transform,
+                    false
+                );
+
+                Vector3Int anchorCell = instance.GetAnchorCell();
+
+                Vector3 anchorOffset =
+                    instance.PlacementAnchor.position -
+                    instance.FloorTilemap.GetCellCenterWorld(anchorCell);
+
+                Debug.Log(
+                    $"CLONED ANCHOR BEFORE PLACEMENT\n" +
+                    $"Position: {instance.PlacementAnchor.position.ToString("F6")}\n" +
+                    $"Offset: {anchorOffset.ToString("F6")}",
+                    instance
+                );
+
+                instance.PlaceAt(
+                    dungeonFloor,
+                    placement.destinationAnchor
+                );
+
+                instances.Add(instance);
+                bounds.Add(placement.bounds);
+            }
+
+            corridors = RoomCorridorBuilder.Build(
+                instances,
+                bounds,
+                dungeonFloor,
+                new RectInt(dungeonOrigin, dungeonSize),
+                random
+            );
+        }
+        catch
+        {
+            if (Application.isPlaying)
+                Destroy(newRoot);
+            else
+                DestroyImmediate(newRoot);
+
+            throw;
+        }
+
+        // Replace the previous rooms after routing succeeds.
         if (generatedRoomRoot != null)
         {
             generatedRoomRoot.SetActive(false);
@@ -322,6 +391,10 @@ public class DesignedDungeonGenerator : MonoBehaviour
         }
 
         generatedRoomRoot = newRoot;
+
+        tilemapVisualizer.Clear();
+        tilemapVisualizer.PaintFloorTiles(corridors);
+
         generatedRoomRoot.SetActive(true);
     }
 }
