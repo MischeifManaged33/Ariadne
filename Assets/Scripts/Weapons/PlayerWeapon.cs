@@ -48,7 +48,9 @@ public class PlayerWeapon : MonoBehaviour
 
     private readonly HashSet<IDamagable> _struck = new();
 
-    private Vector2 Origin => weaponPivot != null ? (Vector2)weaponPivot.position : (Vector2)transform.position;
+    public Vector2 Origin => weaponPivot != null ? (Vector2)weaponPivot.position : (Vector2)transform.position;
+
+    public WeaponData EquippedWeapon => equippedWeapon;
 
     public bool CanAttack => equippedWeapon != null && Time.time >= _nextAttackTime;
 
