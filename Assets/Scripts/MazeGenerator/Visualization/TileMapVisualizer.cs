@@ -18,6 +18,7 @@ public class TileMapVisualizer : MonoBehaviour
     [SerializeField]
     private float wallLayerSpacing = 0.5f;
 
+    public Tilemap FloorTilemap => floorTilemap;
 
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {

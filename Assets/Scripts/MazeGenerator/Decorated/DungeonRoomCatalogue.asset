@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b83caa361324a445bd426cc2e7ab768, type: 3}
+  m_Name: DungeonRoomCatalogue
+  m_EditorClassIdentifier: Assembly-CSharp::RoomCatalogue
+  categories:
+  - categoryName: Puzzle
+    weight: 0.5
+    designs:
+    - {fileID: 6815331865296510707, guid: b84da9842c8dc2744874737d51d0063b, type: 3}
+  - categoryName: Room
+    weight: 0.5
+    designs:
+    - {fileID: 7223632296545535268, guid: 1f5985d9f40e6084e8fb0ba175e953f9, type: 3}
