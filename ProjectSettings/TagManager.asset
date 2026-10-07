@@ -44,6 +44,9 @@ TagManager:
   - name: Floor
     uniqueID: 3295280535
     locked: 0
+  - name: FloorSymbols
+    uniqueID: 1622602933
+    locked: 0
   - name: FloorDecor
     uniqueID: 828023273
     locked: 0
@@ -82,6 +85,15 @@ TagManager:
     locked: 0
   - name: TopDecor
     uniqueID: 2043864919
+    locked: 0
+  - name: TableDecor
+    uniqueID: 1977154461
+    locked: 0
+  - name: ThroneTop
+    uniqueID: 1112240331
+    locked: 0
+  - name: Torches
+    uniqueID: 2497792979
     locked: 0
   m_RenderingLayers:
   - Default
