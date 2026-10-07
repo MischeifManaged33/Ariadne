@@ -14,16 +14,18 @@ public class SwingEffect : MonoBehaviour
     private Animator animator;
 
     [Header("Placement")]
-    [SerializeField, Min(0f)]
-    private float distance = 0.45f;
     [SerializeField]
-    private float height = 0.15f;
+    private float tipOffset;
     [SerializeField, Range(0.1f, 1f)]
     private float isometricYScale = Isometric.DefaultYScale;
     [SerializeField]
     private bool rotateToSwing = true;
     [SerializeField]
-    private bool flipWhenSwingingLeft = true;
+    private float artFacingAngle = -90f;
+    [SerializeField]
+    private Vector2 artArcCenter = new Vector2(-0.024f, -0.962f);
+    [SerializeField, Min(0f)]
+    private float artArcRadius = 1.205f;
 
     [Header("Sorting")]
     [SerializeField]
@@ -99,18 +101,16 @@ public class SwingEffect : MonoBehaviour
 
         groundDirection = groundDirection.normalized;
 
-        var screen = Isometric.ToScreen(groundDirection * distance, isometricYScale);
-
-        transform.localPosition = new Vector3(screen.x, screen.y + height, 0f);
+        var screen = Isometric.ToScreen(groundDirection, isometricYScale);
 
         if (rotateToSwing) {
-            
             var degrees = Mathf.Atan2(screen.y, screen.x) * Mathf.Rad2Deg;
-            transform.localRotation = Quaternion.Euler(0f, 0f, degrees);
+            transform.localRotation = Quaternion.Euler(0f, 0f, degrees - artFacingAngle);
         }
 
-        if (flipWhenSwingingLeft)
-            spriteRenderer.flipY = rotateToSwing && screen.x < 0f;
+        MirrorAcrossFacing(rotateToSwing && screen.x < 0f);
+
+        Place(groundDirection, screen.normalized);
 
         ApplySorting(groundDirection);
 
@@ -128,7 +128,36 @@ public class SwingEffect : MonoBehaviour
         _remaining = duration > 0f ? duration : animator.GetCurrentAnimatorStateInfo(0).length;
     }
 
-   
+    // Lines the arc w the aim line
+    private void Place(Vector2 groundDirection, Vector2 screenDirection)
+    {
+        var hasWeapon = weapon != null && weapon.EquippedWeapon != null;
+        var range = hasWeapon ? weapon.EquippedWeapon.attackRange : artArcRadius;
+
+        var tipDistance = Isometric.ToScreen(groundDirection * (range + tipOffset), isometricYScale).magnitude;
+        var origin = weapon != null && transform.parent != null
+            ? (Vector2)transform.parent.InverseTransformPoint(weapon.Origin) : Vector2.zero;
+        var arcCenter = origin + screenDirection * (tipDistance - artArcRadius);
+
+        var artCenter = artArcCenter;
+        if (spriteRenderer.flipX)
+            artCenter.x = -artCenter.x;
+        if (spriteRenderer.flipY)
+            artCenter.y = -artCenter.y;
+
+        transform.localPosition = (Vector3)(arcCenter - (Vector2)(transform.localRotation * artCenter));
+    }
+
+    // Mirrors swing across the facing direction
+    private void MirrorAcrossFacing(bool mirror)
+    {
+        var radians = artFacingAngle * Mathf.Deg2Rad;
+        var facesVertically = Mathf.Abs(Mathf.Sin(radians)) > Mathf.Abs(Mathf.Cos(radians));
+
+        spriteRenderer.flipX = facesVertically && mirror;
+        spriteRenderer.flipY = !facesVertically && mirror;
+    }
+
     private void ApplySorting(Vector2 groundDirection)
     {
         if (playerRenderer == null)
