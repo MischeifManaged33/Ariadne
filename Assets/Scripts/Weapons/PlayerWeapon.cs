@@ -48,7 +48,9 @@ public class PlayerWeapon : MonoBehaviour
 
     private readonly HashSet<IDamagable> _struck = new();
 
-    private Vector2 Origin => weaponPivot != null ? (Vector2)weaponPivot.position : (Vector2)transform.position;
+    public Vector2 Origin => weaponPivot != null ? (Vector2)weaponPivot.position : (Vector2)transform.position;
+
+    public WeaponData EquippedWeapon => equippedWeapon;
 
     public bool CanAttack => equippedWeapon != null && Time.time >= _nextAttackTime;
 
@@ -94,6 +96,9 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.IsPaused)
+            return;
+
         if (_boundJoystick == null)
             BindJoystick(aimJoystick != null ? aimJoystick : VirtualJoystick.Aim);
 
@@ -167,7 +172,8 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Attack(Vector2 groundDirection)
     {
-        if (!CanAttack)
+        // Stick releases arrive as UI events, so Update's pause check doesn't cover them
+        if (!CanAttack || PauseMenu.IsPaused)
             return;
 
         _nextAttackTime = Time.time + equippedWeapon.attackCooldown;

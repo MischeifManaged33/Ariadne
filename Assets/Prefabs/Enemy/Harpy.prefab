@@ -286,8 +286,8 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
-  knockbackSpeed: 6
-  knockbackDuration: 0.15
+  knockbackSpeed: 10
+  knockbackDuration: 0.2
   wallLayers:
     serializedVersion: 2
     m_Bits: 64

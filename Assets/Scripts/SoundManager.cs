@@ -24,6 +24,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float musicVolume = 0.7f;
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
 
+    private const string MusicVolumeKey = "MusicVolume";
+    private const string SfxVolumeKey = "SfxVolume";
+
     private readonly List<string> loadedBanks = new List<string>();
 
     private EventInstance musicInstance;
@@ -41,6 +44,7 @@ public class SoundManager : MonoBehaviour
         {
             musicVolume = Mathf.Clamp01(value);
             ApplyBusVolume(musicBus, musicVolume);
+            PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
         }
     }
 
@@ -51,6 +55,7 @@ public class SoundManager : MonoBehaviour
         {
             sfxVolume = Mathf.Clamp01(value);
             ApplyBusVolume(sfxBus, sfxVolume);
+            PlayerPrefs.SetFloat(SfxVolumeKey, sfxVolume);
         }
     }
 
@@ -122,6 +127,9 @@ public class SoundManager : MonoBehaviour
     {
         musicBus = GetBus(musicBusPath);
         sfxBus = GetBus(sfxBusPath);
+
+        musicVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, musicVolume));
+        sfxVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(SfxVolumeKey, sfxVolume));
 
         ApplyBusVolume(musicBus, musicVolume);
         ApplyBusVolume(sfxBus, sfxVolume);
@@ -227,5 +235,12 @@ public class SoundManager : MonoBehaviour
     public void PauseAll(bool paused)
     {
         RuntimeManager.PauseAllEvents(paused);
+    }
+
+    // Pauses gameplay sounds while leaving the music playing
+    public void PauseSfx(bool paused)
+    {
+        if (sfxBus.isValid())
+            sfxBus.setPaused(paused);
     }
 }
