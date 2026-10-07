@@ -26,6 +26,28 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField] private int seed = 12345;
     [SerializeField] private TileMapVisualizer tilemapVisualizer;
 
+    [Header("Corridor Width")]
+    [Tooltip("0 = 1 cell wide, 1 = 3 cells, 2 = 5 cells.")]
+    [SerializeField, Range(0, 3)]
+    private int corridorRadius = 1;
+
+    [Header("Extra Corridors")]
+    [SerializeField, Min(0)]
+    private int deadEndCount = 20;
+
+    [Header("Character Spawning")]
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform minotaur;
+
+    [SerializeField, Min(1)]
+    private int minimumBranchLength = 3;
+
+    [SerializeField, Min(1)]
+    private int maximumBranchLength = 12;
+
+    [SerializeField, Range(0f, 1f)]
+    private float straightPreference = 0.65f;
+
     [SerializeField, Min(1)]
     private int layoutAttempts = 30;
 
@@ -115,6 +137,91 @@ public class DesignedDungeonGenerator : MonoBehaviour
         {
             Debug.LogException(exception, this);
         }
+    }
+
+    private void PositionCharacters(
+    List<RoomDefinition> rooms,
+    System.Random random)
+    {
+        if (player == null || minotaur == null)
+        {
+            Debug.LogError(
+                "Assign the Player and Minotaur scene objects.",
+                this
+            );
+            return;
+        }
+
+        if (rooms.Count < 2)
+        {
+            Debug.LogError(
+                "Generate at least two rooms so the Player " +
+                "and Minotaur can start in different rooms.",
+                this
+            );
+            return;
+        }
+
+        int playerRoomIndex = random.Next(rooms.Count);
+
+        // Choose among every room except the player's room.
+        int minotaurRoomIndex = random.Next(rooms.Count - 1);
+
+        if (minotaurRoomIndex >= playerRoomIndex)
+            minotaurRoomIndex++;
+
+        RoomDefinition playerRoom = rooms[playerRoomIndex];
+        RoomDefinition minotaurRoom = rooms[minotaurRoomIndex];
+
+        player.position = GetRoomCenterPosition(playerRoom);
+        minotaur.position = GetRoomCenterPosition(minotaurRoom);
+
+        Debug.Log(
+            $"Player starts in {playerRoom.name}; " +
+            $"Minotaur starts in {minotaurRoom.name}.",
+            this
+        );
+    }
+
+    private Vector3 GetRoomCenterPosition(RoomDefinition room)
+    {
+        var floor = room.FloorTilemap;
+        BoundsInt bounds = floor.cellBounds;
+
+        Vector3 center = (
+    floor.GetCellCenterWorld(bounds.min) +
+    floor.GetCellCenterWorld(bounds.max - Vector3Int.one)
+) * 0.5f;
+
+        Vector3 closestPosition = Vector3.zero;
+        float closestDistance = float.PositiveInfinity;
+        bool foundFloor = false;
+
+        foreach (Vector3Int cell in bounds.allPositionsWithin)
+        {
+            if (!floor.HasTile(cell))
+                continue;
+
+            Vector3 position = floor.GetCellCenterWorld(cell);
+            float distance = (position - center).sqrMagnitude;
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPosition = position;
+                foundFloor = true;
+            }
+        }
+
+        if (!foundFloor)
+        {
+            throw new System.InvalidOperationException(
+                $"{room.name}: cannot spawn characters because " +
+                "its Floor Tilemap has no painted tiles."
+            );
+        }
+
+        return closestPosition;
     }
 
     private List<SelectedRoom> SelectRooms(System.Random random)
@@ -361,13 +468,9 @@ Debug.Log(
                 bounds.Add(placement.bounds);
             }
 
-            corridors = RoomCorridorBuilder.Build(
-                instances,
-                bounds,
-                dungeonFloor,
-                new RectInt(dungeonOrigin, dungeonSize),
-                random
-            );
+            corridors = RoomCorridorBuilder.Build(instances, bounds, dungeonFloor, new RectInt(dungeonOrigin, dungeonSize), random);
+            AddRandomBranches(corridors, bounds, new RectInt(dungeonOrigin, dungeonSize), random);
+            corridors = WidenCorridors(corridors, bounds, new RectInt(dungeonOrigin, dungeonSize));
         }
         catch
         {
@@ -395,6 +498,267 @@ Debug.Log(
         tilemapVisualizer.Clear();
         tilemapVisualizer.PaintFloorTiles(corridors);
 
+        GenerateCorridorWalls(corridors, instances);
+
         generatedRoomRoot.SetActive(true);
+
+        PositionCharacters(instances, random);
+    }
+
+    private HashSet<Vector2Int> WidenCorridors(
+    HashSet<Vector2Int> corridors,
+    List<RectInt> roomBounds,
+    RectInt dungeonArea)
+    {
+        // Preserve the original paths, including entrance passages.
+        HashSet<Vector2Int> widened =
+            new HashSet<Vector2Int>(corridors);
+
+        int radius = Mathf.Max(0, corridorRadius);
+
+        foreach (Vector2Int center in corridors)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    Vector2Int candidate =
+                        center + new Vector2Int(x, y);
+
+                    if (!dungeonArea.Contains(candidate))
+                        continue;
+
+                    bool insideRoom = false;
+
+                    foreach (RectInt room in roomBounds)
+                    {
+                        if (room.Contains(candidate))
+                        {
+                            insideRoom = true;
+                            break;
+                        }
+                    }
+
+                    // Extra floor must not cover the authored room.
+                    if (insideRoom)
+                        continue;
+
+                    widened.Add(candidate);
+                }
+            }
+        }
+
+        return widened;
+    }
+
+    private void GenerateCorridorWalls(
+    HashSet<Vector2Int> corridors,
+    List<RoomDefinition> rooms)
+    {
+        HashSet<Vector2Int> allFloorPositions =
+            new HashSet<Vector2Int>(corridors);
+
+        HashSet<Vector2Int> protectedCells =
+            new HashSet<Vector2Int>();
+
+        foreach (RoomDefinition room in rooms)
+        {
+            UnityEngine.Tilemaps.Tilemap[] tilemaps =
+                room.GetComponentsInChildren<
+                    UnityEngine.Tilemaps.Tilemap
+                >(true);
+
+            foreach (UnityEngine.Tilemaps.Tilemap tilemap in tilemaps)
+            {
+                foreach (Vector3Int cell in
+                         tilemap.cellBounds.allPositionsWithin)
+                {
+                    if (!tilemap.HasTile(cell))
+                        continue;
+
+                    Vector3 worldPosition =
+                        tilemap.GetCellCenterWorld(cell);
+
+                    Vector3Int dungeonCell =
+                        dungeonFloor.WorldToCell(worldPosition);
+
+                    Vector2Int position = new Vector2Int(
+                        dungeonCell.x,
+                        dungeonCell.y
+                    );
+
+                    // Protect every painted room tile:
+                    // floor, walls, and decorations.
+                    protectedCells.Add(position);
+
+                    if (tilemap == room.FloorTilemap)
+                        allFloorPositions.Add(position);
+                }
+            }
+        }
+
+        BasicWallPlacer.CreateWalls(
+            corridors,
+            allFloorPositions,
+            protectedCells,
+            tilemapVisualizer
+        );
+    }
+
+    private void AddRandomBranches(
+    HashSet<Vector2Int> corridors,
+    List<RectInt> roomBounds,
+    RectInt dungeonArea,
+    System.Random random)
+    {
+        if (corridors.Count == 0 || deadEndCount <= 0)
+            return;
+
+        int minimumLength = Mathf.Max(1, minimumBranchLength);
+        int maximumLength = Mathf.Max(
+            minimumLength,
+            maximumBranchLength
+        );
+
+        Vector2Int[] directions =
+        {
+        Vector2Int.up,
+        Vector2Int.right,
+        Vector2Int.down,
+        Vector2Int.left
+    };
+
+        // Protect the entire room footprint and its clearance.
+        HashSet<Vector2Int> protectedCells =
+            new HashSet<Vector2Int>();
+
+        foreach (RectInt room in roomBounds)
+        {
+            for (int x = room.xMin - 1; x < room.xMax + 1; x++)
+            {
+                for (int y = room.yMin - 1; y < room.yMax + 1; y++)
+                {
+                    protectedCells.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        List<Vector2Int> startingCells =
+            new List<Vector2Int>(corridors);
+
+        // Stable ordering makes the same seed repeatable.
+        startingCells.Sort((a, b) =>
+        {
+            int comparison = a.x.CompareTo(b.x);
+            return comparison != 0
+                ? comparison
+                : a.y.CompareTo(b.y);
+        });
+
+        int completedBranches = 0;
+        int attemptLimit = deadEndCount * 40;
+
+        for (int attempt = 0;
+             attempt < attemptLimit &&
+             completedBranches < deadEndCount;
+             attempt++)
+        {
+            Vector2Int current =
+                startingCells[random.Next(startingCells.Count)];
+
+            Vector2Int previousDirection = Vector2Int.zero;
+
+            int targetLength = random.Next(
+                minimumLength,
+                maximumLength + 1
+            );
+
+            List<Vector2Int> branch =
+                new List<Vector2Int>();
+
+            HashSet<Vector2Int> branchCells =
+                new HashSet<Vector2Int>();
+
+            for (int step = 0; step < targetLength; step++)
+            {
+                List<Vector2Int> availableDirections =
+                    new List<Vector2Int>();
+
+                foreach (Vector2Int direction in directions)
+                {
+                    Vector2Int candidate = current + direction;
+
+                    if (!dungeonArea.Contains(candidate) ||
+                        protectedCells.Contains(candidate) ||
+                        corridors.Contains(candidate) ||
+                        branchCells.Contains(candidate))
+                    {
+                        continue;
+                    }
+
+                    bool touchesOtherCorridor = false;
+
+                    foreach (Vector2Int neighborDirection in directions)
+                    {
+                        Vector2Int neighbor =
+                            candidate + neighborDirection;
+
+                        // Connection to the previous cell is allowed.
+                        if (neighbor == current)
+                            continue;
+
+                        if (corridors.Contains(neighbor) ||
+                            branchCells.Contains(neighbor))
+                        {
+                            touchesOtherCorridor = true;
+                            break;
+                        }
+                    }
+
+                    if (!touchesOtherCorridor)
+                        availableDirections.Add(direction);
+                }
+
+                if (availableDirections.Count == 0)
+                    break;
+
+                Vector2Int chosenDirection;
+
+                if (availableDirections.Contains(previousDirection) &&
+                    random.NextDouble() < straightPreference)
+                {
+                    chosenDirection = previousDirection;
+                }
+                else
+                {
+                    chosenDirection = availableDirections[
+                        random.Next(availableDirections.Count)
+                    ];
+                }
+
+                current += chosenDirection;
+                previousDirection = chosenDirection;
+
+                branch.Add(current);
+                branchCells.Add(current);
+            }
+
+            // Discard branches that could not grow far enough.
+            if (branch.Count < minimumLength)
+                continue;
+
+            corridors.UnionWith(branchCells);
+
+            // Future branches can grow from these new corridors too.
+            startingCells.AddRange(branch);
+
+            completedBranches++;
+        }
+
+        Debug.Log(
+            $"Added {completedBranches} of {deadEndCount} " +
+            "requested corridor branches.",
+            this
+        );
     }
 }

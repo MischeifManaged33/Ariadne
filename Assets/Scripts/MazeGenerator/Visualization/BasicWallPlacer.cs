@@ -5,38 +5,55 @@ using System;
 
 public static class BasicWallPlacer
 {
+    // Keeps the original generators working.
     public static void CreateWalls(
-    HashSet<Vector2Int> floorPositions,
-    TileMapVisualizer tilemapVisualizer)
+        HashSet<Vector2Int> floorPositions,
+        TileMapVisualizer tilemapVisualizer)
     {
-        var basicWallPositions =
-            FindWallsInDirections(
-                floorPositions,
-                Direction2D.cardinalDirList
-            );
+        CreateWalls(
+            floorPositions,
+            floorPositions,
+            new HashSet<Vector2Int>(),
+            tilemapVisualizer
+        );
+    }
 
-        var cornerWallPositions =
-            FindWallsInDirections(
-                floorPositions,
-                Direction2D.diagonalDirList
-            );
-
-        Debug.Log(
-            $"Wall placer received {floorPositions.Count} floors. " +
-            $"Found {basicWallPositions.Count} basic walls and " +
-            $"{cornerWallPositions.Count} corner walls."
+    // Generates corridor walls while protecting authored rooms.
+    public static void CreateWalls(
+        HashSet<Vector2Int> corridorPositions,
+        HashSet<Vector2Int> allFloorPositions,
+        HashSet<Vector2Int> protectedCells,
+        TileMapVisualizer tilemapVisualizer)
+    {
+        var basicWallPositions = FindWallsInDirections(
+            corridorPositions,
+            Direction2D.cardinalDirList
         );
 
+        var cornerWallPositions = FindWallsInDirections(
+            corridorPositions,
+            Direction2D.diagonalDirList
+        );
+
+        // Walls cannot occupy floor or painted room cells.
+        basicWallPositions.ExceptWith(allFloorPositions);
+        basicWallPositions.ExceptWith(protectedCells);
+
+        cornerWallPositions.ExceptWith(allFloorPositions);
+        cornerWallPositions.ExceptWith(protectedCells);
+
+        // Include room floors when choosing wall shapes,
+        // especially where corridors meet doorways.
         CreateBasicWall(
             tilemapVisualizer,
             basicWallPositions,
-            floorPositions
+            allFloorPositions
         );
 
         CreateCornerWalls(
             tilemapVisualizer,
             cornerWallPositions,
-            floorPositions
+            allFloorPositions
         );
     }
 

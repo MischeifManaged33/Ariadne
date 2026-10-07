@@ -61,14 +61,49 @@ public class RoomEntrance : MonoBehaviour
     [ContextMenu("Snap To Floor Cell")]
     private void SnapToFloorCell()
     {
-        if (roomFloor == null)
+        if (roomFloor == null || roomFloor.layoutGrid == null)
+        {
+            Debug.LogError(
+                $"{name}: assign Room Floor and open the prefab " +
+                "with its Grid active before snapping.",
+                this
+            );
             return;
+        }
 
-        Vector3Int cell =
+        Vector3 before = transform.position;
+        Vector3Int cell = roomFloor.WorldToCell(before);
+
+#if UNITY_EDITOR
+    UnityEditor.Undo.RecordObject(
+        transform,
+        "Snap Room Entrance"
+    );
+#endif
+
+        transform.position = roomFloor.GetCellCenterWorld(cell);
+
+#if UNITY_EDITOR
+    UnityEditor.EditorUtility.SetDirty(transform);
+
+    UnityEditor.PrefabUtility
+        .RecordPrefabInstancePropertyModifications(transform);
+#endif
+
+        Vector3Int resultingCell =
             roomFloor.WorldToCell(transform.position);
 
-        transform.position =
-            roomFloor.GetCellCenterWorld(cell);
+        Vector3 offset = transform.position -
+            roomFloor.GetCellCenterWorld(resultingCell);
+
+        Debug.Log(
+            $"{name}: ENTRANCE SNAP\n" +
+            $"Before: {before.ToString("F6")}\n" +
+            $"After: {transform.position.ToString("F6")}\n" +
+            $"Cell: {resultingCell}\n" +
+            $"Remaining offset: {offset.ToString("F6")}",
+            this
+        );
     }
 
     private void OnDrawGizmos()

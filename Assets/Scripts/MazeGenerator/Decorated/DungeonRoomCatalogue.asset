@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomCatalogue
   categories:
   - categoryName: Puzzle
-    weight: 1
+    weight: 0.5
     designs:
     - {fileID: 6815331865296510707, guid: b84da9842c8dc2744874737d51d0063b, type: 3}
+  - categoryName: Room
+    weight: 0.5
+    designs:
+    - {fileID: 7223632296545535268, guid: 1f5985d9f40e6084e8fb0ba175e953f9, type: 3}
