@@ -16,8 +16,6 @@ public class Chest : MonoBehaviour, IInteractable
     [Header("Contents")]
     [SerializeField]
     private GameObject itemPrefab;
-    [SerializeField]
-    private WeaponData weaponOverride;
 
     [Header("Pop Out")]
     [SerializeField]
@@ -65,8 +63,6 @@ public class Chest : MonoBehaviour, IInteractable
 
         var item = Instantiate(itemPrefab, transform.position, Quaternion.identity);
 
-        if (weaponOverride != null && item.TryGetComponent<WeaponPickup>(out var pickup))
-            pickup.SetWeapon(weaponOverride);
 
         StartCoroutine(PopOut(item.transform));
     }
