@@ -14,12 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomCatalogue
   categories:
   - categoryName: Plain
+    minimumRooms: 0
+    maximumRooms: 10
     weight: 0.5
+    allowDuplicateDesigns: 1
     designs:
     - {fileID: 48299319226861388, guid: 0276cf839d898b84387c7298d01620ed, type: 3}
     - {fileID: 5026520659954765013, guid: 5b847bd3b51c9c94fb47f0bdc1782063, type: 3}
   - categoryName: Letters
+    minimumRooms: 0
+    maximumRooms: 10
     weight: 0.5
+    allowDuplicateDesigns: 1
     designs:
     - {fileID: 7581801934749019169, guid: 80660052a916e7d438262f43913fcf7d, type: 3}
     - {fileID: 6383840726066061533, guid: 521b793db652fc944ac0db6a8d0e1c36, type: 3}
@@ -29,6 +35,9 @@ MonoBehaviour:
     - {fileID: 7907185740270482485, guid: 3537fcf801262da44b583ae5667ba35d, type: 3}
     - {fileID: 1216065022897570266, guid: e9ce0f580b671d44db5a01742b2935ad, type: 3}
   - categoryName: Tutorial
-    weight: 0.5
+    minimumRooms: 1
+    maximumRooms: 1
+    weight: 1
+    allowDuplicateDesigns: 0
     designs:
     - {fileID: 915344865438367891, guid: 3fa9d8fb1151a304aa9b9fccc3a5b91c, type: 3}

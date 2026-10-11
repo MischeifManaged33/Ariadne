@@ -2642,6 +2642,7 @@ MonoBehaviour:
   - {fileID: 5039164926847068870}
   - {fileID: 573500516833984164}
   - {fileID: 7940680807689110428}
+  playerSpawnPoint: {fileID: 0}
 --- !u!1 &7507195845026378984
 GameObject:
   m_ObjectHideFlags: 0

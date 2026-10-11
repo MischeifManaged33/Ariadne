@@ -267,10 +267,11 @@ public class DesignedDungeonGenerator : MonoBehaviour
         List<SelectedRoom> selected =
             new List<SelectedRoom>();
 
-        for (int i = 0; i < roomCount; i++)
+        List<RoomDefinition> chosenPrefabs =
+    roomCatalogue.PickRooms(roomCount, random);
+
+        foreach (RoomDefinition prefab in chosenPrefabs)
         {
-            RoomDefinition prefab =
-                roomCatalogue.PickRoom(random);
 
             if (prefab.gameObject.scene.IsValid())
             {

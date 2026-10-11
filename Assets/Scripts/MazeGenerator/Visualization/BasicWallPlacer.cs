@@ -20,41 +20,44 @@ public static class BasicWallPlacer
 
     // Generates corridor walls while protecting authored rooms.
     public static void CreateWalls(
-        HashSet<Vector2Int> corridorPositions,
-        HashSet<Vector2Int> allFloorPositions,
-        HashSet<Vector2Int> protectedCells,
-        TileMapVisualizer tilemapVisualizer)
+    HashSet<Vector2Int> corridorFloor,
+    HashSet<Vector2Int> allFloorPositions,
+    HashSet<Vector2Int> protectedCells,
+    TileMapVisualizer tilemapVisualizer)
     {
-        var basicWallPositions = FindWallsInDirections(
-            corridorPositions,
-            Direction2D.cardinalDirList
+        List<Vector2Int> backDirections = new List<Vector2Int>
+    {
+        Vector2Int.right,
+        Vector2Int.up
+    };
+
+        HashSet<Vector2Int> wallPositions = FindWallsInDirections(
+            corridorFloor,
+            backDirections
         );
 
-        var cornerWallPositions = FindWallsInDirections(
-            corridorPositions,
-            Direction2D.diagonalDirList
+        wallPositions.ExceptWith(allFloorPositions);
+        wallPositions.ExceptWith(protectedCells);
+
+        // Avoid walls between nearby floor sections.
+        wallPositions.RemoveWhere(position =>
+            allFloorPositions.Contains(position + Vector2Int.right) ||
+            allFloorPositions.Contains(position + Vector2Int.up)
         );
 
-        // Walls cannot occupy floor or painted room cells.
-        basicWallPositions.ExceptWith(allFloorPositions);
-        basicWallPositions.ExceptWith(protectedCells);
-
-        cornerWallPositions.ExceptWith(allFloorPositions);
-        cornerWallPositions.ExceptWith(protectedCells);
-
-        // Include room floors when choosing wall shapes,
-        // especially where corridors meet doorways.
         CreateBasicWall(
             tilemapVisualizer,
-            basicWallPositions,
+            wallPositions,
             allFloorPositions
         );
 
-        CreateCornerWalls(
-            tilemapVisualizer,
-            cornerWallPositions,
-            allFloorPositions
-        );
+        // Choose corner artwork only at the approved wall positions.
+        // Do not add separate diagonal wall cells.
+        //CreateCornerWalls(
+        //    tilemapVisualizer,
+        //    wallPositions,
+        //    allFloorPositions
+        //);
     }
 
     private static void CreateCornerWalls(TileMapVisualizer tilemapVisualizer, HashSet<Vector2Int> cornerWallPositions, HashSet<Vector2Int> floorPositions)
