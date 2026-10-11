@@ -24,6 +24,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [Header("Generation")]
     [SerializeField] private bool generateOnStart = true;
     [SerializeField] private int seed = 12345;
+    [SerializeField] private bool useFixedSeed = false;
     [SerializeField] private TileMapVisualizer tilemapVisualizer;
 
     [Header("Corridor Width")]
@@ -106,7 +107,13 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
         try
         {
-            System.Random random = new System.Random(seed);
+            int generationSeed = useFixedSeed
+    ? seed
+    : System.Guid.NewGuid().GetHashCode();
+
+            System.Random random = new System.Random(generationSeed);
+
+            Debug.Log($"Generating dungeon with seed: {generationSeed}");
 
             // Choose every design BEFORE planning placement.
             List<SelectedRoom> selectedRooms =
@@ -152,32 +159,63 @@ public class DesignedDungeonGenerator : MonoBehaviour
             return;
         }
 
-        if (rooms.Count < 2)
+        int tutorialRoomIndex = -1;
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            if (rooms[i].PlayerSpawnPoint == null)
+                continue;
+
+            if (tutorialRoomIndex != -1)
+            {
+                Debug.LogError(
+                    "Multiple generated rooms have Player Spawn Points. " +
+                    "Assign one only on the tutorial room, and generate " +
+                    "exactly one tutorial room.",
+                    this
+                );
+                return;
+            }
+
+            tutorialRoomIndex = i;
+        }
+
+        if (tutorialRoomIndex == -1)
         {
             Debug.LogError(
-                "Generate at least two rooms so the Player " +
-                "and Minotaur can start in different rooms.",
+                "No tutorial spawn point was found. Make sure the " +
+                "tutorial room is generated and its Player Spawn Point " +
+                "is assigned.",
                 this
             );
             return;
         }
 
-        int playerRoomIndex = random.Next(rooms.Count);
+        if (rooms.Count < 2)
+        {
+            Debug.LogError(
+                "Generate at least two rooms so the Minotaur " +
+                "can start outside the tutorial room.",
+                this
+            );
+            return;
+        }
 
-        // Choose among every room except the player's room.
+        RoomDefinition tutorialRoom = rooms[tutorialRoomIndex];
+
+        // Pick any room except the tutorial room.
         int minotaurRoomIndex = random.Next(rooms.Count - 1);
 
-        if (minotaurRoomIndex >= playerRoomIndex)
+        if (minotaurRoomIndex >= tutorialRoomIndex)
             minotaurRoomIndex++;
 
-        RoomDefinition playerRoom = rooms[playerRoomIndex];
         RoomDefinition minotaurRoom = rooms[minotaurRoomIndex];
 
-        player.position = GetRoomCenterPosition(playerRoom);
+        player.position = tutorialRoom.PlayerSpawnPoint.position;
         minotaur.position = GetRoomCenterPosition(minotaurRoom);
 
         Debug.Log(
-            $"Player starts in {playerRoom.name}; " +
+            $"Player starts in {tutorialRoom.name}; " +
             $"Minotaur starts in {minotaurRoom.name}.",
             this
         );
