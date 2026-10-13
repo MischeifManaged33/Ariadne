@@ -47,20 +47,17 @@ TagManager:
   - name: FloorSymbols
     uniqueID: 1622602933
     locked: 0
-  - name: FloorDecor
-    uniqueID: 828023273
-    locked: 0
   - name: Wall
     uniqueID: 2027013127
+    locked: 0
+  - name: FloorDecor
+    uniqueID: 828023273
     locked: 0
   - name: Wall2
     uniqueID: 1947433991
     locked: 0
   - name: Wall3
     uniqueID: 1184337027
-    locked: 0
-  - name: Wall4
-    uniqueID: 1734486673
     locked: 0
   - name: WallDecor
     uniqueID: 3183167243
@@ -71,14 +68,17 @@ TagManager:
   - name: Plate
     uniqueID: 2265296491
     locked: 0
-  - name: Block
-    uniqueID: 725097597
-    locked: 0
   - name: Player
     uniqueID: 3027823411
     locked: 0
+  - name: Block
+    uniqueID: 725097597
+    locked: 0
   - name: Topwall
     uniqueID: 573366377
+    locked: 0
+  - name: Topwall2
+    uniqueID: 1734486673
     locked: 0
   - name: Decor
     uniqueID: 1429553387
@@ -88,6 +88,12 @@ TagManager:
     locked: 0
   - name: TableDecor
     uniqueID: 1977154461
+    locked: 0
+  - name: Throne1
+    uniqueID: 1364554135
+    locked: 0
+  - name: Throne2
+    uniqueID: 3880459191
     locked: 0
   - name: ThroneTop
     uniqueID: 1112240331
