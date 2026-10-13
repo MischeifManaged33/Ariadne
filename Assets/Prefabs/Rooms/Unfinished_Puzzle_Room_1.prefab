@@ -801,7 +801,7 @@ Tilemap:
   m_GameObject: {fileID: 1352461206315602974}
   m_Enabled: 1
   m_Tiles:
-  - first: {x: 6, y: -13, z: 0}
+  - first: {x: 7, y: -12, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 2
@@ -3215,7 +3215,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2027013127
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}

@@ -44,11 +44,11 @@ TagManager:
   - name: Floor
     uniqueID: 3295280535
     locked: 0
-  - name: FloorSymbols
-    uniqueID: 1622602933
-    locked: 0
   - name: Wall
     uniqueID: 2027013127
+    locked: 0
+  - name: FloorSymbols
+    uniqueID: 1622602933
     locked: 0
   - name: FloorDecor
     uniqueID: 828023273
