@@ -334,4 +334,21 @@ public class TileMapVisualizer : MonoBehaviour
         );
     }
 
+    public void PaintSingleCorridorWall(Vector2Int position)
+    {
+        if (isometricWallTile == null)
+        {
+            throw new InvalidOperationException(
+                "Assign Isometric Wall Tile on TileMapVisualizer."
+            );
+        }
+
+        PaintSingleTile(
+            wallTilemap,
+            isometricWallTile,
+            position
+        );
+
+        paintedWallCount++;
+    }
 }

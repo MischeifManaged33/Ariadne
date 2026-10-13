@@ -58,6 +58,11 @@ public static class BasicWallPlacer
         //    wallPositions,
         //    allFloorPositions
         //);
+        CreateBasicWall(
+    tilemapVisualizer,
+    wallPositions,
+    allFloorPositions
+);
     }
 
     private static void CreateCornerWalls(TileMapVisualizer tilemapVisualizer, HashSet<Vector2Int> cornerWallPositions, HashSet<Vector2Int> floorPositions)
