@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using FMOD.Studio;
 using FMODUnity;
@@ -32,7 +31,6 @@ public class SoundManager : MonoBehaviour
 
     private EventInstance musicInstance;
     private EventReference currentMusic;
-    private EventReference pendingMusic;
 
     private Bus musicBus;
     private Bus sfxBus;
@@ -72,27 +70,13 @@ public class SoundManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        musicVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, musicVolume));
-        sfxVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(SfxVolumeKey, sfxVolume));
-
         LoadBanks();
+        CacheBuses();
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        while (!RuntimeManager.HaveAllBanksLoaded || RuntimeManager.AnySampleDataLoading())
-            yield return null;
-
-        BanksLoaded = loadedBanks.Count == banks.Count;
-        CacheBuses();
-
-        // Wait for music to load
-        if (pendingMusic.IsNull)
-            PlayMazeMusic();
-        else
-            PlayMusic(pendingMusic);
-
-        pendingMusic = default;
+        PlayMazeMusic();
     }
 
     private void OnDestroy()
@@ -126,6 +110,8 @@ public class SoundManager : MonoBehaviour
 
         if (loadSampleData)
             RuntimeManager.WaitForAllSampleLoading();
+
+        BanksLoaded = loadedBanks.Count == banks.Count;
     }
 
     private void UnloadBanks()
@@ -141,6 +127,9 @@ public class SoundManager : MonoBehaviour
     {
         musicBus = GetBus(musicBusPath);
         sfxBus = GetBus(sfxBusPath);
+
+        musicVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, musicVolume));
+        sfxVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(SfxVolumeKey, sfxVolume));
 
         ApplyBusVolume(musicBus, musicVolume);
         ApplyBusVolume(sfxBus, sfxVolume);
@@ -182,12 +171,6 @@ public class SoundManager : MonoBehaviour
         if (music.IsNull)
         {
             Debug.LogWarning("No music event was assigned.", this);
-            return;
-        }
-
-        if (!BanksLoaded)
-        {
-            pendingMusic = music;
             return;
         }
 
