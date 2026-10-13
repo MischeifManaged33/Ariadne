@@ -38,7 +38,8 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (!_toggleAction.WasPressedThisFrame())
+        // Closing the menu would restart time behind the intro screen
+        if (!_toggleAction.WasPressedThisFrame() || IntroCutsceneManager.IsShowing)
             return;
 
         if (IsPaused)

@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 5910907604388181261}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.09, y: -2.6802, z: 0}
+  m_LocalPosition: {x: 43.399998, y: 72.799995, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2.0819273}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -573,7 +573,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinotaurAnimator
   animator: {fileID: 6119955104361690364}
   spriteRenderer: {fileID: 9141004852014171056}
-  directions: 2
   directionHysteresis: 10
   flipForLeft: 1
   moveThreshold: 0.05
