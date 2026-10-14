@@ -4618,14 +4618,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -4648,6 +4648,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -4682,6 +4683,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -13483,14 +13486,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -13513,6 +13516,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -13547,6 +13551,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -15138,14 +15144,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -15168,6 +15174,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -15202,6 +15209,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -16483,14 +16492,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -16513,6 +16522,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -16547,6 +16557,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -17037,14 +17049,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -17067,6 +17079,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -17101,6 +17114,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -74345,14 +74360,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -74375,6 +74390,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -74409,6 +74425,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -74627,14 +74645,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -74657,6 +74675,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -74691,6 +74710,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -102222,14 +102243,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -102252,6 +102273,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -102286,6 +102308,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -107526,14 +107550,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -107556,6 +107580,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -107590,6 +107615,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -107808,14 +107835,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -107838,6 +107865,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -107872,6 +107900,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3
@@ -109268,14 +109298,14 @@ MonoBehaviour:
         Data2: 1205735243
         Data3: -1372696438
         Data4: -1192426155
-      Path: event:/SFX/Enemies/HarpyFlap
+      Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
         Data1: -881533275
         Data2: 1126759142
         Data3: 1093886101
         Data4: -394687106
-      Path: event:/SFX/Enemies/HarpyCry
+      Path: event:/SFX/Enemies/Harpy/HarpyCry
     impact:
       Guid:
         Data1: 0
@@ -109298,6 +109328,7 @@ MonoBehaviour:
   maxHealth: 150
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 0}
   knockbackSpeed: 10
   knockbackDuration: 0.2
   wallLayers:
@@ -109332,6 +109363,8 @@ MonoBehaviour:
   alertMemory: 2.5
   scanInterval: 0.15
   reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 1
   homeAnchor: {fileID: 0}
   wanderRadius: 5
   wanderStep: 3

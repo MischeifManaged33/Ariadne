@@ -506,6 +506,13 @@ MonoBehaviour:
   spriteRenderer: {fileID: 2630564910986659030}
   hitFlashColor: {r: 1, g: 0.35, b: 0.35, a: 1}
   hitFlashDuration: 0.12
+  hurtSound:
+    Guid:
+      Data1: 472879025
+      Data2: 1116514950
+      Data3: 92497588
+      Data4: -1925060610
+    Path: event:/SFX/Player/Hurt
   onDamaged:
     m_PersistentCalls:
       m_Calls: []

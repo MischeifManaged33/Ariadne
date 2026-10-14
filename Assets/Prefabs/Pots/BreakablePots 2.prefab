@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 13
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -143,3 +143,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Breakable
   hitsToBreak: 1
+  breakSound:
+    Guid:
+      Data1: 567827981
+      Data2: 1318991985
+      Data3: 1922644128
+      Data4: 2084692225
+    Path: event:/SFX/Objects/JarBreak

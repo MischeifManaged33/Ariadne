@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 
 
@@ -17,6 +18,13 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     private float destroyDelay = 0f;
     [SerializeField]
     private DropTable dropTable;
+
+
+    [Header("Sounds")]
+    [SerializeField]
+    private EventReference hurtSound;
+    [SerializeField]
+    private EventReference deathSound;
 
 
     [Header("Knockback")]
@@ -106,7 +114,9 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
         Damaged?.Invoke(applied);
         RaiseHealthChanged();
 
-        if (!IsAlive)
+        if (IsAlive)
+            Sfx.PlayOneShot(hurtSound, Position);
+        else
             Die();
 
         return applied;
@@ -158,6 +168,8 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
 
         _dead = true;
         _knockback = Vector2.zero;
+
+        Sfx.PlayOneShot(deathSound, Position);
 
         Died?.Invoke();
 

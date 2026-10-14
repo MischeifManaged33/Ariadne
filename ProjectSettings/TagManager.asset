@@ -95,6 +95,9 @@ TagManager:
   - name: Torches
     uniqueID: 2497792979
     locked: 0
+  - name: Darkness
+    uniqueID: 2436876629
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []
