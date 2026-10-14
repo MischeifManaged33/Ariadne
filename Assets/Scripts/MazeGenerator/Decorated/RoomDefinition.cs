@@ -24,6 +24,11 @@ public class RoomDefinition : MonoBehaviour
     private Tilemap[] blockingTilemaps =
     new Tilemap[0];
 
+    [Header("Player Spawn")]
+    [SerializeField] private Transform playerSpawnPoint;
+
+    public Transform PlayerSpawnPoint => playerSpawnPoint;
+
     public bool IsBlockedCell(Vector3Int cell)
     {
         foreach (Tilemap tilemap in blockingTilemaps)

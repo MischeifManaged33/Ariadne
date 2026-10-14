@@ -5,17 +5,24 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField]
-    private Player player;
-    [SerializeField]
-    private VirtualJoystick joystick;
+    [SerializeField] private Player player;
+    [SerializeField] private VirtualJoystick joystick;
     [SerializeField] private Animator animator;
+
+    [Header("Floor Bounds")]
+    [SerializeField]
+    private DesignedDungeonGenerator dungeonGenerator;
+
+    [Tooltip(
+        "A child marker at the player's ground contact point. " +
+        "Leave empty if the root is at the feet."
+    )]
+    [SerializeField] private Transform feet;
 
     [Header("Movement")]
     [SerializeField, Min(0f)]
     private float acceleration = 60f;
-    // Currently, moving up/down will be slightly faster than left/right, be probably need to tweak it a bit
-    // after an exact scale for the grid is determined. I'm just using 2:1 ratio
+
     [SerializeField, Range(0.1f, 1f)]
     private float isometricYScale = 0.5f;
 
@@ -35,6 +42,9 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimation(Vector2 movement)
     {
+        if (animator == null)
+            return;
+
         animator.SetFloat("MoveX", movement.x);
         animator.SetFloat("MoveY", movement.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
@@ -43,8 +53,15 @@ public class PlayerController : MonoBehaviour
         {
             lastMoveDirection = movement.normalized;
 
-            animator.SetFloat("LastMoveX", lastMoveDirection.x);
-            animator.SetFloat("LastMoveY", lastMoveDirection.y);
+            animator.SetFloat(
+                "LastMoveX",
+                lastMoveDirection.x
+            );
+
+            animator.SetFloat(
+                "LastMoveY",
+                lastMoveDirection.y
+            );
         }
     }
 
@@ -56,59 +73,159 @@ public class PlayerController : MonoBehaviour
         if (player == null)
             player = GetComponent<Player>();
 
-        _moveAction = new InputAction("Move", InputActionType.Value, expectedControlType: "Vector2");
+        if (dungeonGenerator == null)
+        {
+            Debug.LogError(
+                "Assign Dungeon Generator on PlayerController " +
+                "to enable movement.",
+                this
+            );
+        }
+
+        _moveAction = new InputAction(
+            "Move",
+            InputActionType.Value,
+            expectedControlType: "Vector2"
+        );
+
         _moveAction.AddCompositeBinding("2DVector")
             .With("Up", "<Keyboard>/w")
             .With("Down", "<Keyboard>/s")
             .With("Left", "<Keyboard>/a")
             .With("Right", "<Keyboard>/d");
+
         _moveAction.AddCompositeBinding("2DVector")
             .With("Up", "<Keyboard>/upArrow")
             .With("Down", "<Keyboard>/downArrow")
             .With("Left", "<Keyboard>/leftArrow")
             .With("Right", "<Keyboard>/rightArrow");
+
         _moveAction.AddBinding("<Gamepad>/leftStick");
         _moveAction.AddBinding("<Joystick>/stick");
     }
 
-    private void OnEnable() => _moveAction.Enable();
+    private void OnEnable() => _moveAction?.Enable();
 
-    private void OnDisable() => _moveAction.Disable();
+    private void OnDisable() => _moveAction?.Disable();
 
     private void OnDestroy() => _moveAction?.Dispose();
 
     private void FixedUpdate()
     {
-        var input = ReadInput();
+        Vector2 input = ReadInput();
         CurrentInput = input;
 
-        var speed = player != null ? player.MoveSpeed : 5f;
-        var target = new Vector2(input.x, input.y * isometricYScale) * speed;
+        float speed = player != null
+            ? player.MoveSpeed
+            : 5f;
+
+        Vector2 target = new Vector2(
+            input.x,
+            input.y * isometricYScale
+        ) * speed;
 
         _velocity = acceleration > 0f
-            ? Vector2.MoveTowards(_velocity, target, acceleration * Time.fixedDeltaTime) : target;
+            ? Vector2.MoveTowards(
+                _velocity,
+                target,
+                acceleration * Time.fixedDeltaTime
+            )
+            : target;
 
+        Vector2 requestedMove =
+            _velocity * Time.fixedDeltaTime;
+
+        Vector2 allowedMove = Vector2.zero;
+
+        if (dungeonGenerator != null &&
+            dungeonGenerator.WalkableFloorReady)
+        {
+            // Use the physics position rather than the
+            // interpolated Transform position.
+            Vector3 feetOffset = feet != null
+                ? feet.position - transform.position
+                : Vector3.zero;
+
+            Vector3 start = new Vector3(
+                _rigidbody.position.x,
+                _rigidbody.position.y,
+                transform.position.z
+            ) + feetOffset;
+
+            float fraction =
+                dungeonGenerator.GetWalkableMoveFraction(
+                    start,
+                    start + (Vector3)requestedMove
+                );
+
+            allowedMove = requestedMove * fraction;
+
+            // Try sliding along one world axis when blocked.
+            if (fraction < 1f)
+            {
+                Vector2 xMove = new Vector2(
+                    requestedMove.x,
+                    0f
+                );
+
+                Vector2 yMove = new Vector2(
+                    0f,
+                    requestedMove.y
+                );
+
+                xMove *=
+                    dungeonGenerator.GetWalkableMoveFraction(
+                        start,
+                        start + (Vector3)xMove
+                    );
+
+                yMove *=
+                    dungeonGenerator.GetWalkableMoveFraction(
+                        start,
+                        start + (Vector3)yMove
+                    );
+
+                if (xMove.sqrMagnitude >
+                    allowedMove.sqrMagnitude)
+                {
+                    allowedMove = xMove;
+                }
+
+                if (yMove.sqrMagnitude >
+                    allowedMove.sqrMagnitude)
+                {
+                    allowedMove = yMove;
+                }
+            }
+        }
+
+        _velocity = allowedMove / Time.fixedDeltaTime;
         _rigidbody.linearVelocity = _velocity;
+
+        UpdateAnimation(new Vector2(
+            _velocity.x,
+            _velocity.y / isometricYScale
+        ));
 
         if (player != null)
             player.OnMovementUpdated(_velocity);
     }
 
-    // Merges keyboard or joystick input into a single clamped vector
     private Vector2 ReadInput()
     {
-        var input = _moveAction.ReadValue<Vector2>();
+        Vector2 input =
+            _moveAction.ReadValue<Vector2>();
 
-        var stick = joystick != null ? joystick : VirtualJoystick.Move;
+        VirtualJoystick stick = joystick != null
+            ? joystick
+            : VirtualJoystick.Move;
+
         if (stick != null)
             input += stick.Direction;
-
-        UpdateAnimation(input);
 
         return Vector2.ClampMagnitude(input, 1f);
     }
 
-    // Helper to configure the Rigidbody2D for top down
     private static void ConfigureBody(Rigidbody2D body)
     {
         if (body == null)
@@ -117,7 +234,11 @@ public class PlayerController : MonoBehaviour
         body.bodyType = RigidbodyType2D.Dynamic;
         body.gravityScale = 0f;
         body.freezeRotation = true;
-        body.interpolation = RigidbodyInterpolation2D.Interpolate;
-        body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        body.interpolation =
+            RigidbodyInterpolation2D.Interpolate;
+
+        body.collisionDetectionMode =
+            CollisionDetectionMode2D.Continuous;
     }
 }

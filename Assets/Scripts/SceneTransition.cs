@@ -11,7 +11,7 @@ public class SceneTransition : MonoBehaviour
     public void LoadMaze()
     {
         //LoadNum(1);
-        SceneManager.LoadScene("Playtest");
+        SceneManager.LoadScene("Dev-Builder");
     }
 
     public void LoadMenu()

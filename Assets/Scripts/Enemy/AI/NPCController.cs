@@ -200,6 +200,11 @@ public class NPCController : MonoBehaviour
         }
     }
 
+    public void SetPlayer(PlayerController playerController)
+    {
+        player = playerController;
+    }
+
     public void RefreshAfterNodeRegeneration()
     {
         path.Clear();
@@ -223,11 +228,5 @@ public class NPCController : MonoBehaviour
 
         currentState = newState;
         path.Clear();
-    }
-
-    public void SetPlayer(
-    PlayerController newPlayer)
-    {
-        player = newPlayer;
     }
 }

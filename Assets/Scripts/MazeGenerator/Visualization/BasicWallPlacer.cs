@@ -20,39 +20,59 @@ public static class BasicWallPlacer
 
     // Generates corridor walls while protecting authored rooms.
     public static void CreateWalls(
-        HashSet<Vector2Int> corridorPositions,
-        HashSet<Vector2Int> allFloorPositions,
-        HashSet<Vector2Int> protectedCells,
-        TileMapVisualizer tilemapVisualizer)
+    HashSet<Vector2Int> corridorFloor,
+    HashSet<Vector2Int> allFloorPositions,
+    HashSet<Vector2Int> protectedCells,
+    TileMapVisualizer tilemapVisualizer)
     {
-        var basicWallPositions = FindWallsInDirections(
-            corridorPositions,
-            Direction2D.cardinalDirList
+        List<Vector2Int> backDirections = new List<Vector2Int>
+    {
+        Vector2Int.right,
+        Vector2Int.up
+    };
+
+        HashSet<Vector2Int> wallPositions = FindWallsInDirections(
+            corridorFloor,
+            backDirections
         );
 
-        var cornerWallPositions = FindWallsInDirections(
-            corridorPositions,
-            Direction2D.diagonalDirList
-        );
+        wallPositions.ExceptWith(allFloorPositions);
+        wallPositions.ExceptWith(protectedCells);
 
-        // Walls cannot occupy floor or painted room cells.
-        basicWallPositions.ExceptWith(allFloorPositions);
-        basicWallPositions.ExceptWith(protectedCells);
+        // Add only the outside corner that joins two back walls.
+        HashSet<Vector2Int> cornerPositions =
+            new HashSet<Vector2Int>();
 
-        cornerWallPositions.ExceptWith(allFloorPositions);
-        cornerWallPositions.ExceptWith(protectedCells);
+        foreach (Vector2Int floorCell in corridorFloor)
+        {
+            Vector2Int corner =
+                floorCell + Vector2Int.right + Vector2Int.up;
 
-        // Include room floors when choosing wall shapes,
-        // especially where corridors meet doorways.
+            if (allFloorPositions.Contains(corner) ||
+                protectedCells.Contains(corner))
+            {
+                continue;
+            }
+
+            bool joinsTwoWalls =
+                wallPositions.Contains(corner + Vector2Int.left) &&
+                wallPositions.Contains(corner + Vector2Int.down);
+
+            if (joinsTwoWalls)
+                cornerPositions.Add(corner);
+        }
+
         CreateBasicWall(
             tilemapVisualizer,
-            basicWallPositions,
+            wallPositions,
             allFloorPositions
         );
 
+        // Corner selection runs only on connector cells,
+        // so it cannot overwrite the straight wall pieces.
         CreateCornerWalls(
             tilemapVisualizer,
-            cornerWallPositions,
+            cornerPositions,
             allFloorPositions
         );
     }

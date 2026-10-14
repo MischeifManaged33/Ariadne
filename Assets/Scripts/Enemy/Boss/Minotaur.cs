@@ -18,6 +18,10 @@ public class Minotaur : MonoBehaviour, IDamagable
         new BossPhase(1f, 1.5f, 1f)
     };
 
+    [Header("Victory")]
+    [SerializeField]
+    private MinotaurWinTrigger winTrigger;
+
     [Header("Targeting")]
     [SerializeField]
     private Transform target;
@@ -565,15 +569,32 @@ public class Minotaur : MonoBehaviour, IDamagable
 
         _dead = true;
 
+        Debug.Log($"MINOTAUR DIED: {name}", this);
+
         CancelMove();
 
-        if (_fightRoutine != null) {
+        if (_fightRoutine != null)
+        {
             StopCoroutine(_fightRoutine);
             _fightRoutine = null;
         }
 
         onDied?.Invoke();
         Died?.Invoke();
+
+        if (winTrigger == null)
+        {
+            Debug.LogError(
+                "MinotaurWinTrigger is missing. Add it to " +
+                "the Minotaur prefab on this object or its parent.",
+                this
+            );
+        }
+        else
+        {
+            Debug.Log("Calling ShowWinScreen.", this);
+            winTrigger.ShowWinScreen();
+        }
 
         if (destroyOnDeath)
             Destroy(gameObject, destroyDelay);
