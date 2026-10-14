@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     private bool destroyOnDeath = true;
     [SerializeField, Min(0f)]
     private float destroyDelay = 0f;
+    [SerializeField]
+    private DropTable dropTable;
 
 
     [Header("Knockback")]
@@ -158,6 +160,9 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
         _knockback = Vector2.zero;
 
         Died?.Invoke();
+
+        if (dropTable != null)
+            dropTable.Drop(Position);
 
         if (destroyOnDeath)
             Destroy(gameObject, destroyDelay);

@@ -27,9 +27,25 @@ public class CameraFollow : MonoBehaviour
     [SerializeField, Range(0.1f, 1f)]
     private float lookAheadYScale = 0.5f;
 
+    [Header("Hit Shake")]
+    [SerializeField, Min(0f)]
+    private float shakeDamageThreshold = 10f;
+    [SerializeField, Min(0f)]
+    private float shakeMagnitude = 0.25f;
+    [SerializeField, Min(0f)]
+    private float shakeDuration = 0.25f;
+    [SerializeField, Min(0f)]
+    private float shakeFrequency = 25f;
+
     private Player _player;
+    private PlayerHealth _health;
     private Rigidbody2D _targetBody;
     private float _z;
+
+    private float _shakeTimer;
+    private float _shakeTotal;
+    private float _shakeStrength;
+    private float _shakeSeed;
 
     private Vector2 _anchor;
     private Vector2 _lookAhead;
@@ -62,8 +78,62 @@ public class CameraFollow : MonoBehaviour
         if (_player == null)
             _player = target.GetComponentInParent<Player>();
         _targetBody = target.GetComponentInParent<Rigidbody2D>();
+        SubscribeHealth(target.GetComponentInParent<PlayerHealth>());
 
         GoToTarget();
+    }
+
+    private void OnDisable()
+    {
+        SubscribeHealth(null);
+    }
+
+    private void SubscribeHealth(PlayerHealth health)
+    {
+        if (_health != null)
+            _health.Damaged -= OnTargetDamaged;
+
+        _health = health;
+
+        if (_health != null && isActiveAndEnabled)
+            _health.Damaged += OnTargetDamaged;
+    }
+
+    private void OnTargetDamaged(float amount)
+    {
+        if (amount > shakeDamageThreshold)
+            Shake(shakeDuration, shakeMagnitude);
+    }
+
+    public void Shake(float duration, float magnitude)
+    {
+        if (duration <= 0f || magnitude <= 0f)
+            return;
+
+        // Don't let a weaker shake cut short a stronger one
+        if (_shakeTimer > 0f && _shakeStrength > magnitude)
+            return;
+
+        _shakeTimer = duration;
+        _shakeTotal = duration;
+        _shakeStrength = magnitude;
+        _shakeSeed = Random.value * 100f;
+    }
+
+    private Vector2 UpdateShake()
+    {
+        if (_shakeTimer <= 0f)
+            return Vector2.zero;
+
+        _shakeTimer -= Time.deltaTime;
+        var falloff = Mathf.Clamp01(_shakeTimer / _shakeTotal);
+        var strength = _shakeStrength * falloff * falloff;
+
+        var t = Time.time * shakeFrequency;
+        var x = Mathf.PerlinNoise(_shakeSeed, t) * 2f - 1f;
+        var y = Mathf.PerlinNoise(_shakeSeed + 50f, t) * 2f - 1f;
+
+        return new Vector2(x, y) * strength;
     }
 
     private void LateUpdate()
@@ -80,7 +150,8 @@ public class CameraFollow : MonoBehaviour
         _position = Vector2.SmoothDamp(_position, goal, ref _followVelocity, smoothTime,
             maxSpeed > 0f ? maxSpeed : Mathf.Infinity, Time.deltaTime);
 
-        transform.position = new Vector3(_position.x, _position.y, _z);
+        var shaken = _position + UpdateShake();
+        transform.position = new Vector3(shaken.x, shaken.y, _z);
         _previousTargetPosition = (Vector2)target.position;
     }
 
@@ -143,6 +214,7 @@ public class CameraFollow : MonoBehaviour
         target = value;
         _player = value != null ? value.GetComponentInParent<Player>() : null;
         _targetBody = value != null ? value.GetComponentInParent<Rigidbody2D>() : null;
+        SubscribeHealth(value != null ? value.GetComponentInParent<PlayerHealth>() : null);
 
         if (snap)
             GoToTarget();

@@ -1,0 +1,581 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1424758965364556372
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 868058835741787341}
+  - component: {fileID: 5369545331398924274}
+  - component: {fileID: 4411486351206393367}
+  - component: {fileID: 8026153396221731732}
+  m_Layer: 0
+  m_Name: indicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &868058835741787341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424758965364556372}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7365541708743826542}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &5369545331398924274
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424758965364556372}
+  m_Mesh: {fileID: 0}
+--- !u!23 &4411486351206393367
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424758965364556372}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8026153396221731732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424758965364556372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77fc5dbb0d973144396a8968155f588f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CircleIndicator
+  segments: 48
+  ringWidth: 0.12
+  material: {fileID: 0}
+  ringColor: {r: 1, g: 0.3, b: 0.3, a: 0.8}
+  fillColor: {r: 1, g: 0.3, b: 0.3, a: 0.3}
+  flashColor: {r: 1, g: 1, b: 1, a: 0.9}
+  fadeSpeed: 12
+  flashDuration: 0.15
+  sortingLayer: Enemy
+  sortingPrecision: 16
+  sortingOffset: -1
+--- !u!1 &3876905382218478030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7365541708743826542}
+  - component: {fileID: 4516260258099715100}
+  - component: {fileID: 6214072023238617331}
+  - component: {fileID: 2386133410607603521}
+  - component: {fileID: 867881180752687177}
+  - component: {fileID: 1174089054967481288}
+  - component: {fileID: 514735484815435060}
+  - component: {fileID: 7406182829615431268}
+  - component: {fileID: 7688368160947103617}
+  - component: {fileID: 7077738448930041599}
+  m_Layer: 0
+  m_Name: Pheonix
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7365541708743826542
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.4831, y: 1.22, z: 0}
+  m_LocalScale: {x: 1.0077, y: 0.9691, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 868058835741787341}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &4516260258099715100
+SpriteRenderer:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 632217233
+  m_SortingLayer: 8
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 21300000, guid: cf1e9330295f46e4587f4da6021378c6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.4628571, y: 1.4628571}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
+--- !u!114 &6214072023238617331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183ac79a3cb06fd4394d27de1d726aee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMover
+  speed: 2.5
+  isometricYScale: 0.5
+  usePathfinding: 1
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  bodyRadius: 0.3
+  nodeReachRadius: 0.4
+  repathInterval: 0.5
+  repathDistance: 1.5
+--- !u!114 &2386133410607603521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d220e7959da019d4094bf3a302185c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
+  target: {fileID: 0}
+  findPlayerOnStart: 1
+  sightRange: 7
+  loseSightRange: 10
+  requireLineOfSight: 1
+  sightBlockers:
+    serializedVersion: 2
+    m_Bits: 64
+  alertMemory: 2.5
+  scanInterval: 0.15
+  reactionDelay: 0.25
+  stayAlerted: 0
+  wanders: 0
+  homeAnchor: {fileID: 0}
+  wanderRadius: 5
+  wanderStep: 3
+  wanderPauseMin: 0.4
+  wanderPauseMax: 1.6
+  wanderSpeedMultiplier: 0.6
+  wanderLegTimeout: 4
+  wanderArriveDistance: 0.35
+  wanderAttempts: 8
+  none: 0
+  chaseStopDistance: 1.2
+  chaseSpeedMultiplier: 1
+  thinkInterval: 0.1
+  sleepDistance: 25
+--- !u!61 &867881180752687177
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.00736171, y: 1.0744684}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 2.5, y: 2.5}
+    newSize: {x: 1.4628571, y: 1.4628571}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.8786032, y: 0.8934537}
+  m_EdgeRadius: 0
+--- !u!114 &1174089054967481288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0238d27339e708f4c900626343fa897f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Phoenix
+  maxHealth: 200
+  destroyOnDeath: 1
+  destroyDelay: 0
+  dropTable: {fileID: 11400000, guid: 3c3d2ea5648244e596894f0e25634dcb, type: 2}
+  knockbackSpeed: 6
+  knockbackDuration: 0.15
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  isometricYScale: 0.5
+  wallSkin: 0.02
+  visual: {fileID: 0}
+  perchedSprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
+  flyingSprite: {fileID: 21300000, guid: cf1e9330295f46e4587f4da6021378c6, type: 3}
+  artFacesLeft: 1
+  deathLinger: 0.4
+--- !u!114 &514735484815435060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783072131ff8c8741a2637f5a73210f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhoenixDash
+  weight: 1
+  cooldown: 2
+  firstUseDelay: 0.5
+  minRange: 0
+  maxRange: 11
+  needsLineOfSight: 1
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  minDistance: 6
+  maxDistance: 13
+  overshoot: 4
+  dashDuration: 0.3
+  contactDamage: 15
+  bodyRadius: 0.5
+  leadStrength: 0.8
+  leadTime: 0.6
+  windup: 0.6
+  trackFraction: 0.8
+  recovery: 1
+  trailWidth: 0.8
+  trailSpacing: 0.75
+  trailDamage: 4
+  trailTickInterval: 0.5
+  trailLifetime: 10
+  trailFadeTime: 0.5
+  trailColor: {r: 0.9, g: 0.1, b: 0.05, a: 0.75}
+  indicator: {fileID: 0}
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+--- !u!114 &7406182829615431268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7709fd24a0389e7479430acbee268323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhoenixBackdash
+  weight: 4
+  cooldown: 3
+  firstUseDelay: 0.5
+  minRange: 0
+  maxRange: 3
+  needsLineOfSight: 0
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  distance: 3.5
+  windup: 0.15
+  dashDuration: 0.25
+  recovery: 0.2
+  bodyRadius: 0.3
+  minimumHop: 1
+  matchEruptionRadius: 1
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+--- !u!114 &7688368160947103617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be77889a56f43de4a93b27bd17bb46f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhoenixEruption
+  weight: 100
+  cooldown: 0
+  firstUseDelay: 0.5
+  minRange: 0
+  maxRange: 100
+  needsLineOfSight: 0
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  radius: 7
+  damage: 35
+  windup: 0.9
+  startFill: 0.1
+  recovery: 0.5
+  indicator: {fileID: 0}
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+--- !u!114 &7077738448930041599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7225ecf9d45960642a8965ecfba58404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhoenixVolley
+  weight: 1
+  cooldown: 1.5
+  firstUseDelay: 0.5
+  minRange: 0
+  maxRange: 9
+  needsLineOfSight: 1
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  count: 3
+  spread: 30
+  range: 15
+  speed: 17
+  hitRadius: 0.5
+  blastRadius: 2.5
+  damage: 15
+  color: {r: 1, g: 0.55, b: 0.1, a: 1}
+  size: 0.35
+  windup: 0.8
+  trackFraction: 0.6
+  recovery: 0.6
+  indicators: []
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 

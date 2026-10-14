@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Circle shapped attack indicator that get filled
+// Circle attack indicator
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class CircleIndicator : MonoBehaviour
 {
@@ -137,8 +137,6 @@ public class CircleIndicator : MonoBehaviour
         if (_colors == null || _colors.Length == 0)
             return;
 
-        // Uploading the colour buffer is the expensive half of the draw, and the
-        // tint only actually moves while it is fading in or flashing
         if (_tinted && fill == _appliedFill && ring == _appliedRing)
             return;
 
@@ -178,7 +176,6 @@ public class CircleIndicator : MonoBehaviour
             var radians = Mathf.PI * 2f * i / count;
             var unit = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
 
-            // Built on the ground then squashed, so it lies flat like the floor
             _vertices[i + 1] = Flatten(unit * fillRadius);
             _vertices[ringStart + i * 2] = Flatten(unit * _radius);
             _vertices[ringStart + i * 2 + 1] = Flatten(unit * innerRadius);

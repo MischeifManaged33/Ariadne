@@ -44,8 +44,14 @@ public class EnemyAI : MonoBehaviour
     private float scanInterval = 0.15f;
     [SerializeField, Min(0f)]
     private float reactionDelay = 0.25f;
+    // Once alerted it stays alerted, so it never goes back to wandering or sleeping
+    [SerializeField]
+    private bool stayAlerted;
 
     [Header("Wander")]
+    // Off holds still until alerted, like a mimic
+    [SerializeField]
+    private bool wanders = true;
     [SerializeField]
     private Transform homeAnchor;
     [SerializeField, Min(0f)]
@@ -88,7 +94,7 @@ public class EnemyAI : MonoBehaviour
 
     public Transform Target => target;
     public bool CanSeeTarget { get; private set; }
-    public bool IsAlerted => Time.time < _alertUntil;
+    public bool IsAlerted => _alertedForGood || Time.time < _alertUntil;
 
     public Vector2 Facing { get; private set; } = Vector2.down;
     public Vector2 Home => homeAnchor != null ? (Vector2)homeAnchor.position : _home;
@@ -117,6 +123,7 @@ public class EnemyAI : MonoBehaviour
     private bool _hasWanderPoint;
 
     private float _alertUntil;
+    private bool _alertedForGood;
     private float _nextScanTime;
     private float _nextThinkTime;
     private float _actReadyTime;
@@ -220,6 +227,9 @@ public class EnemyAI : MonoBehaviour
 
     public void Alert()
     {
+        if (stayAlerted)
+            _alertedForGood = true;
+
         _alertUntil = Mathf.Max(_alertUntil, Time.time + Mathf.Max(alertMemory, 0.1f));
     }
 
@@ -240,6 +250,12 @@ public class EnemyAI : MonoBehaviour
     private void Think()
     {
         if (!IsAlerted) {
+            if (!wanders) {
+                SetState(State.Idle);
+                Mover.Stop();
+                return;
+            }
+
             SetState(State.Wander);
             WanderStep();
             return;
@@ -287,6 +303,8 @@ public class EnemyAI : MonoBehaviour
             return;
 
         _alertUntil = Time.time + alertMemory;
+        if (stayAlerted)
+            _alertedForGood = true;
 
         if (!wasAlerted)
             _actReadyTime = Time.time + reactionDelay;
