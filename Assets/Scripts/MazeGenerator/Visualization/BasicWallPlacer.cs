@@ -39,11 +39,28 @@ public static class BasicWallPlacer
         wallPositions.ExceptWith(allFloorPositions);
         wallPositions.ExceptWith(protectedCells);
 
-        // Avoid walls between nearby floor sections.
-        wallPositions.RemoveWhere(position =>
-            allFloorPositions.Contains(position + Vector2Int.right) ||
-            allFloorPositions.Contains(position + Vector2Int.up)
-        );
+        // Add only the outside corner that joins two back walls.
+        HashSet<Vector2Int> cornerPositions =
+            new HashSet<Vector2Int>();
+
+        foreach (Vector2Int floorCell in corridorFloor)
+        {
+            Vector2Int corner =
+                floorCell + Vector2Int.right + Vector2Int.up;
+
+            if (allFloorPositions.Contains(corner) ||
+                protectedCells.Contains(corner))
+            {
+                continue;
+            }
+
+            bool joinsTwoWalls =
+                wallPositions.Contains(corner + Vector2Int.left) &&
+                wallPositions.Contains(corner + Vector2Int.down);
+
+            if (joinsTwoWalls)
+                cornerPositions.Add(corner);
+        }
 
         CreateBasicWall(
             tilemapVisualizer,
@@ -51,18 +68,13 @@ public static class BasicWallPlacer
             allFloorPositions
         );
 
-        // Choose corner artwork only at the approved wall positions.
-        // Do not add separate diagonal wall cells.
-        //CreateCornerWalls(
-        //    tilemapVisualizer,
-        //    wallPositions,
-        //    allFloorPositions
-        //);
-        CreateBasicWall(
-    tilemapVisualizer,
-    wallPositions,
-    allFloorPositions
-);
+        // Corner selection runs only on connector cells,
+        // so it cannot overwrite the straight wall pieces.
+        CreateCornerWalls(
+            tilemapVisualizer,
+            cornerPositions,
+            allFloorPositions
+        );
     }
 
     private static void CreateCornerWalls(TileMapVisualizer tilemapVisualizer, HashSet<Vector2Int> cornerWallPositions, HashSet<Vector2Int> floorPositions)

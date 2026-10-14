@@ -32,6 +32,10 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField, Range(0, 3)]
     private int corridorRadius = 1;
 
+    [Header("Corridor Smoothing")]
+    [SerializeField, Range(0, 3)]
+    private int smoothingPasses = 2;
+
     [Header("Extra Corridors")]
     [SerializeField, Min(0)]
     private int deadEndCount = 20;
@@ -144,6 +148,85 @@ public class DesignedDungeonGenerator : MonoBehaviour
         {
             Debug.LogException(exception, this);
         }
+    }
+
+    private HashSet<Vector2Int> SmoothCorridorFloor(
+    HashSet<Vector2Int> floor,
+    List<RectInt> roomBounds,
+    RectInt dungeonArea)
+    {
+        HashSet<Vector2Int> result =
+            new HashSet<Vector2Int>(floor);
+
+        Vector2Int[] directions =
+        {
+        Vector2Int.up,
+        Vector2Int.right,
+        Vector2Int.down,
+        Vector2Int.left
+    };
+
+        HashSet<Vector2Int> candidates =
+            new HashSet<Vector2Int>();
+
+        foreach (Vector2Int cell in floor)
+        {
+            foreach (Vector2Int direction in directions)
+            {
+                Vector2Int candidate = cell + direction;
+
+                if (!floor.Contains(candidate))
+                    candidates.Add(candidate);
+            }
+        }
+
+        foreach (Vector2Int candidate in candidates)
+        {
+            if (!dungeonArea.Contains(candidate))
+                continue;
+
+            bool insideRoom = false;
+
+            foreach (RectInt room in roomBounds)
+            {
+                if (room.Contains(candidate))
+                {
+                    insideRoom = true;
+                    break;
+                }
+            }
+
+            if (insideRoom)
+                continue;
+
+            int floorNeighbors = 0;
+
+            foreach (Vector2Int direction in directions)
+            {
+                if (floor.Contains(candidate + direction))
+                    floorNeighbors++;
+            }
+
+            // Fill a small indentation surrounded on three sides.
+            bool up = floor.Contains(candidate + Vector2Int.up);
+            bool right = floor.Contains(candidate + Vector2Int.right);
+            bool down = floor.Contains(candidate + Vector2Int.down);
+            bool left = floor.Contains(candidate + Vector2Int.left);
+
+            // Two perpendicular floor neighbors form a small inward corner.
+            bool inwardCorner =
+                (up && right) ||
+                (right && down) ||
+                (down && left) ||
+                (left && up);
+
+            if (floorNeighbors >= 3 || inwardCorner)
+            {
+                result.Add(candidate);
+            }
+        }
+
+        return result;
     }
 
     private void PositionCharacters(
@@ -510,6 +593,16 @@ Debug.Log(
             corridors = RoomCorridorBuilder.Build(instances, bounds, dungeonFloor, new RectInt(dungeonOrigin, dungeonSize), random);
             AddRandomBranches(corridors, bounds, new RectInt(dungeonOrigin, dungeonSize), random);
             corridors = WidenCorridors(corridors, bounds, new RectInt(dungeonOrigin, dungeonSize));
+            RectInt dungeonArea = new RectInt(dungeonOrigin, dungeonSize);
+
+            for (int pass = 0; pass < smoothingPasses; pass++)
+            {
+                corridors = SmoothCorridorFloor(
+                    corridors,
+                    bounds,
+                    dungeonArea
+                );
+            }
         }
         catch
         {
