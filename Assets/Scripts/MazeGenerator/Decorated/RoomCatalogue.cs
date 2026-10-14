@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(
@@ -12,8 +13,18 @@ public class RoomCatalogue : ScriptableObject
     {
         public string categoryName;
 
+        [Min(0)]
+        public int minimumRooms = 0;
+
+        [Min(0)]
+        public int maximumRooms = 10;
+
+        [Tooltip("Weight used to fill slots after minimums are satisfied.")]
         [Min(0f)]
         public float weight = 1f;
+
+        [Tooltip("Allow the same design more than once in this category.")]
+        public bool allowDuplicateDesigns = true;
 
         public RoomDefinition[] designs =
             new RoomDefinition[0];
@@ -23,10 +34,27 @@ public class RoomCatalogue : ScriptableObject
     private RoomCategory[] categories =
         new RoomCategory[0];
 
-    public RoomDefinition PickRoom(System.Random random)
+    // Counts and available designs belong to this generation only.
+    private class CategoryState
+    {
+        public RoomCategory category;
+        public List<RoomDefinition> available;
+        public int spawnedCount;
+
+        public bool CanPick =>
+            spawnedCount < category.maximumRooms &&
+            available.Count > 0;
+    }
+
+    public List<RoomDefinition> PickRooms(
+        int roomCount,
+        System.Random random)
     {
         if (random == null)
             throw new ArgumentNullException(nameof(random));
+
+        if (roomCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(roomCount));
 
         if (categories == null || categories.Length == 0)
         {
@@ -35,90 +63,160 @@ public class RoomCatalogue : ScriptableObject
             );
         }
 
-        double totalWeight = 0;
-        RoomCategory lastEnabledCategory = null;
+        List<CategoryState> states = new List<CategoryState>();
+        long totalMinimum = 0;
 
         foreach (RoomCategory category in categories)
         {
             if (category == null)
                 continue;
 
-            if (float.IsNaN(category.weight) ||
-                float.IsInfinity(category.weight))
+            if (category.minimumRooms < 0 ||
+                category.maximumRooms < category.minimumRooms)
             {
                 throw new InvalidOperationException(
-                    $"{name}: category weights must be finite."
+                    $"{category.categoryName}: Maximum Rooms must " +
+                    "be at least Minimum Rooms, and both must be nonnegative."
                 );
             }
 
-            // A zero-weight category is disabled.
-            if (category.weight <= 0f)
+            if (float.IsNaN(category.weight) ||
+                float.IsInfinity(category.weight) ||
+                category.weight < 0f)
+            {
+                throw new InvalidOperationException(
+                    $"{category.categoryName}: weight must be " +
+                    "finite and nonnegative."
+                );
+            }
+
+            totalMinimum += category.minimumRooms;
+
+            // Maximum zero disables this category.
+            if (category.maximumRooms == 0)
                 continue;
 
-            if (category.designs == null ||
-                category.designs.Length == 0)
+            // Zero weight with no minimum means this category is unused.
+            if (category.minimumRooms == 0 && category.weight == 0f)
+                continue;
+
+            if (category.designs == null || category.designs.Length == 0)
             {
                 throw new InvalidOperationException(
                     $"{category.categoryName}: add a room prefab."
                 );
             }
 
+            List<RoomDefinition> available =
+                new List<RoomDefinition>();
+
             foreach (RoomDefinition design in category.designs)
             {
                 if (design == null)
                 {
                     throw new InvalidOperationException(
-                        $"{category.categoryName}: " +
-                        "a room prefab reference is missing."
+                        $"{category.categoryName}: a prefab reference is missing."
                     );
                 }
+
+                // Listing a prefab twice should not bypass duplicate limits.
+                if (!available.Contains(design))
+                    available.Add(design);
             }
 
-            totalWeight += category.weight;
-            lastEnabledCategory = category;
+            if (!category.allowDuplicateDesigns &&
+                available.Count < category.minimumRooms)
+            {
+                throw new InvalidOperationException(
+                    $"{category.categoryName}: its minimum requires " +
+                    "more unique designs than are available."
+                );
+            }
+
+            states.Add(new CategoryState
+            {
+                category = category,
+                available = available
+            });
         }
 
-        if (lastEnabledCategory == null)
+        if (totalMinimum > roomCount)
         {
             throw new InvalidOperationException(
-                $"{name}: at least one category needs a positive weight."
+                $"{name}: category minimums require {totalMinimum} rooms, " +
+                $"but the generator's Room Count is {roomCount}."
             );
         }
 
-        double roll = random.NextDouble() * totalWeight;
+        List<RoomDefinition> selected =
+            new List<RoomDefinition>();
 
-        RoomCategory selectedCategory =
-            lastEnabledCategory;
-
-        foreach (RoomCategory category in categories)
+        // First guarantee each category's minimum.
+        foreach (CategoryState state in states)
         {
-            if (category == null || category.weight <= 0f)
-                continue;
-
-            roll -= category.weight;
-
-            if (roll < 0)
-            {
-                selectedCategory = category;
-                break;
-            }
+            for (int i = 0; i < state.category.minimumRooms; i++)
+                selected.Add(TakeDesign(state, random));
         }
 
-        int designIndex =
-            random.Next(selectedCategory.designs.Length);
+        // Fill remaining slots using weights and remaining capacity.
+        while (selected.Count < roomCount)
+        {
+            double totalWeight = 0;
+            CategoryState chosen = null;
 
-        return selectedCategory.designs[designIndex];
+            foreach (CategoryState state in states)
+            {
+                if (!state.CanPick || state.category.weight <= 0f)
+                    continue;
+
+                totalWeight += state.category.weight;
+                chosen = state;
+            }
+
+            if (chosen == null)
+            {
+                throw new InvalidOperationException(
+                    $"{name}: cannot fill Room Count ({roomCount}). " +
+                    "Increase category maximums, add unique designs, " +
+                    "enable duplicates, or give an eligible category " +
+                    "a positive weight."
+                );
+            }
+
+            double roll = random.NextDouble() * totalWeight;
+
+            foreach (CategoryState state in states)
+            {
+                if (!state.CanPick || state.category.weight <= 0f)
+                    continue;
+
+                roll -= state.category.weight;
+
+                if (roll < 0)
+                {
+                    chosen = state;
+                    break;
+                }
+            }
+
+            selected.Add(TakeDesign(chosen, random));
+        }
+
+        return selected;
     }
 
-    [ContextMenu("Test Room Selection")]
-    private void TestRoomSelection()
+    private RoomDefinition TakeDesign(
+        CategoryState state,
+        System.Random random)
     {
-        RoomDefinition selected =
-            PickRoom(new System.Random());
+        int index = random.Next(state.available.Count);
+        RoomDefinition design = state.available[index];
 
-        Debug.Log(
-            $"Selected room prefab: {selected.name}",
-            this
-        );
+        state.spawnedCount++;
+
+        if (!state.category.allowDuplicateDesigns)
+            state.available.RemoveAt(index);
+
+        return design;
     }
 }

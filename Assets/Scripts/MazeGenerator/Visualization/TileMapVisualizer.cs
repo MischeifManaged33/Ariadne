@@ -77,10 +77,13 @@ public class TileMapVisualizer : MonoBehaviour
     TileBase tile,
     Vector2Int position)
     {
-        Vector3Int cellPosition =
-            new Vector3Int(position.x, position.y, 0);
+        Vector3Int cell = new Vector3Int(
+            position.x,
+            position.y,
+            0
+        );
 
-        tilemap.SetTile(cellPosition, tile);
+        tilemap.SetTile(cell, tile);
     }
 
     public void PaintIsometricWalls(HashSet<Vector2Int> floorPositions)
@@ -257,4 +260,78 @@ public class TileMapVisualizer : MonoBehaviour
             }
         }
     }
+
+    [ContextMenu("Diagnose Corridor Walls")]
+    private void DiagnoseCorridorWalls()
+    {
+        if (floorTilemap == null || wallTilemap == null)
+        {
+            Debug.LogError("Assign the floor and wall Tilemaps.", this);
+            return;
+        }
+
+        Vector3 floorOrigin =
+            floorTilemap.GetCellCenterWorld(Vector3Int.zero);
+
+        Vector3 wallOrigin =
+            wallTilemap.GetCellCenterWorld(Vector3Int.zero);
+
+        Vector3 floorX =
+            floorTilemap.GetCellCenterWorld(Vector3Int.right)
+            - floorOrigin;
+
+        Vector3 wallX =
+            wallTilemap.GetCellCenterWorld(Vector3Int.right)
+            - wallOrigin;
+
+        Vector3 floorY =
+            floorTilemap.GetCellCenterWorld(Vector3Int.up)
+            - floorOrigin;
+
+        Vector3 wallY =
+            wallTilemap.GetCellCenterWorld(Vector3Int.up)
+            - wallOrigin;
+
+        int floorCount = 0;
+        int wallCount = 0;
+        int overlappingCells = 0;
+        string firstOverlap = "none";
+
+        foreach (Vector3Int cell in
+                 floorTilemap.cellBounds.allPositionsWithin)
+        {
+            if (!floorTilemap.HasTile(cell))
+                continue;
+
+            floorCount++;
+
+            if (wallTilemap.HasTile(cell))
+            {
+                overlappingCells++;
+
+                if (firstOverlap == "none")
+                    firstOverlap = cell.ToString();
+            }
+        }
+
+        foreach (Vector3Int cell in
+                 wallTilemap.cellBounds.allPositionsWithin)
+        {
+            if (wallTilemap.HasTile(cell))
+                wallCount++;
+        }
+
+        Debug.Log(
+            $"CORRIDOR WALL DIAGNOSTICS\n" +
+            $"Floor cells: {floorCount}\n" +
+            $"Base wall cells: {wallCount}\n" +
+            $"Walls sharing floor cells: {overlappingCells}\n" +
+            $"First overlap: {firstOverlap}\n" +
+            $"Wall grid offset: {(wallOrigin - floorOrigin).ToString("F6")}\n" +
+            $"X step difference: {(wallX - floorX).ToString("F6")}\n" +
+            $"Y step difference: {(wallY - floorY).ToString("F6")}",
+            this
+        );
+    }
+
 }
