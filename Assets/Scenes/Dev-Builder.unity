@@ -108029,6 +108029,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CorridorEnemySpawner
   enemyPrefabs:
   - {fileID: 3876905382218478030, guid: d0a071adcdb75464985842c8e5e3c732, type: 3}
+  - {fileID: 3876905382218478030, guid: b0383e81b82f5e049bf32b32d9a99ab9, type: 3}
+  - {fileID: 3876905382218478030, guid: 783f019c66a058f4390dab7d47de27f8, type: 3}
   enemyCount: 10
   minimumDistanceFromPlayer: 4
   minimumDistanceBetweenEnemies: 2
