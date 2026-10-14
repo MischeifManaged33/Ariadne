@@ -396,18 +396,18 @@ MonoBehaviour:
       Path: 
     swing:
       Guid:
-        Data1: 1602403349
-        Data2: 1192849187
-        Data3: 1191027348
-        Data4: -1374218044
-      Path: event:/SFX/Minotaur/AxeSwing
+        Data1: 855242753
+        Data2: 1168023525
+        Data3: 1149397685
+        Data4: 1982269005
+      Path: event:/SFX/Minotaur/AxeThrow
     impact:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
+        Data1: 1562677399
+        Data2: 1231513343
+        Data3: -579098947
+        Data4: 540227486
+      Path: event:/SFX/Minotaur/AxeCling
 --- !u!114 &7130976122343417830
 MonoBehaviour:
   m_ObjectHideFlags: 0

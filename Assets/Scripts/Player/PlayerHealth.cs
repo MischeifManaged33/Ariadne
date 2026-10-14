@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,8 @@ public class PlayerHealth : MonoBehaviour
     private Color hitFlashColor = new Color(1f, 0.35f, 0.35f);
     [SerializeField, Min(0f)]
     private float hitFlashDuration = 0.12f;
+    [SerializeField]
+    private EventReference hurtSound;
 
     [Header("Events")]
     [SerializeField]
@@ -83,6 +86,8 @@ public class PlayerHealth : MonoBehaviour
             return 0f;
 
         CurrentHealth -= applied;
+
+        Sfx.PlayOneShot(hurtSound, transform.position);
 
         if (CurrentHealth <= 0)
         {

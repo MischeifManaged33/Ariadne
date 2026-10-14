@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine;
 
 
@@ -68,6 +69,8 @@ public class Basilisk : Enemy
     private float maxPetrifyTime = 6f;
     [SerializeField]
     private AttackSounds peckSounds = new AttackSounds();
+    [SerializeField]
+    private EventReference petrifySound;
 
     [Header("When Struck")]
     [SerializeField, Min(0f)]
@@ -430,6 +433,8 @@ public class Basilisk : Enemy
 
         if (!_stone.TryPetrify(this, maxPetrifyTime))
             return;
+
+        Sfx.PlayOneShot(petrifySound, _target.transform.position);
 
         if (!_hasReturnPoint) {
             _returnPoint = Position;

@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using UnityEngine;
 
 // Breakable objects by hit
@@ -7,6 +8,8 @@ public class Breakable : MonoBehaviour, IDamagable
 {
     [SerializeField, Min(1)]
     private int hitsToBreak = 1;
+    [SerializeField]
+    private EventReference breakSound;
 
     public event Action Broken;
 
@@ -46,6 +49,7 @@ public class Breakable : MonoBehaviour, IDamagable
     private void Break()
     {
         Broken?.Invoke();
+        Sfx.PlayOneShot(breakSound, transform.position);
         Destroy(gameObject);
     }
 }
