@@ -44,6 +44,9 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Transform minotaur;
 
+    [SerializeField]
+    private CorridorWallPainter corridorWallPainter;
+
     [SerializeField, Min(1)]
     private int minimumBranchLength = 3;
 
@@ -729,11 +732,17 @@ Debug.Log(
             }
         }
 
-        BasicWallPlacer.CreateWalls(
+        if (corridorWallPainter == null)
+        {
+            throw new InvalidOperationException(
+                "Assign the Corridor Wall Painter."
+            );
+        }
+
+        corridorWallPainter.Paint(
             corridors,
             allFloorPositions,
-            protectedCells,
-            tilemapVisualizer
+            protectedCells
         );
     }
 

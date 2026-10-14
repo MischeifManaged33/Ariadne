@@ -17,7 +17,7 @@ MonoBehaviour:
     minimumRooms: 0
     maximumRooms: 10
     weight: 0.5
-    allowDuplicateDesigns: 1
+    allowDuplicateDesigns: 0
     designs:
     - {fileID: 48299319226861388, guid: 0276cf839d898b84387c7298d01620ed, type: 3}
     - {fileID: 5026520659954765013, guid: 5b847bd3b51c9c94fb47f0bdc1782063, type: 3}
