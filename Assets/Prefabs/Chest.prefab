@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 61.8, y: 58.1, z: 0}
-  m_LocalScale: {x: 2.8, y: 2.8, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2027013127
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2105504302921150959, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -132,7 +132,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2.8, y: 2.8}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -168,7 +168,6 @@ MonoBehaviour:
   closedSprite: {fileID: 2105504302921150959, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
   openSprite: {fileID: 2607120031577715440, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
   itemPrefab: {fileID: 1378728296616829523, guid: 9b1f4b021494aa747864c1eff3090200, type: 3}
-  weaponOverride: {fileID: 0}
   landingOffset: {x: 0, y: -0.6}
   popHeight: 0.5
   popDuration: 0.35
