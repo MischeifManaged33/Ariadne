@@ -44,7 +44,7 @@ public class Phoenix : Enemy
 
     private void Update()
     {
-        // Holds the torch pose while disguised
+        // Disguise
         if (!IsRevealed || visual == null || Mathf.Abs(AI.Facing.x) < 0.1f)
             return;
 

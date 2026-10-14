@@ -161,7 +161,6 @@ public class Basilisk : Enemy
         if (targetLayers.value == 0)
             targetLayers = LayerMask.GetMask("Player");
 
-        // EnemyAI chases and wanders on the same mover, which would fight the patrol
         foreach (var ai in GetComponents<EnemyAI>()) {
             ai.enabled = false;
             Destroy(ai);

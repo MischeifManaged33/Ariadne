@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// The basilisk's cone of petrification. Like the darkness, it's a fan of rays that walls cut short,
-// so the cone drawn on the floor is exactly the area it can petrify
+// Petrify
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class BasiliskGaze : MonoBehaviour
 {
@@ -44,8 +43,6 @@ public class BasiliskGaze : MonoBehaviour
     public float Range => range;
     public float Angle => angle;
     public float YScale => isometricYScale;
-
-    // How close the player is to being petrified, 0 to 1, shown by the cone's colour
     public float Charge { get; set; }
     public bool Active { get; set; }
 
