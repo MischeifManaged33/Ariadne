@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: DungeonRoomCatalogue
   m_EditorClassIdentifier: Assembly-CSharp::RoomCatalogue
   categories:
-  - categoryName: Plain
+  - categoryName: Special
     minimumRooms: 0
     maximumRooms: 0
     weight: 0.5
     allowDuplicateDesigns: 0
-    designs: []
+    designs:
+    - {fileID: 5523358972298957273, guid: 5257626b4c19f0948be1ac7de8fc5aa9, type: 3}
+    - {fileID: 5348679523876645825, guid: 59f6c28f080c1c4418fdc6758622e30a, type: 3}
+    - {fileID: 5360576888822564090, guid: 204060d6e6a0dd84cb1311fffefa23fc, type: 3}
   - categoryName: Letters
     minimumRooms: 0
     maximumRooms: 10
@@ -27,10 +30,19 @@ MonoBehaviour:
     designs:
     - {fileID: 7961586015930139223, guid: 2c4549cb32d07f64c884dc7314cac7b4, type: 3}
     - {fileID: 2107294968608101972, guid: 00b025597cc4dfd4b8b7970da8ba107c, type: 3}
+    - {fileID: 8711391629914878009, guid: 5c42b5f8f400f43418ee6af41bf89a41, type: 3}
+    - {fileID: 6727792626030538797, guid: 5e0e8ef5b8bd58d4a90a3652698ae267, type: 3}
   - categoryName: Tutorial
     minimumRooms: 1
     maximumRooms: 1
     weight: 1
     allowDuplicateDesigns: 0
     designs:
-    - {fileID: 2870294335450515287, guid: 8efbefb010330294fa241b701b0e3f62, type: 3}
+    - {fileID: 4498101460983394622, guid: 3fa9d8fb1151a304aa9b9fccc3a5b91c, type: 3}
+  - categoryName: Minotaur
+    minimumRooms: 1
+    maximumRooms: 1
+    weight: 1
+    allowDuplicateDesigns: 0
+    designs:
+    - {fileID: 8084174052593425488, guid: 0b5b5ef0e221f3842b9b0a667a38dff2, type: 3}

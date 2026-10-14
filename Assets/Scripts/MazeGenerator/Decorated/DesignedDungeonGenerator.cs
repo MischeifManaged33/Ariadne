@@ -49,6 +49,9 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField]
     private CorridorWallPainter corridorWallPainter;
 
+    [SerializeField]
+    private CorridorEnemySpawner corridorEnemySpawner;
+
     [SerializeField, Min(1)]
     private int minimumBranchLength = 3;
 
@@ -863,6 +866,17 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
         PositionCharacters(instances, random);
         RefreshWalkableFloors();
+
+        if (corridorEnemySpawner != null)
+        {
+            corridorEnemySpawner.Spawn(
+                corridors,
+                dungeonFloor,
+                instances,
+                player,
+                random
+            );
+        }
     }
 
     private HashSet<Vector2Int> WidenCorridors(
