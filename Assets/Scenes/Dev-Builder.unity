@@ -5798,6 +5798,7 @@ MonoBehaviour:
     moveInterval: 1.5
     transitionDuration: 1
     speedMultiplier: 1
+  winTrigger: {fileID: 0}
   target: {fileID: 0}
   isometricYScale: 0.5
   startDelay: 1
@@ -87743,7 +87744,7 @@ MonoBehaviour:
   dungeonSize: {x: 250, y: 250}
   roomCount: 6
   roomSpacing: 5
-  generateOnStart: 0
+  generateOnStart: 1
   seed: 3
   useFixedSeed: 0
   tilemapVisualizer: {fileID: 1293803158}
