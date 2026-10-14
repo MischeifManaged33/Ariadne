@@ -23,6 +23,9 @@ public class BasiliskGaze : MonoBehaviour
     private float wallOvershoot = 0.1f;
 
     [Header("Look")]
+    // Off hides the cone without changing what it petrifies
+    [SerializeField]
+    private bool showIndicator = true;
     [SerializeField]
     private Color calmColor = new Color(0.55f, 0.9f, 0.45f, 0.22f);
     [SerializeField]
@@ -45,6 +48,11 @@ public class BasiliskGaze : MonoBehaviour
     // How close the player is to being petrified, 0 to 1, shown by the cone's colour
     public float Charge { get; set; }
     public bool Active { get; set; }
+
+    public bool ShowIndicator {
+        get => showIndicator;
+        set => showIndicator = value;
+    }
 
     public Vector2 Origin { get; private set; }
     public Vector2 Facing { get; private set; } = Vector2.left;
@@ -110,7 +118,7 @@ public class BasiliskGaze : MonoBehaviour
 
     private void LateUpdate()
     {
-        var target = Active ? 1f : 0f;
+        var target = Active && showIndicator ? 1f : 0f;
         _alpha = fadeSpeed > 0f ? Mathf.MoveTowards(_alpha, target, fadeSpeed * Time.deltaTime) : target;
 
         if (_alpha <= 0.001f) {

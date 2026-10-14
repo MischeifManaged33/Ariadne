@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Walks a fixed route and never chases. Anyone caught in its gaze is turned to stone and pecked,
-// so it has to be fought from behind, where it answers with a tail swipe or by turning around
+
 [RequireComponent(typeof(EnemyMover))]
 public class Basilisk : Enemy
 {
@@ -25,7 +24,6 @@ public class Basilisk : Enemy
     }
 
     [Header("Patrol")]
-    // Positions are read once on Start, so waypoints can be children of the basilisk or its room
     [SerializeField]
     private Transform[] waypoints;
     [SerializeField]
@@ -36,8 +34,8 @@ public class Basilisk : Enemy
     private float waypointPause = 0.6f;
     [SerializeField, Min(0.05f)]
     private float arriveDistance = 0.2f;
-    [SerializeField, Min(0.5f)]
-    private float legTimeout = 10f;
+    [SerializeField, Min(0f)]
+    private float stuckGrace = 3f;
     [SerializeField, Min(0f)]
     private float turnSpeed = 270f;
     [SerializeField, Range(0f, 180f)]
@@ -66,8 +64,6 @@ public class Basilisk : Enemy
     private float peckWindup = 0.5f;
     [SerializeField, Min(0f)]
     private float recovery = 2f;
-    [SerializeField, Min(0.5f)]
-    private float returnTimeout = 8f;
     [SerializeField, Min(0.5f)]
     private float maxPetrifyTime = 6f;
     [SerializeField]
@@ -133,12 +129,14 @@ public class Basilisk : Enemy
     private int _index;
     private int _step = 1;
     private float _pauseUntil;
-    private float _legDeadline;
+    private float _legDeadline = -1f;
 
     private Vector2 _desiredFacing = Vector2.left;
     private Vector2 _returnPoint;
     private bool _hasReturnPoint;
-    private float _returnDeadline;
+    private float _returnDeadline = -1f;
+    private float _eyeX;
+    private bool _artFlipped;
     private float _nextReactionTime;
     private float _exposure;
 
@@ -163,8 +161,18 @@ public class Basilisk : Enemy
         if (targetLayers.value == 0)
             targetLayers = LayerMask.GetMask("Player");
 
+        // EnemyAI chases and wanders on the same mover, which would fight the patrol
+        foreach (var ai in GetComponents<EnemyAI>()) {
+            ai.enabled = false;
+            Destroy(ai);
+        }
+
         if (visual == null)
             visual = GetComponentInChildren<SpriteRenderer>();
+        if (visual != null)
+            _artFlipped = visual.flipX;
+        if (eye != null)
+            _eyeX = eye.localPosition.x;
 
         Facing = artFacesLeft ? Vector2.left : Vector2.right;
         _desiredFacing = Facing;
@@ -239,8 +247,8 @@ public class Basilisk : Enemy
         }
 
         _route = points.ToArray();
-        _index = NearestWaypoint();
-        _legDeadline = Time.time + legTimeout;
+        _index = 0;
+        _legDeadline = -1f;
 
         if (_route.Length > 0)
             LookAt(_route[_index]);
@@ -255,12 +263,15 @@ public class Basilisk : Enemy
 
         var point = _route[_index];
 
+        if (_legDeadline < 0f)
+            _legDeadline = Deadline(point);
+
         if (_mover.GroundDistanceTo(point) <= arriveDistance || Time.time >= _legDeadline) {
             _mover.Stop();
             Advance();
 
             _pauseUntil = Time.time + waypointPause;
-            _legDeadline = _pauseUntil + legTimeout;
+            _legDeadline = -1f;
 
             LookAt(_route[_index]);
             return;
@@ -271,11 +282,14 @@ public class Basilisk : Enemy
 
     private void ReturnStep()
     {
+        if (_hasReturnPoint && _returnDeadline < 0f)
+            _returnDeadline = Deadline(_returnPoint);
+
         if (!_hasReturnPoint || _mover.GroundDistanceTo(_returnPoint) <= arriveDistance ||
             Time.time >= _returnDeadline) {
             _hasReturnPoint = false;
             _mover.Stop();
-            _legDeadline = Time.time + legTimeout;
+            _legDeadline = -1f;
 
             SetState(State.Patrol);
             return;
@@ -284,7 +298,13 @@ public class Basilisk : Enemy
         WalkTo(_returnPoint);
     }
 
-    // Turns on the spot before setting off, so the cone sweeps round instead of snapping
+    private float Deadline(Vector2 point)
+    {
+        var speed = Mathf.Max(0.01f, _mover.Speed * patrolSpeedMultiplier);
+
+        return Time.time + Vector2.Distance(Position, point) / speed * 1.5f + stuckGrace;
+    }
+
     private void WalkTo(Vector2 point)
     {
         if (!_mover.IsMoving) {
@@ -319,30 +339,12 @@ public class Basilisk : Enemy
         _index = next;
     }
 
-    // Heads back to the waypoint it last left, walking the route the other way from then on
     private void ReverseRoute()
     {
         _step = -_step;
         Advance();
 
-        _legDeadline = Time.time + legTimeout;
-    }
-
-    private int NearestWaypoint()
-    {
-        var best = 0;
-        var bestDistance = float.MaxValue;
-
-        for (var i = 0; i < _route.Length; i++) {
-            var distance = Isometric.GroundDistance(Position, _route[i], YScale);
-            if (distance >= bestDistance)
-                continue;
-
-            best = i;
-            bestDistance = distance;
-        }
-
-        return best;
+        _legDeadline = -1f;
     }
 
     // Facing
@@ -378,7 +380,14 @@ public class Basilisk : Enemy
         if (visual == null || Mathf.Abs(Facing.x) < 0.1f)
             return;
 
-        visual.flipX = artFacesLeft ? Facing.x > 0f : Facing.x < 0f;
+        var turned = artFacesLeft ? Facing.x > 0f : Facing.x < 0f;
+        visual.flipX = turned != _artFlipped;
+
+        if (eye != null && eye.parent != null) {
+            var local = eye.localPosition;
+            local.x = turned ? -_eyeX : _eyeX;
+            eye.localPosition = local;
+        }
     }
 
     // Gaze
@@ -423,7 +432,6 @@ public class Basilisk : Enemy
         if (!_stone.TryPetrify(this, maxPetrifyTime))
             return;
 
-        // Caught again on the way back: keep the original spot on the route
         if (!_hasReturnPoint) {
             _returnPoint = Position;
             _hasReturnPoint = true;
@@ -467,7 +475,7 @@ public class Basilisk : Enemy
         SetState(State.Recovering);
         yield return new WaitForSeconds(recovery);
 
-        _returnDeadline = Time.time + returnTimeout;
+        _returnDeadline = -1f;
         SetState(State.Returning);
 
         _routine = null;
@@ -577,7 +585,6 @@ public class Basilisk : Enemy
 
         ReverseRoute();
 
-        // Turns through whichever side the player is on, so standing still doesn't save them
         var start = Facing;
         var side = 1f;
         if (_target != null)
@@ -600,10 +607,10 @@ public class Basilisk : Enemy
     private void Resume()
     {
         _routine = null;
-        _legDeadline = Time.time + legTimeout;
+        _legDeadline = -1f;
 
         if (_hasReturnPoint) {
-            _returnDeadline = Time.time + returnTimeout;
+            _returnDeadline = -1f;
             SetState(State.Returning);
         }
         else {
