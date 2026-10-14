@@ -299,6 +299,7 @@ MonoBehaviour:
   maxHealth: 250
   destroyOnDeath: 1
   destroyDelay: 0
+  dropTable: {fileID: 11400000, guid: 3c3d2ea5648244e596894f0e25634dcb, type: 2}
   knockbackSpeed: 6
   knockbackDuration: 0.15
   wallLayers:
