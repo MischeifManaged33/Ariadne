@@ -200,11 +200,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 632217233
-  m_SortingLayer: 8
+  m_SortingLayerID: -1797174317
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: cf1e9330295f46e4587f4da6021378c6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -314,7 +314,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 2.5, y: 2.5}
+    oldSize: {x: 0.8275, y: 2.56}
     newSize: {x: 1.4628571, y: 1.4628571}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -338,6 +338,20 @@ MonoBehaviour:
   destroyOnDeath: 1
   destroyDelay: 0
   dropTable: {fileID: 11400000, guid: 3c3d2ea5648244e596894f0e25634dcb, type: 2}
+  hurtSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  deathSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   knockbackSpeed: 6
   knockbackDuration: 0.15
   wallLayers:

@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 7310965188765842295}
   - component: {fileID: 7568923995244346674}
   - component: {fileID: 867881180752687177}
+  - component: {fileID: 3701377046681198117}
   m_Layer: 0
   m_Name: Harpy
   m_TagString: Untagged
@@ -355,11 +356,11 @@ MonoBehaviour:
       Path: event:/SFX/Enemies/Harpy/HarpyFlap
     swing:
       Guid:
-        Data1: -881533275
-        Data2: 1126759142
-        Data3: 1093886101
-        Data4: -394687106
-      Path: event:/SFX/Enemies/Harpy/HarpyCry
+        Data1: -1991317984
+        Data2: 1330054469
+        Data3: 1799804095
+        Data4: 1782815981
+      Path: event:/SFX/Enemies/Harpy/HarpyAttack
     impact:
       Guid:
         Data1: 0
@@ -367,6 +368,8 @@ MonoBehaviour:
         Data3: 0
         Data4: 0
       Path: 
+  windupClip: {fileID: 7400000, guid: 1b985c4467f822640aa293ba760f97b1, type: 2}
+  landClip: {fileID: 7400000, guid: e4a928efd26295047a7db19d9cd76066, type: 2}
 --- !u!61 &867881180752687177
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -413,3 +416,25 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.1234419, y: 0.61571854}
   m_EdgeRadius: 0
+--- !u!95 &3701377046681198117
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 42eb3f4556978b041b0da32dce10ec2c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

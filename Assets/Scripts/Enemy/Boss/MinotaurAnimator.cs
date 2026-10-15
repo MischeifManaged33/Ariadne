@@ -25,6 +25,8 @@ public class MinotaurAnimator : MonoBehaviour
     private float directionHysteresis = 10f;
     [SerializeField]
     private bool flipForLeft;
+    [SerializeField, Range(0f, 1f)]
+    private float backDeadzone = 0.15f;
 
     [Header("Speed")]
     [SerializeField, Min(0f)]
@@ -41,6 +43,7 @@ public class MinotaurAnimator : MonoBehaviour
     private static readonly int MoveYHash = Animator.StringToHash("MoveY");
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
     private static readonly int DirectionHash = Animator.StringToHash("Direction");
+    private static readonly int BackHash = Animator.StringToHash("Back");
     private static readonly int AttackHash = Animator.StringToHash("Attack");
     private static readonly int AttackIdHash = Animator.StringToHash("AttackId");
     private static readonly int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
@@ -53,6 +56,8 @@ public class MinotaurAnimator : MonoBehaviour
     private Vector2 _lastPosition;
     private float _speed;
     private int _direction;
+    private bool _back;
+    private bool _attacking;
 
     private void Reset()
     {
@@ -106,16 +111,21 @@ public class MinotaurAnimator : MonoBehaviour
 
         _direction = Quantize(facing, _direction);
 
+        // Front/back is locked for the length of an attack so a swing never flips mid-clip
+        if (!_attacking)
+            _back = ResolveBack(facing, _back);
+
         animator.SetFloat(MoveXHash, facing.x);
         animator.SetFloat(MoveYHash, facing.y);
         animator.SetFloat(SpeedHash, _speed, speedDamping, Time.deltaTime);
         animator.SetInteger(DirectionHash, _direction);
+        animator.SetBool(BackHash, _back);
 
         if (flipForLeft && spriteRenderer != null && Mathf.Abs(facing.x) > 0.01f)
             spriteRenderer.flipX = facing.x < 0f;
     }
 
-    // Holds facing so no need so I don't gotta flip the sprite manually
+    // Holds facing so I don't gotta flip the sprite manually
     private int Quantize(Vector2 facing, int current)
     {
         var count = 2;
@@ -135,11 +145,25 @@ public class MinotaurAnimator : MonoBehaviour
         return fromCurrent > sector * 0.5f + directionHysteresis ? candidate : current;
     }
 
+    private bool ResolveBack(Vector2 facing, bool current)
+    {
+        if (facing.y > backDeadzone)
+            return true;
+        if (facing.y < -backDeadzone)
+            return false;
+
+        return current;
+    }
+
     public void PlayAttack(int attackId, float windup)
     {
         if (animator == null)
             return;
 
+        _back = ResolveBack(_boss.Facing, _back);
+        _attacking = true;
+
+        animator.SetBool(BackHash, _back);
         animator.SetInteger(AttackIdHash, attackId);
         animator.SetBool(AttackingHash, true);
         animator.SetFloat(AttackSpeedHash, ResolveAttackSpeed(attackId, windup));
@@ -148,6 +172,8 @@ public class MinotaurAnimator : MonoBehaviour
 
     public void EndAttack()
     {
+        _attacking = false;
+
         if (animator == null)
             return;
 

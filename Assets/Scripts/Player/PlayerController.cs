@@ -73,15 +73,6 @@ public class PlayerController : MonoBehaviour
         if (player == null)
             player = GetComponent<Player>();
 
-        if (dungeonGenerator == null)
-        {
-            Debug.LogError(
-                "Assign Dungeon Generator on PlayerController " +
-                "to enable movement.",
-                this
-            );
-        }
-
         _moveAction = new InputAction(
             "Move",
             InputActionType.Value,
@@ -135,7 +126,7 @@ public class PlayerController : MonoBehaviour
         Vector2 requestedMove =
             _velocity * Time.fixedDeltaTime;
 
-        Vector2 allowedMove = Vector2.zero;
+        Vector2 allowedMove = dungeonGenerator == null ? requestedMove : Vector2.zero;
 
         if (dungeonGenerator != null &&
             dungeonGenerator.WalkableFloorReady)
