@@ -80194,7 +80194,7 @@ GameObject:
   - component: {fileID: 1091929269}
   - component: {fileID: 1091929270}
   - component: {fileID: 1091929272}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CorridorWallsAlongX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99689,7 +99689,7 @@ GameObject:
   - component: {fileID: 1559338843}
   - component: {fileID: 1559338842}
   - component: {fileID: 1559338844}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CorridorWallsAlongY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112892,7 +112892,7 @@ GameObject:
   - component: {fileID: 1892392745}
   - component: {fileID: 1892392743}
   - component: {fileID: 1892392744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CorridorWallsAlongCorners
   m_TagString: Untagged
   m_Icon: {fileID: 0}
