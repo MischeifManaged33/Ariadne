@@ -47,6 +47,8 @@ MonoBehaviour:
   roomFloor: {fileID: 6525425387360333593}
   outwardDirection: 3
   entranceWidth: 3
+  savedEntranceCell: {x: 0, y: 0, z: 0}
+  hasSavedEntranceCell: 0
 --- !u!1 &1849024963721429903
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +525,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 34, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -645,6 +647,8 @@ MonoBehaviour:
   roomFloor: {fileID: 6525425387360333593}
   outwardDirection: 3
   entranceWidth: 3
+  savedEntranceCell: {x: 0, y: 0, z: 0}
+  hasSavedEntranceCell: 0
 --- !u!1 &4540808885356618440
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +741,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 16, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1313,7 +1317,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 32, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1378,7 +1382,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2027013127
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -1858,7 +1862,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 33, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -4511,7 +4515,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 31, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -4678,7 +4682,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 16, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -5229,7 +5233,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 35, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -5380,3 +5384,4 @@ MonoBehaviour:
   - {fileID: 5039164926847068870}
   - {fileID: 573500516833984164}
   - {fileID: 7940680807689110428}
+  playerSpawnPoint: {fileID: 0}

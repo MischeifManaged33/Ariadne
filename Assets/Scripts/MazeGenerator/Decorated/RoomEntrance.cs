@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -15,10 +17,19 @@ public class RoomEntrance : MonoBehaviour
     [SerializeField] private Tilemap roomFloor;
 
     [Header("Entrance")]
-    [SerializeField] private EntranceDirection outwardDirection;
+    [SerializeField]
+    private EntranceDirection outwardDirection;
 
     [Tooltip("Doorway width in tile cells.")]
-    [SerializeField, Min(1)] private int entranceWidth = 1;
+    [SerializeField, Min(1)]
+    private int entranceWidth = 1;
+
+    [Header("Saved Placement — Floor Cell Coordinates")]
+    [SerializeField]
+    private Vector3Int savedEntranceCell;
+
+    [SerializeField, HideInInspector]
+    private bool hasSavedEntranceCell;
 
     public Vector2Int Direction
     {
@@ -44,126 +55,108 @@ public class RoomEntrance : MonoBehaviour
         }
     }
 
-    public Vector3 WorldPosition => transform.position;
+    // Markers are authoring handles; saved cells control routing.
+    public Vector3 WorldPosition =>
+        roomFloor.GetCellCenterWorld(GetRoomCell());
 
     public Vector3Int GetRoomCell()
     {
-        if (roomFloor == null)
+        if (roomFloor == null || !hasSavedEntranceCell)
         {
-            Debug.LogError(
-                $"{name}: assign the room's floor tilemap.",
-                this
+            throw new InvalidOperationException(
+                $"{name}: assign Room Floor and capture room cells " +
+                "on RoomDefinition, then save the prefab."
             );
-
-            return Vector3Int.zero;
         }
 
-        return roomFloor.WorldToCell(transform.position);
+        return savedEntranceCell;
     }
 
-    [ContextMenu("Snap To Floor Cell")]
-    private void SnapToFloorCell()
+    private void RequireOwner(RoomDefinition room)
     {
-        if (roomFloor == null || roomFloor.layoutGrid == null)
+        if (room == null ||
+            roomFloor == null ||
+            roomFloor != room.FloorTilemap ||
+            GetComponentInParent<RoomDefinition>(true) != room)
         {
-            Debug.LogError(
-                $"{name}: assign Room Floor and open the prefab " +
-                "with its Grid active before snapping.",
-                this
+            throw new InvalidOperationException(
+                $"{name}: Room Floor must match the parent " +
+                "RoomDefinition's floor."
             );
-            return;
         }
 
-        Vector3 before = transform.position;
-        Vector3Int cell = roomFloor.WorldToCell(before);
+        if (transform == room.transform ||
+            roomFloor.transform.IsChildOf(transform))
+        {
+            throw new InvalidOperationException(
+                $"{name}: an entrance must be a separate " +
+                "marker that does not move the room floor."
+            );
+        }
+    }
 
-#if UNITY_EDITOR
-    UnityEditor.Undo.RecordObject(
-        transform,
-        "Snap Room Entrance"
-    );
-#endif
+    public Vector3Int CellFromMarker(RoomDefinition room)
+    {
+        RequireOwner(room);
 
-        transform.position = roomFloor.GetCellCenterWorld(cell);
-
-#if UNITY_EDITOR
-    UnityEditor.EditorUtility.SetDirty(transform);
-
-    UnityEditor.PrefabUtility
-        .RecordPrefabInstancePropertyModifications(transform);
-#endif
-
-        Vector3Int resultingCell =
-            roomFloor.WorldToCell(transform.position);
-
-        Vector3 offset = transform.position -
-            roomFloor.GetCellCenterWorld(resultingCell);
-
-        Debug.Log(
-            $"{name}: ENTRANCE SNAP\n" +
-            $"Before: {before.ToString("F6")}\n" +
-            $"After: {transform.position.ToString("F6")}\n" +
-            $"Cell: {resultingCell}\n" +
-            $"Remaining offset: {offset.ToString("F6")}",
-            this
+        return RoomDefinition.NearestFloorCell(
+            roomFloor,
+            transform.position
         );
     }
 
-    private void OnDrawGizmos()
+    public void SaveCell(Vector3Int cell)
     {
-        if (roomFloor == null)
-            return;
+        RoomDefinition.RecordEditorObject(this);
 
-        Vector3Int entranceCell =
-            roomFloor.WorldToCell(transform.position);
+        savedEntranceCell = cell;
+        hasSavedEntranceCell = true;
 
-        Vector3Int outsideCell = entranceCell +
-            new Vector3Int(Direction.x, Direction.y, 0);
-
-        Vector3 start =
-            roomFloor.GetCellCenterWorld(entranceCell);
-
-        Vector3 end =
-            roomFloor.GetCellCenterWorld(outsideCell);
-
-        Gizmos.color = Color.cyan;
-
-        Gizmos.DrawSphere(start, 0.06f);
-        Gizmos.DrawLine(start, end);
-
-        Vector3 arrow = (end - start) * 0.25f;
-        Vector3 side = new Vector3(-arrow.y, arrow.x, 0f);
-
-        Gizmos.DrawLine(end, end - arrow + side);
-        Gizmos.DrawLine(end, end - arrow - side);
+        RoomDefinition.FinishEditorObject(this);
     }
 
-    public System.Collections.Generic.List<Vector3Int>
-    GetOutwardConnectionCells()
+    public void RestoreMarker(RoomDefinition room)
+    {
+        RequireOwner(room);
+
+        Vector3 target =
+            roomFloor.GetCellCenterWorld(GetRoomCell());
+
+        RoomDefinition.RecordEditorObject(transform);
+        transform.position = target;
+        RoomDefinition.FinishEditorObject(transform);
+    }
+
+    public void ValidateSavedCell(RoomDefinition room)
+    {
+        RequireOwner(room);
+        GetConnectionCellsFrom(GetRoomCell());
+    }
+
+    public List<Vector3Int> GetOutwardConnectionCells()
+    {
+        RequireOwner(
+            GetComponentInParent<RoomDefinition>(true)
+        );
+
+        return GetConnectionCellsFrom(GetRoomCell());
+    }
+
+    private List<Vector3Int> GetConnectionCellsFrom(
+        Vector3Int entranceCell)
     {
         RoomDefinition room =
             GetComponentInParent<RoomDefinition>(true);
 
-        if (room == null ||
-            roomFloor == null ||
-            room.FloorTilemap != roomFloor)
-        {
-            throw new System.InvalidOperationException(
-                $"{name}: assign the same room floor as RoomDefinition."
-            );
-        }
+        RequireOwner(room);
 
-        if (roomFloor.layoutGrid == null)
+        if (roomFloor.layoutGrid == null ||
+            Direction == Vector2Int.zero ||
+            entranceCell.z != 0)
         {
-            throw new System.InvalidOperationException(
-                $"{name}: the room Grid must be active."
-            );
-        }
-
-        if (Direction == Vector2Int.zero)
-        {
-            throw new System.InvalidOperationException(
-                $"{name}: choose a valid outward direction."
+            throw new InvalidOperationException(
+                $"{name}: routing needs an active Grid, " +
+                "valid direction and entrance cell Z = 0."
             );
         }
 
@@ -176,24 +169,36 @@ public class RoomEntrance : MonoBehaviour
             bounds.size.y + 2
         );
 
-        Vector3Int direction =
-            new Vector3Int(Direction.x, Direction.y, 0);
+        if (!routingBoundary.Contains(new Vector2Int(
+            entranceCell.x,
+            entranceCell.y)))
+        {
+            throw new InvalidOperationException(
+                $"{name}: saved entrance {entranceCell} " +
+                "is outside the room bounds."
+            );
+        }
 
-        // Across the doorway, perpendicular to its outward direction.
-        Vector3Int sideways =
-            new Vector3Int(-direction.y, direction.x, 0);
+        Vector3Int direction = new Vector3Int(
+            Direction.x,
+            Direction.y,
+            0
+        );
 
-        Vector3Int entranceCell =
-            roomFloor.WorldToCell(transform.position);
+        Vector3Int sideways = new Vector3Int(
+            -direction.y,
+            direction.x,
+            0
+        );
 
         int width = Mathf.Max(1, entranceWidth);
         int firstOffset = -(width / 2);
 
-        var connectionCells =
-            new System.Collections.Generic.List<Vector3Int>();
+        List<Vector3Int> connectionCells =
+            new List<Vector3Int>();
 
-        var centerLane =
-            new System.Collections.Generic.List<Vector3Int>();
+        List<Vector3Int> centerLane =
+            new List<Vector3Int>();
 
         for (int offset = firstOffset;
              offset < firstOffset + width;
@@ -204,21 +209,20 @@ public class RoomEntrance : MonoBehaviour
 
             Vector3Int inwardCell = position - direction;
 
-            // The full doorway width must already be authored.
             if (!roomFloor.HasTile(position) ||
                 !roomFloor.HasTile(inwardCell) ||
                 room.IsBlockedCell(position) ||
                 room.IsBlockedCell(inwardCell))
             {
-                throw new System.InvalidOperationException(
-                    $"{name}: Entrance Width {width} does not fit " +
-                    $"the doorway at {position}. Each doorway cell " +
-                    "and its inward cell must contain clear floor."
+                throw new InvalidOperationException(
+                    $"{room.name}/{name}: doorway width {width} " +
+                    $"does not fit at {position}. Doorway and " +
+                    "inward cells need clear floor."
                 );
             }
 
-            var laneCells =
-                new System.Collections.Generic.List<Vector3Int>();
+            List<Vector3Int> laneCells =
+                new List<Vector3Int>();
 
             bool leftRoomFloor = false;
 
@@ -228,10 +232,9 @@ public class RoomEntrance : MonoBehaviour
 
                 if (room.IsBlockedCell(position))
                 {
-                    throw new System.InvalidOperationException(
-                        $"{name}: the entrance passage hits a wall " +
-                        $"or obstacle at {position}. Reduce Entrance " +
-                        "Width or widen the opening in the prefab."
+                    throw new InvalidOperationException(
+                        $"{room.name}/{name}: outward passage " +
+                        $"hits a wall or obstacle at {position}."
                     );
                 }
 
@@ -239,9 +242,10 @@ public class RoomEntrance : MonoBehaviour
 
                 if (leftRoomFloor && hasFloor)
                 {
-                    throw new System.InvalidOperationException(
-                        $"{name}: the outward passage enters another " +
-                        $"part of the room at {position}."
+                    throw new InvalidOperationException(
+                        $"{room.name}/{name}: outward passage " +
+                        "enters another part of the room " +
+                        $"at {position}."
                     );
                 }
 
@@ -251,11 +255,12 @@ public class RoomEntrance : MonoBehaviour
                     laneCells.Add(position);
                 }
 
-                Vector2Int cell2D =
-                    new Vector2Int(position.x, position.y);
-
-                if (!routingBoundary.Contains(cell2D))
+                if (!routingBoundary.Contains(new Vector2Int(
+                    position.x,
+                    position.y)))
+                {
                     break;
+                }
             }
 
             if (offset == 0)
@@ -264,85 +269,26 @@ public class RoomEntrance : MonoBehaviour
                 connectionCells.AddRange(laneCells);
         }
 
-        // RoomCorridorBuilder uses the last cell as its routing start.
-        // Keep that cell at the outward end of the center lane.
+        // Builder routes from the outward end of the center lane.
         connectionCells.AddRange(centerLane);
+
+        if (centerLane.Count == 0)
+        {
+            throw new InvalidOperationException(
+                $"{name}: entrance has no outward connection cells."
+            );
+        }
 
         return connectionCells;
     }
 
-    [ContextMenu("Validate Placement")]
-    private void ValidatePlacement()
+    [ContextMenu("Snap To Floor Cell")]
+    private void SnapToFloorCell()
     {
-        if (roomFloor == null)
+        if (Application.isPlaying)
         {
             Debug.LogError(
-                $"{name}: assign Room Floor.",
-                this
-            );
-            return;
-        }
-
-        RoomDefinition room =
-            GetComponentInParent<RoomDefinition>(true);
-
-        if (room == null)
-        {
-            Debug.LogError(
-                $"{name}: the entrance must be a child " +
-                "of a GameObject with RoomDefinition.",
-                this
-            );
-            return;
-        }
-
-        if (room.FloorTilemap != roomFloor)
-        {
-            Debug.LogError(
-                $"{name}: Room Floor must match the " +
-                "floor assigned to RoomDefinition.",
-                this
-            );
-            return;
-        }
-
-        Vector3Int cell =
-            roomFloor.WorldToCell(transform.position);
-
-        Vector3 center =
-            roomFloor.GetCellCenterWorld(cell);
-
-        if ((transform.position - center)
-            .sqrMagnitude > 0.000001f)
-        {
-            Debug.LogError(
-                $"{name}: use Snap To Floor Cell first.",
-                this
-            );
-            return;
-        }
-
-        Vector3Int direction =
-            new Vector3Int(Direction.x, Direction.y, 0);
-
-        Vector3Int inwardCell = cell - direction;
-        Vector3Int outwardCell = cell + direction;
-
-        if (!roomFloor.HasTile(cell))
-        {
-            Debug.LogError(
-                $"{name}: doorway cell {cell} has no floor. " +
-                "Move the marker onto a painted doorway tile.",
-                this
-            );
-            return;
-        }
-
-        if (!roomFloor.HasTile(inwardCell))
-        {
-            Debug.LogError(
-                $"{name}: inward cell {inwardCell} has no floor. " +
-                "Check the outward direction or doorway position.",
+                "Capture entrances outside Play Mode.",
                 this
             );
             return;
@@ -350,104 +296,153 @@ public class RoomEntrance : MonoBehaviour
 
         try
         {
-            GetOutwardConnectionCells();
+            RoomDefinition room =
+                GetComponentInParent<RoomDefinition>(true);
+
+            SaveCell(CellFromMarker(room));
+            RestoreMarker(room);
+            ValidatePlacement();
         }
-        catch (System.InvalidOperationException exception)
+        catch (InvalidOperationException exception)
         {
             Debug.LogError(exception.Message, this);
-            return;
         }
+    }
 
-        Debug.Log(
-            $"{name}: entrance placement is valid. " +
-            $"Doorway: {cell}; inward: {inwardCell}; " +
-            $"outward: {outwardCell}. " +
-            "Also check that the doorway has no blocking collider.",
-            this
-        );
+    [ContextMenu("Validate Placement")]
+    private void ValidatePlacement()
+    {
+        try
+        {
+            ValidateSavedCell(
+                GetComponentInParent<RoomDefinition>(true)
+            );
+
+            Debug.Log(
+                $"{name}: saved entrance {GetRoomCell()} " +
+                "and its outward passage are valid.",
+                this
+            );
+        }
+        catch (InvalidOperationException exception)
+        {
+            Debug.LogError(exception.Message, this);
+        }
     }
 
     [ContextMenu("Snap To Nearest Valid Entrance")]
     private void SnapToNearestValidEntrance()
     {
-        RoomDefinition room =
-            GetComponentInParent<RoomDefinition>(true);
-
-        if (room == null ||
-            roomFloor == null ||
-            room.FloorTilemap != roomFloor)
+        if (Application.isPlaying)
         {
             Debug.LogError(
-                $"{name}: assign the same floor as RoomDefinition.",
+                "Edit entrances outside Play Mode.",
                 this
             );
             return;
         }
 
-        Vector3 originalPosition = transform.position;
-        Vector3 bestPosition = originalPosition;
-
-        float bestDistance = float.PositiveInfinity;
-        bool found = false;
-
-        Vector3Int direction =
-            new Vector3Int(Direction.x, Direction.y, 0);
-
-        foreach (Vector3Int cell in
-                 roomFloor.cellBounds.allPositionsWithin)
+        try
         {
-            Vector3Int inwardCell = cell - direction;
+            RoomDefinition room =
+                GetComponentInParent<RoomDefinition>(true);
 
-            if (!roomFloor.HasTile(cell) ||
-                !roomFloor.HasTile(inwardCell) ||
-                room.IsBlockedCell(cell) ||
-                room.IsBlockedCell(inwardCell))
+            RequireOwner(room);
+
+            bool found = false;
+            Vector3Int best = Vector3Int.zero;
+            float bestDistance = float.PositiveInfinity;
+
+            foreach (Vector3Int cell in
+                     roomFloor.cellBounds.allPositionsWithin)
             {
-                continue;
-            }
+                if (!roomFloor.HasTile(cell) || cell.z != 0)
+                    continue;
 
-            Vector3 center =
-                roomFloor.GetCellCenterWorld(cell);
+                float distance = (
+                    roomFloor.GetCellCenterWorld(cell) -
+                    transform.position
+                ).sqrMagnitude;
 
-            float distance =
-                (center - originalPosition).sqrMagnitude;
+                if (distance >= bestDistance)
+                    continue;
 
-            if (distance >= bestDistance)
-                continue;
+                try
+                {
+                    GetConnectionCellsFrom(cell);
+                }
+                catch (InvalidOperationException)
+                {
+                    continue;
+                }
 
-            try
-            {
-                transform.position = center;
-
-                // Reject candidates whose outward passage
-                // hits a wall or another part of the room.
-                GetOutwardConnectionCells();
-
-                bestPosition = center;
+                best = cell;
                 bestDistance = distance;
                 found = true;
             }
-            catch (System.InvalidOperationException)
-            {
-                // This candidate cannot connect outward.
-            }
-            finally
-            {
-                transform.position = originalPosition;
-            }
-        }
 
-        if (!found)
+            if (!found)
+            {
+                throw new InvalidOperationException(
+                    $"{name}: no valid entrance found " +
+                    "for this direction and width."
+                );
+            }
+
+            SaveCell(best);
+            RestoreMarker(room);
+            ValidatePlacement();
+        }
+        catch (InvalidOperationException exception)
         {
-            Debug.LogError(
-                $"{name}: no valid entrance found for this direction. " +
-                "Check Outward Direction and the assigned wall tilemaps.",
-                this
-            );
+            Debug.LogError(exception.Message, this);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (roomFloor == null || roomFloor.layoutGrid == null)
+            return;
+
+        Vector3Int cell;
+
+        try
+        {
+            cell = hasSavedEntranceCell
+                ? savedEntranceCell
+                : RoomDefinition.NearestFloorCell(
+                    roomFloor,
+                    transform.position
+                );
+        }
+        catch (InvalidOperationException)
+        {
             return;
         }
 
-        transform.position = bestPosition;
-        ValidatePlacement();
+        Vector3 start =
+            roomFloor.GetCellCenterWorld(cell);
+
+        Vector3 end =
+            roomFloor.GetCellCenterWorld(
+                cell + new Vector3Int(
+                    Direction.x,
+                    Direction.y,
+                    0
+                )
+            );
+
+        Gizmos.color = hasSavedEntranceCell
+            ? Color.cyan
+            : Color.yellow;
+
+        Gizmos.DrawSphere(start, 0.06f);
+        Gizmos.DrawLine(start, end);
+
+        Vector3 arrow = (end - start) * 0.25f;
+        Vector3 side = new Vector3(-arrow.y, arrow.x, 0f);
+
+        Gizmos.DrawLine(end, end - arrow + side);
+        Gizmos.DrawLine(end, end - arrow - side);
     }
 }

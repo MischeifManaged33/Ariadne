@@ -482,7 +482,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -16, z: 0}
   m_Size: {x: 25, y: 27, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1045,7 +1045,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -18, z: 0}
   m_Size: {x: 23, y: 29, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1110,7 +1110,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2027013127
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -1602,7 +1602,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -17, z: 0}
   m_Size: {x: 24, y: 28, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -4392,7 +4392,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -19, z: 0}
   m_Size: {x: 22, y: 30, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -4559,7 +4559,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 16, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -4624,7 +4624,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -5132,7 +5132,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -15, z: 0}
   m_Size: {x: 27, y: 26, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -5197,7 +5197,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 13
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}

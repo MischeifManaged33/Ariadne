@@ -16,6 +16,7 @@ public static class RoomCorridorBuilder
     private class EntranceStub
     {
         public Vector2Int outside;
+
         public readonly List<Vector2Int> cells =
             new List<Vector2Int>();
     }
@@ -25,9 +26,13 @@ public static class RoomCorridorBuilder
         List<RectInt> roomBounds,
         Tilemap dungeonFloor,
         RectInt dungeonArea,
-        System.Random random)
+        System.Random random,
+        int mazeSpacing = 6,
+        float mazeLoopChance = 0.08f)
     {
-        if (rooms.Count == 0 ||
+        if (rooms == null ||
+            roomBounds == null ||
+            rooms.Count == 0 ||
             rooms.Count != roomBounds.Count)
         {
             throw new InvalidOperationException(
@@ -35,27 +40,18 @@ public static class RoomCorridorBuilder
             );
         }
 
-        HashSet<Vector2Int> reserved =
-            new HashSet<Vector2Int>();
+        if (dungeonFloor == null || random == null)
+        {
+            throw new ArgumentException(
+                "Assign the dungeon floor and random generator."
+            );
+        }
 
         HashSet<Vector2Int> blocked =
             new HashSet<Vector2Int>();
 
-        // Protect each room and one surrounding cell.
-        // That surrounding space will accommodate walls.
         foreach (RectInt bounds in roomBounds)
-        {
-            AddRectangle(reserved, bounds);
-
-            RectInt paddedBounds = new RectInt(
-                bounds.xMin - 1,
-                bounds.yMin - 1,
-                bounds.width + 2,
-                bounds.height + 2
-            );
-
-            AddRectangle(blocked, paddedBounds);
-        }
+            AddRectangle(blocked, Padded(bounds));
 
         List<EntranceStub> entrances =
             new List<EntranceStub>();
@@ -63,6 +59,9 @@ public static class RoomCorridorBuilder
         for (int i = 0; i < rooms.Count; i++)
         {
             RoomDefinition room = rooms[i];
+
+            room.ValidateFloorCompatibility(dungeonFloor);
+
             RoomEntrance[] markers = room.Entrances;
 
             if (markers.Length == 0)
@@ -74,115 +73,60 @@ public static class RoomCorridorBuilder
 
             foreach (RoomEntrance marker in markers)
             {
-                Vector3Int cell3 =
-                    dungeonFloor.WorldToCell(
-                        marker.WorldPosition
-                    );
+                marker.ValidateSavedCell(room);
 
-                Vector2Int cell =
-                    new Vector2Int(cell3.x, cell3.y);
-
-                Vector2Int direction = marker.Direction;
-
-                Vector3 center =
-                    dungeonFloor.GetCellCenterWorld(cell3);
-
-                if ((center - marker.WorldPosition)
-    .sqrMagnitude > 0.000001f)
-                {
-                    Vector3Int localCell =
-                        room.FloorTilemap.WorldToCell(marker.WorldPosition);
-
-                    Vector3 roomCenter =
-                        room.FloorTilemap.GetCellCenterWorld(localCell);
-
-                    Vector3 anchorCenter =
-                        room.FloorTilemap.GetCellCenterWorld(
-                            room.GetAnchorCell()
-                        );
-
-                    throw new InvalidOperationException(
-                        $"{room.name}/{marker.name}: alignment mismatch.\n" +
-                        $"Entrance offset from room cell: " +
-                        $"{(marker.WorldPosition - roomCenter).ToString("F6")}\n" +
-                        $"Anchor offset from room cell: " +
-                        $"{(room.PlacementAnchor.position - anchorCenter).ToString("F6")}\n" +
-                        $"Entrance offset from dungeon cell: " +
-                        $"{(marker.WorldPosition - center).ToString("F6")}"
-                    );
-                }
-
-                Vector3Int roomCell =
-                    room.FloorTilemap.WorldToCell(
-                        marker.WorldPosition
-                    );
-
-                Vector3Int inwardCell =
-                    roomCell - new Vector3Int(
-                        direction.x,
-                        direction.y,
-                        0
-                    );
-
-                if (!room.FloorTilemap.HasTile(roomCell) ||
-                    !room.FloorTilemap.HasTile(inwardCell))
-                {
-                    throw new InvalidOperationException(
-                        $"{room.name}/{marker.name}: " +
-                        "the doorway cell and the cell inward " +
-                        "must both contain floor."
-                    );
-                }
+                // Verify the entrance using saved cell coordinates.
+                room.ToDungeonCell(
+                    marker.GetRoomCell(),
+                    dungeonFloor
+                );
 
                 EntranceStub entrance = new EntranceStub();
 
                 foreach (Vector3Int localCell in
                          marker.GetOutwardConnectionCells())
                 {
-                    Vector3 worldPosition =
-                        room.FloorTilemap.GetCellCenterWorld(localCell);
+                    Vector3Int mapped = room.ToDungeonCell(
+                        localCell,
+                        dungeonFloor
+                    );
 
-                    Vector3Int dungeonCell =
-                        dungeonFloor.WorldToCell(worldPosition);
-
-                    Vector2Int outsideCell =
-                        new Vector2Int(dungeonCell.x, dungeonCell.y);
+                    Vector2Int outsideCell = new Vector2Int(
+                        mapped.x,
+                        mapped.y
+                    );
 
                     if (!dungeonArea.Contains(outsideCell))
                     {
                         throw new InvalidOperationException(
                             $"{room.name}/{marker.name}: " +
-                            "the entrance passage leaves the dungeon area."
+                            "entrance passage leaves the dungeon area."
                         );
                     }
 
-                    // Allow the passage through this room's empty recess,
-                    // while protecting every other room and its wall clearance.
                     for (int j = 0; j < roomBounds.Count; j++)
                     {
-                        if (j == i)
-                            continue;
-
-                        RectInt other = roomBounds[j];
-
-                        RectInt protectedArea = new RectInt(
-                            other.xMin - 1,
-                            other.yMin - 1,
-                            other.width + 2,
-                            other.height + 2
-                        );
-
-                        if (protectedArea.Contains(outsideCell))
+                        if (j != i &&
+                            Padded(roomBounds[j]).Contains(outsideCell))
                         {
                             throw new InvalidOperationException(
                                 $"{room.name}/{marker.name}: " +
-                                "the entrance passage is too close to another room."
+                                "entrance passage is too close " +
+                                "to another room."
                             );
                         }
                     }
 
                     entrance.cells.Add(outsideCell);
                     blocked.Remove(outsideCell);
+                }
+
+                if (entrance.cells.Count == 0)
+                {
+                    throw new InvalidOperationException(
+                        $"{room.name}/{marker.name}: " +
+                        "no outward passage cells."
+                    );
                 }
 
                 entrance.outside =
@@ -192,14 +136,26 @@ public static class RoomCorridorBuilder
             }
         }
 
+        // Create the branching maze before connecting rooms.
         HashSet<Vector2Int> corridors =
-            new HashSet<Vector2Int>();
+            MazeCorridorCarver.Create(
+                blocked,
+                dungeonArea,
+                random,
+                mazeSpacing,
+                mazeLoopChance
+            );
 
-        corridors.UnionWith(entrances[0].cells);
-
-        // Join every entrance to the connected corridor network.
-        for (int i = 1; i < entrances.Count; i++)
+        // Connect every entrance to the same corridor network.
+        for (int i = 0; i < entrances.Count; i++)
         {
+            // Fallback when there was insufficient room for a maze.
+            if (corridors.Count == 0)
+            {
+                corridors.UnionWith(entrances[i].cells);
+                continue;
+            }
+
             List<Vector2Int> path = FindPath(
                 entrances[i].outside,
                 corridors,
@@ -221,6 +177,16 @@ public static class RoomCorridorBuilder
         }
 
         return corridors;
+    }
+
+    private static RectInt Padded(RectInt bounds)
+    {
+        return new RectInt(
+            bounds.xMin - 1,
+            bounds.yMin - 1,
+            bounds.width + 2,
+            bounds.height + 2
+        );
     }
 
     private static List<Vector2Int> FindPath(
@@ -263,7 +229,6 @@ public static class RoomCorridorBuilder
                 return path;
             }
 
-            // Randomize equally short route choices.
             Vector2Int[] shuffled =
                 (Vector2Int[])directions.Clone();
 
@@ -302,9 +267,7 @@ public static class RoomCorridorBuilder
         for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y < bounds.yMax; y++)
-            {
                 cells.Add(new Vector2Int(x, y));
-            }
         }
     }
 }

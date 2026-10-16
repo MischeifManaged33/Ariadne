@@ -93,7 +93,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 23, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -390,7 +390,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 40, y: 29, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -893,7 +893,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 25, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1061,7 +1061,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 37, y: 26, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1267,7 +1267,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 23, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1797,7 +1797,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 37, y: 26, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -1936,7 +1936,7 @@ Transform:
   m_GameObject: {fileID: 3104694533996238709}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.8, y: -2.8, z: 0}
+  m_LocalPosition: {x: 23.8, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1957,6 +1957,8 @@ MonoBehaviour:
   roomFloor: {fileID: 6525425387360333593}
   outwardDirection: 2
   entranceWidth: 3
+  savedEntranceCell: {x: 6, y: -11, z: 0}
+  hasSavedEntranceCell: 1
 --- !u!1 &3453267865070363553
 GameObject:
   m_ObjectHideFlags: 0
@@ -1982,7 +1984,7 @@ Transform:
   m_GameObject: {fileID: 3453267865070363553}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.7, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2081,7 +2083,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 23, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -2366,7 +2368,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -9, y: -27, z: 0}
   m_Size: {x: 30, y: 38, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -2962,7 +2964,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 23, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -3529,7 +3531,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 24, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -5958,7 +5960,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 22, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -6132,7 +6134,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 23, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -6358,7 +6360,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 37, y: 26, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -6889,7 +6891,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 27, y: 24, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -7089,7 +7091,7 @@ Tilemap:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -13, z: 0}
   m_Size: {x: 21, y: 26, z: 1}
-  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileAnchor: {x: 0, y: 0, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
     e00: 1
@@ -7228,7 +7230,7 @@ Transform:
   m_GameObject: {fileID: 7085284959553408768}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.2, y: -3.4999998, z: 0}
+  m_LocalPosition: {x: 11.2, y: -2.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7249,6 +7251,8 @@ MonoBehaviour:
   roomFloor: {fileID: 6525425387360333593}
   outwardDirection: 3
   entranceWidth: 3
+  savedEntranceCell: {x: 2, y: -6, z: 0}
+  hasSavedEntranceCell: 1
 --- !u!1 &7107652544453354405
 GameObject:
   m_ObjectHideFlags: 0
