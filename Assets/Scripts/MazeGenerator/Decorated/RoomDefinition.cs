@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -7,30 +8,51 @@ public class RoomDefinition : MonoBehaviour
     [SerializeField] private Tilemap floorTilemap;
     [SerializeField] private Transform placementAnchor;
 
+    // Keep existing serialized field names.
     [SerializeField, HideInInspector]
     private Vector3Int savedAnchorCell;
 
     [SerializeField, HideInInspector]
     private bool hasSavedAnchorCell;
 
-    public Tilemap FloorTilemap => floorTilemap;
-    public Transform PlacementAnchor => placementAnchor;
-
-    public RoomEntrance[] Entrances =>
-        GetComponentsInChildren<RoomEntrance>(true);
-
     [Header("Corridor Obstacles")]
     [SerializeField]
-    private Tilemap[] blockingTilemaps =
-    new Tilemap[0];
+    private Tilemap[] blockingTilemaps = new Tilemap[0];
 
     [Header("Player Spawn")]
     [SerializeField] private Transform playerSpawnPoint;
 
+    public Tilemap FloorTilemap => floorTilemap;
+    public Transform PlacementAnchor => placementAnchor;
     public Transform PlayerSpawnPoint => playerSpawnPoint;
+
+    public RoomEntrance[] Entrances =>
+        GetComponentsInChildren<RoomEntrance>(true);
+
+    private Tilemap placedDungeonFloor;
+    private Vector3Int placedDungeonAnchor;
+    private bool isPlaced;
+
+    private const float Tolerance = 0.001f;
+
+    public Vector3Int GetAnchorCell()
+    {
+        if (!hasSavedAnchorCell)
+        {
+            throw new InvalidOperationException(
+                $"{name}: open the prefab and run " +
+                "Capture Room Cells From Markers, then save it."
+            );
+        }
+
+        return savedAnchorCell;
+    }
 
     public bool IsBlockedCell(Vector3Int cell)
     {
+        if (blockingTilemaps == null)
+            return false;
+
         foreach (Tilemap tilemap in blockingTilemaps)
         {
             if (tilemap != null && tilemap.HasTile(cell))
@@ -40,102 +62,15 @@ public class RoomDefinition : MonoBehaviour
         return false;
     }
 
-    public Vector3Int GetAnchorCell()
-    {
-        if (floorTilemap == null || placementAnchor == null)
-        {
-            throw new System.InvalidOperationException(
-                $"{name}: assign Floor Tilemap and Placement Anchor."
-            );
-        }
-
-        // Scene instances have a working Grid connection.
-        if (gameObject.scene.IsValid() &&
-            floorTilemap.layoutGrid != null)
-        {
-            return floorTilemap.WorldToCell(
-                placementAnchor.position
-            );
-        }
-
-        // Prefab assets use the cell recorded during authoring.
-        if (!hasSavedAnchorCell)
-        {
-            throw new System.InvalidOperationException(
-                $"{name}: open this room in Prefab Mode and run " +
-                "'Save Placement Anchor Cell', then save the prefab."
-            );
-        }
-
-        return savedAnchorCell;
-    }
-
-    [ContextMenu("Save Placement Anchor Cell")]
-    private void SavePlacementAnchorCell()
-    {
-        if (floorTilemap == null ||
-            placementAnchor == null ||
-            floorTilemap.layoutGrid == null ||
-            !gameObject.scene.IsValid())
-        {
-            Debug.LogError(
-                $"{name}: open the room in Prefab Mode with its " +
-                "Grid active before saving the anchor cell.",
-                this
-            );
-            return;
-        }
-
-        Vector3Int cell =
-            floorTilemap.WorldToCell(placementAnchor.position);
-
-        Vector3 center =
-            floorTilemap.GetCellCenterWorld(cell);
-
-        if ((placementAnchor.position - center).sqrMagnitude > 0.000001f)
-        {
-            Debug.LogError(
-                $"{name}: snap the placement anchor first.",
-                this
-            );
-            return;
-        }
-
-#if UNITY_EDITOR
-    UnityEditor.Undo.RecordObject(
-        this,
-        "Save Placement Anchor Cell"
-    );
-#endif
-
-        savedAnchorCell = cell;
-        hasSavedAnchorCell = true;
-
-#if UNITY_EDITOR
-    UnityEditor.EditorUtility.SetDirty(this);
-    UnityEditor.PrefabUtility
-        .RecordPrefabInstancePropertyModifications(this);
-#endif
-
-        Debug.Log(
-            $"{name}: saved placement anchor cell {savedAnchorCell}.",
-            this
-        );
-    }
-
-    // Measures all painted tilemaps, including the room's walls.
-    // Returned coordinates are room tile coordinates.
     public BoundsInt GetLocalBounds()
     {
-        Tilemap[] tilemaps =
-            GetComponentsInChildren<Tilemap>(true);
+        bool found = false;
 
         Vector3Int minimum = Vector3Int.zero;
         Vector3Int maximum = Vector3Int.zero;
 
-        bool foundTile = false;
-
-        foreach (Tilemap tilemap in tilemaps)
+        foreach (Tilemap tilemap in
+                 GetComponentsInChildren<Tilemap>(true))
         {
             foreach (Vector3Int cell in
                      tilemap.cellBounds.allPositionsWithin)
@@ -143,11 +78,10 @@ public class RoomDefinition : MonoBehaviour
                 if (!tilemap.HasTile(cell))
                     continue;
 
-                if (!foundTile)
+                if (!found)
                 {
-                    minimum = cell;
-                    maximum = cell;
-                    foundTile = true;
+                    minimum = maximum = cell;
+                    found = true;
                 }
                 else
                 {
@@ -157,74 +91,414 @@ public class RoomDefinition : MonoBehaviour
             }
         }
 
-        if (!foundTile)
+        if (!found)
         {
-            Debug.LogError(
-                $"{name}: the room contains no painted tiles.",
-                this
+            throw new InvalidOperationException(
+                $"{name}: the room contains no painted tiles."
             );
-
-            return new BoundsInt();
         }
 
-        // BoundsInt's maximum is exclusive.
         return new BoundsInt(
             minimum,
             maximum - minimum + Vector3Int.one
         );
     }
 
-    // Moves the entire room so its anchor matches a dungeon cell.
     public void PlaceAt(
         Tilemap dungeonFloor,
         Vector2Int destinationCell)
     {
-        if (dungeonFloor == null ||
-            floorTilemap == null ||
+        isPlaced = false;
+
+        ValidateFloorCompatibility(dungeonFloor);
+
+        Vector3Int anchorCell = GetAnchorCell();
+
+        foreach (RoomEntrance entrance in Entrances)
+            entrance.ValidateSavedCell(this);
+
+        Vector3Int destination = new Vector3Int(
+            destinationCell.x,
+            destinationCell.y,
+            0
+        );
+
+        // Align the saved floor cell instead of a marker Transform.
+        transform.position +=
+            dungeonFloor.GetCellCenterWorld(destination) -
+            floorTilemap.GetCellCenterWorld(anchorCell);
+
+        placedDungeonFloor = dungeonFloor;
+        placedDungeonAnchor = destination;
+        isPlaced = true;
+
+        RestoreMarkers();
+    }
+
+    public Vector3Int ToDungeonCell(
+        Vector3Int roomCell,
+        Tilemap dungeonFloor)
+    {
+        if (!isPlaced || placedDungeonFloor != dungeonFloor)
+        {
+            throw new InvalidOperationException(
+                $"{name}: call PlaceAt before mapping room cells."
+            );
+        }
+
+        if (roomCell.z != 0)
+        {
+            throw new InvalidOperationException(
+                $"{name}: routing requires room floor cells on Z = 0."
+            );
+        }
+
+        Vector3Int result =
+            placedDungeonAnchor + roomCell - GetAnchorCell();
+
+        Vector3 actual =
+            floorTilemap.GetCellCenterWorld(roomCell);
+
+        Vector3 expected =
+            dungeonFloor.GetCellCenterWorld(result);
+
+        if ((actual - expected).sqrMagnitude >
+            Tolerance * Tolerance)
+        {
+            throw new InvalidOperationException(
+                $"{name}: the floor grid moved after placement. " +
+                $"Room cell {roomCell}, dungeon cell {result}, " +
+                $"world difference {(actual - expected).ToString("F6")}."
+            );
+        }
+
+        return result;
+    }
+
+    public void ValidateFloorCompatibility(Tilemap dungeonFloor)
+    {
+        if (floorTilemap == null ||
+            dungeonFloor == null ||
             placementAnchor == null)
         {
+            throw new InvalidOperationException(
+                $"{name}: assign Floor Tilemap, " +
+                "Placement Anchor and Dungeon Floor."
+            );
+        }
+
+        if (!floorTilemap.transform.IsChildOf(transform) ||
+            placementAnchor == transform ||
+            !placementAnchor.IsChildOf(transform) ||
+            floorTilemap.transform.IsChildOf(placementAnchor))
+        {
+            throw new InvalidOperationException(
+                $"{name}: floor and placement anchor must belong " +
+                "to this room; the anchor must be a separate " +
+                "marker that does not move the floor."
+            );
+        }
+
+        Grid roomGrid = floorTilemap.layoutGrid;
+        Grid dungeonGrid = dungeonFloor.layoutGrid;
+
+        if (roomGrid == null || dungeonGrid == null)
+        {
+            throw new InvalidOperationException(
+                $"{name}: both floor Tilemaps need a linked Grid."
+            );
+        }
+
+        if (roomGrid.cellLayout != dungeonGrid.cellLayout)
+        {
+            throw new InvalidOperationException(
+                $"{name}: Grid Cell Layout differs. " +
+                $"Room: {roomGrid.cellLayout}; " +
+                $"dungeon: {dungeonGrid.cellLayout}."
+            );
+        }
+
+        if (roomGrid.cellSwizzle != dungeonGrid.cellSwizzle)
+        {
+            throw new InvalidOperationException(
+                $"{name}: Grid Cell Swizzle differs. " +
+                $"Room: {roomGrid.cellSwizzle}; " +
+                $"dungeon: {dungeonGrid.cellSwizzle}."
+            );
+        }
+
+        RequireSame(
+            "Grid Cell Size",
+            roomGrid.cellSize,
+            dungeonGrid.cellSize
+        );
+
+        RequireSame(
+            "Grid Cell Gap",
+            roomGrid.cellGap,
+            dungeonGrid.cellGap
+        );
+
+        RequireSame(
+            "Floor Tile Anchor",
+            floorTilemap.tileAnchor,
+            dungeonFloor.tileAnchor
+        );
+
+        Vector3 roomOrigin =
+            floorTilemap.GetCellCenterWorld(Vector3Int.zero);
+
+        Vector3 dungeonOrigin =
+            dungeonFloor.GetCellCenterWorld(Vector3Int.zero);
+
+        RequireSame(
+            "world X cell step (check Grid/parent scale and rotation)",
+            floorTilemap.GetCellCenterWorld(Vector3Int.right)
+                - roomOrigin,
+            dungeonFloor.GetCellCenterWorld(Vector3Int.right)
+                - dungeonOrigin,
+            Tolerance
+        );
+
+        RequireSame(
+            "world Y cell step (check Grid/parent scale and rotation)",
+            floorTilemap.GetCellCenterWorld(Vector3Int.up)
+                - roomOrigin,
+            dungeonFloor.GetCellCenterWorld(Vector3Int.up)
+                - dungeonOrigin,
+            Tolerance
+        );
+
+        if (GetAnchorCell().z != 0)
+        {
+            throw new InvalidOperationException(
+                $"{name}: save the placement anchor " +
+                "on floor layer Z = 0."
+            );
+        }
+    }
+
+    private void RequireSame(
+        string setting,
+        Vector3 roomValue,
+        Vector3 dungeonValue,
+        float tolerance = 0.000001f)
+    {
+        if ((roomValue - dungeonValue).sqrMagnitude >
+            tolerance * tolerance)
+        {
+            throw new InvalidOperationException(
+                $"{name}: {setting} differs. " +
+                $"Room: {roomValue.ToString("F6")}; " +
+                $"dungeon: {dungeonValue.ToString("F6")}."
+            );
+        }
+    }
+
+    // Find the nearest logical cell center in a planar floor grid.
+    public static Vector3Int NearestFloorCell(
+        Tilemap floor,
+        Vector3 world)
+    {
+        if (floor == null || floor.layoutGrid == null)
+        {
+            throw new InvalidOperationException(
+                "Open the prefab with an active Grid " +
+                "and assign its floor."
+            );
+        }
+
+        Vector3 origin =
+            floor.GetCellCenterWorld(Vector3Int.zero);
+
+        Vector3 x =
+            floor.GetCellCenterWorld(Vector3Int.right) - origin;
+
+        Vector3 y =
+            floor.GetCellCenterWorld(Vector3Int.up) - origin;
+
+        Vector3 delta = world - origin;
+
+        float xx = Vector3.Dot(x, x);
+        float xy = Vector3.Dot(x, y);
+        float yy = Vector3.Dot(y, y);
+
+        float determinant = xx * yy - xy * xy;
+
+        if (determinant <= Mathf.Epsilon * xx * yy)
+        {
+            throw new InvalidOperationException(
+                "Floor grid has degenerate cell axes; check its scale."
+            );
+        }
+
+        float dx = Vector3.Dot(delta, x);
+        float dy = Vector3.Dot(delta, y);
+
+        int cx = Mathf.RoundToInt(
+            (dx * yy - dy * xy) / determinant
+        );
+
+        int cy = Mathf.RoundToInt(
+            (dy * xx - dx * xy) / determinant
+        );
+
+        Vector3Int best = new Vector3Int(cx, cy, 0);
+        float bestDistance = float.PositiveInfinity;
+
+        for (int a = cx - 1; a <= cx + 1; a++)
+        {
+            for (int b = cy - 1; b <= cy + 1; b++)
+            {
+                Vector3Int candidate = new Vector3Int(a, b, 0);
+
+                float distance = (
+                    floor.GetCellCenterWorld(candidate) - world
+                ).sqrMagnitude;
+
+                if (distance < bestDistance)
+                {
+                    best = candidate;
+                    bestDistance = distance;
+                }
+            }
+        }
+
+        return best;
+    }
+
+    [ContextMenu("Capture Room Cells From Markers")]
+    private void CaptureRoomCells()
+    {
+        if (Application.isPlaying)
+        {
             Debug.LogError(
-                $"{name}: missing a floor tilemap or placement anchor.",
+                "Capture room cells outside Play Mode.",
                 this
             );
-
             return;
         }
 
-        Vector3 destinationWorld =
-            dungeonFloor.GetCellCenterWorld(
-                new Vector3Int(
-                    destinationCell.x,
-                    destinationCell.y,
-                    0
-                )
+        try
+        {
+            if (floorTilemap == null ||
+                placementAnchor == null ||
+                placementAnchor == transform ||
+                floorTilemap.transform.IsChildOf(placementAnchor) ||
+                !placementAnchor.IsChildOf(transform))
+            {
+                throw new InvalidOperationException(
+                    "Assign a room floor and a separate " +
+                    "child placement marker."
+                );
+            }
+
+            Vector3Int anchor = NearestFloorCell(
+                floorTilemap,
+                placementAnchor.position
             );
 
-        PrintGridDiagnostics();
+            RoomEntrance[] entrances = Entrances;
+            Vector3Int[] cells =
+                new Vector3Int[entrances.Length];
 
-        LogAlignment("BEFORE placement");
+            // Resolve all marker cells before changing saved data.
+            for (int i = 0; i < entrances.Length; i++)
+                cells[i] = entrances[i].CellFromMarker(this);
 
-        Vector3 movement =
-            destinationWorld - placementAnchor.position;
+            RecordEditorObject(this);
 
-        transform.position += movement;
+            savedAnchorCell = anchor;
+            hasSavedAnchorCell = true;
 
-        LogAlignment("AFTER placement"); LogAlignment("AFTER placement");
+            for (int i = 0; i < entrances.Length; i++)
+                entrances[i].SaveCell(cells[i]);
+
+            RestoreMarkers();
+            FinishEditorObject(this);
+
+            Debug.Log(
+                $"{name}: saved anchor {anchor} and " +
+                $"{entrances.Length} entrance cells. Save the prefab.",
+                this
+            );
+        }
+        catch (InvalidOperationException exception)
+        {
+            Debug.LogError(exception.Message, this);
+        }
+    }
+
+    [ContextMenu("Restore Markers From Saved Cells")]
+    private void RestoreMarkersFromSavedCells()
+    {
+        try
+        {
+            RestoreMarkers();
+        }
+        catch (InvalidOperationException exception)
+        {
+            Debug.LogError(exception.Message, this);
+        }
+    }
+
+    private void RestoreMarkers()
+    {
+        if (floorTilemap == null || placementAnchor == null)
+        {
+            throw new InvalidOperationException(
+                $"{name}: assign floor and placement marker."
+            );
+        }
+
+        RecordEditorObject(placementAnchor);
+
+        placementAnchor.position =
+            floorTilemap.GetCellCenterWorld(GetAnchorCell());
+
+        FinishEditorObject(placementAnchor);
+
+        foreach (RoomEntrance entrance in Entrances)
+            entrance.RestoreMarker(this);
+    }
+
+    // Retain the old authoring menu entries.
+    [ContextMenu("Save Placement Anchor Cell")]
+    private void SavePlacementAnchorCell() =>
+        CaptureRoomCells();
+
+    [ContextMenu("Snap Placement Anchor To Floor Cell")]
+    private void SnapPlacementAnchor() =>
+        CaptureRoomCells();
+
+    [ContextMenu("Print Room Information")]
+    private void PrintRoomInformation()
+    {
+        try
+        {
+            Debug.Log(
+                $"{name}: bounds {GetLocalBounds()}, " +
+                $"saved anchor {GetAnchorCell()}, " +
+                $"entrances {Entrances.Length}.",
+                this
+            );
+        }
+        catch (InvalidOperationException exception)
+        {
+            Debug.LogError(exception.Message, this);
+        }
     }
 
     [ContextMenu("Print Grid Diagnostics")]
     private void PrintGridDiagnostics()
     {
-        if (floorTilemap == null)
+        if (floorTilemap == null ||
+            floorTilemap.layoutGrid == null)
         {
-            Debug.LogError("Floor Tilemap is missing.", this);
             return;
         }
 
-        Grid parentGrid =
-            floorTilemap.GetComponentInParent<Grid>(true);
-
-        Grid linkedGrid = floorTilemap.layoutGrid;
+        Grid grid = floorTilemap.layoutGrid;
 
         Vector3 origin =
             floorTilemap.GetCellCenterWorld(Vector3Int.zero);
@@ -237,152 +511,40 @@ public class RoomDefinition : MonoBehaviour
             floorTilemap.GetCellCenterWorld(Vector3Int.up)
             - origin;
 
-        string message =
-            $"{name}: GRID DIAGNOSTICS\n" +
-            $"Parent Grid: " +
-            $"{(parentGrid != null ? parentGrid.name : "MISSING")}\n" +
-            $"Linked Grid: " +
-            $"{(linkedGrid != null ? linkedGrid.name : "MISSING")}\n" +
-            $"World X step: {xStep.ToString("F6")}\n" +
-            $"World Y step: {yStep.ToString("F6")}\n" +
-            $"Floor world scale: {floorTilemap.transform.lossyScale}";
-
-        if (parentGrid != null)
-        {
-            message +=
-                $"\nCell Layout: {parentGrid.cellLayout}" +
-                $"\nCell Size: {parentGrid.cellSize}" +
-                $"\nCell Gap: {parentGrid.cellGap}" +
-                $"\nCell Swizzle: {parentGrid.cellSwizzle}";
-        }
-
-        Debug.Log(message, this);
-    }
-
-    [ContextMenu("Snap Placement Anchor To Floor Cell")]
-    private void SnapPlacementAnchor()
-    {
-        if (floorTilemap == null || placementAnchor == null)
-        {
-            Debug.LogError(
-                $"{name}: assign Floor Tilemap and Placement Anchor.",
-                this
-            );
-            return;
-        }
-
-        if (floorTilemap.layoutGrid == null)
-        {
-            Debug.LogError(
-                $"{name}: snapping cannot run because the floor " +
-                "has no linked Grid. Use an active room instance " +
-                "in the scene, then apply the change to the prefab.",
-                this
-            );
-            return;
-        }
-
-        if (placementAnchor == transform ||
-            floorTilemap.transform.IsChildOf(placementAnchor))
-        {
-            Debug.LogError(
-                $"{name}: Placement Anchor must be a separate " +
-                "child marker. Moving it must not move the floor.",
-                this
-            );
-            return;
-        }
-
-        Vector3 before = placementAnchor.position;
-        Vector3Int cell = floorTilemap.WorldToCell(before);
-        Vector3 target = floorTilemap.GetCellCenterWorld(cell);
-
-#if UNITY_EDITOR
-    UnityEditor.Undo.RecordObject(
-        placementAnchor,
-        "Snap Room Placement Anchor"
-    );
-#endif
-
-        placementAnchor.position = target;
-
-#if UNITY_EDITOR
-    UnityEditor.EditorUtility.SetDirty(placementAnchor);
-
-    UnityEditor.PrefabUtility
-        .RecordPrefabInstancePropertyModifications(placementAnchor);
-#endif
-
-        Vector3Int resultingCell =
-            floorTilemap.WorldToCell(placementAnchor.position);
-
-        Vector3 offset = placementAnchor.position -
-            floorTilemap.GetCellCenterWorld(resultingCell);
-
         Debug.Log(
-            $"{name}: ANCHOR SNAP\n" +
-            $"Before: {before.ToString("F6")}\n" +
-            $"After: {placementAnchor.position.ToString("F6")}\n" +
-            $"Cell: {resultingCell}\n" +
-            $"Remaining offset: {offset.ToString("F6")}",
+            $"{name}: layout {grid.cellLayout}, " +
+            $"swizzle {grid.cellSwizzle}\n" +
+            $"Cell Size {grid.cellSize}, Gap {grid.cellGap}, " +
+            $"Anchor {floorTilemap.tileAnchor}\n" +
+            $"X step {xStep.ToString("F6")}\n" +
+            $"Y step {yStep.ToString("F6")}",
             this
         );
     }
 
-    [ContextMenu("Print Room Information")]
-    private void PrintRoomInformation()
+    public static void RecordEditorObject(UnityEngine.Object value)
     {
-        if (floorTilemap == null || placementAnchor == null)
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
         {
-            Debug.LogError(
-                $"{name}: assign Floor Tilemap and Placement Anchor.",
-                this
+            UnityEditor.Undo.RecordObject(
+                value,
+                "Edit Room Cells"
             );
-
-            return;
         }
-
-        BoundsInt bounds = GetLocalBounds();
-
-        Debug.Log(
-            $"{name}: " +
-            $"size {bounds.size.x} × {bounds.size.y} cells, " +
-            $"anchor cell {GetAnchorCell()}, " +
-            $"{Entrances.Length} entrances.",
-            this
-        );
+#endif
     }
 
-    private void LogAlignment(string stage)
+    public static void FinishEditorObject(UnityEngine.Object value)
     {
-        Vector3Int anchorCell = GetAnchorCell();
-
-        Vector3 anchorOffset =
-            placementAnchor.position -
-            floorTilemap.GetCellCenterWorld(anchorCell);
-
-        string message =
-            $"{name} — {stage}\n" +
-            $"Floor belongs to room: " +
-            $"{floorTilemap.transform.IsChildOf(transform)}\n" +
-            $"Anchor belongs to room: " +
-            $"{placementAnchor.IsChildOf(transform)}\n" +
-            $"Tile Anchor: {floorTilemap.tileAnchor}\n" +
-            $"Anchor offset: {anchorOffset.ToString("F6")}";
-
-        foreach (RoomEntrance entrance in Entrances)
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
         {
-            Vector3Int cell =
-                floorTilemap.WorldToCell(entrance.WorldPosition);
+            UnityEditor.EditorUtility.SetDirty(value);
 
-            Vector3 offset =
-                entrance.WorldPosition -
-                floorTilemap.GetCellCenterWorld(cell);
-
-            message +=
-                $"\n{entrance.name} offset: {offset.ToString("F6")}";
+            UnityEditor.PrefabUtility
+                .RecordPrefabInstancePropertyModifications(value);
         }
-
-        Debug.Log(message, this);
+#endif
     }
 }
