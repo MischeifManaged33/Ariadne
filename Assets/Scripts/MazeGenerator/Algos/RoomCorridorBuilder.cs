@@ -26,7 +26,9 @@ public static class RoomCorridorBuilder
         List<RectInt> roomBounds,
         Tilemap dungeonFloor,
         RectInt dungeonArea,
-        System.Random random)
+        System.Random random,
+        int mazeSpacing = 6,
+        float mazeLoopChance = 0.08f)
     {
         if (rooms == null ||
             roomBounds == null ||
@@ -57,6 +59,7 @@ public static class RoomCorridorBuilder
         for (int i = 0; i < rooms.Count; i++)
         {
             RoomDefinition room = rooms[i];
+
             room.ValidateFloorCompatibility(dungeonFloor);
 
             RoomEntrance[] markers = room.Entrances;
@@ -72,8 +75,7 @@ public static class RoomCorridorBuilder
             {
                 marker.ValidateSavedCell(room);
 
-                // Map saved room cells directly into dungeon cells.
-                // This also verifies their actual world centers.
+                // Verify the entrance using saved cell coordinates.
                 room.ToDungeonCell(
                     marker.GetRoomCell(),
                     dungeonFloor
@@ -134,11 +136,26 @@ public static class RoomCorridorBuilder
             }
         }
 
+        // Create the branching maze before connecting rooms.
         HashSet<Vector2Int> corridors =
-            new HashSet<Vector2Int>(entrances[0].cells);
+            MazeCorridorCarver.Create(
+                blocked,
+                dungeonArea,
+                random,
+                mazeSpacing,
+                mazeLoopChance
+            );
 
-        for (int i = 1; i < entrances.Count; i++)
+        // Connect every entrance to the same corridor network.
+        for (int i = 0; i < entrances.Count; i++)
         {
+            // Fallback when there was insufficient room for a maze.
+            if (corridors.Count == 0)
+            {
+                corridors.UnionWith(entrances[i].cells);
+                continue;
+            }
+
             List<Vector2Int> path = FindPath(
                 entrances[i].outside,
                 corridors,

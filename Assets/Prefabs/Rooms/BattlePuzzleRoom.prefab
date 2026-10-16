@@ -1515,7 +1515,7 @@ MonoBehaviour:
   roomFloor: {fileID: 6525425387360333593}
   outwardDirection: 3
   entranceWidth: 3
-  savedEntranceCell: {x: 4, y: 2, z: 0}
+  savedEntranceCell: {x: 3, y: 1, z: 0}
   hasSavedEntranceCell: 1
 --- !u!1 &4773790065274175359
 GameObject:

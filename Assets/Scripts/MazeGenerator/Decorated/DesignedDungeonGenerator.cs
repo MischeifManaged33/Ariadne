@@ -46,6 +46,13 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [Header("Character Spawning")]
     [SerializeField] private Transform player;
 
+    [Header("Maze Layout")]
+    [SerializeField, Min(4)]
+    private int mazeSpacing = 6;
+
+    [SerializeField, Range(0f, 0.3f)]
+    private float mazeLoopChance = 0.08f; [Header("Maze Layout")]
+
     [SerializeField]
     private CorridorWallPainter corridorWallPainter;
 
@@ -802,12 +809,14 @@ public class DesignedDungeonGenerator : MonoBehaviour
                 new RectInt(dungeonOrigin, dungeonSize);
 
             corridors = RoomCorridorBuilder.Build(
-                instances,
-                bounds,
-                dungeonFloor,
-                dungeonArea,
-                random
-            );
+    instances,
+    bounds,
+    dungeonFloor,
+    new RectInt(dungeonOrigin, dungeonSize),
+    random,
+    Mathf.Max(mazeSpacing, corridorRadius * 2 + 2),
+    mazeLoopChance
+);
 
             AddRandomBranches(
                 corridors,
