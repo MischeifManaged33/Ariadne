@@ -87,7 +87,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 11
+  m_SortingLayer: 15
   m_SortingOrder: 32000
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -125,6 +125,6 @@ MonoBehaviour:
   flickerSpeed: 1.5
   shade: {r: 0.04150939, g: 0.034029868, b: 0.026550347, a: 1}
   material: {fileID: 0}
-  sortingLayer: TopDecor
+  sortingLayer: Darkness
   sortingOrder: 32000
   screenMargin: 2

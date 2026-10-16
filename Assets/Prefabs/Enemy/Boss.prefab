@@ -316,7 +316,7 @@ MonoBehaviour:
   outOfRangeWeight: 0.15
   minRange: 0
   maxRange: 5
-  attackId: 0
+  attackId: 1
   damage: 30
   arc: 150
   windup: 0.8
@@ -577,9 +577,12 @@ MonoBehaviour:
   spriteRenderer: {fileID: 9141004852014171056}
   directionHysteresis: 10
   flipForLeft: 1
+  backDeadzone: 0.15
   moveThreshold: 0.05
   speedDamping: 0.08
-  attacks: []
+  attacks:
+  - id: 1
+    clipWindup: 0.8
 --- !u!114 &2660575557615155100
 MonoBehaviour:
   m_ObjectHideFlags: 0
