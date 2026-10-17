@@ -5,19 +5,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Player player;
-    [SerializeField] private VirtualJoystick joystick;
-    [SerializeField] private Animator animator;
-
-    [Header("Floor Bounds")]
     [SerializeField]
-    private DesignedDungeonGenerator dungeonGenerator;
+    private Player player;
 
-    [Tooltip(
-        "A child marker at the player's ground contact point. " +
-        "Leave empty if the root is at the feet."
-    )]
-    [SerializeField] private Transform feet;
+    [SerializeField]
+    private VirtualJoystick joystick;
+
+    [SerializeField]
+    private Animator animator;
 
     [Header("Movement")]
     [SerializeField, Min(0f)]
@@ -42,9 +37,6 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimation(Vector2 movement)
     {
-        if (animator == null)
-            return;
-
         animator.SetFloat("MoveX", movement.x);
         animator.SetFloat("MoveY", movement.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
@@ -95,22 +87,22 @@ public class PlayerController : MonoBehaviour
         _moveAction.AddBinding("<Joystick>/stick");
     }
 
-    private void OnEnable() => _moveAction?.Enable();
+    private void OnEnable() => _moveAction.Enable();
 
-    private void OnDisable() => _moveAction?.Disable();
+    private void OnDisable() => _moveAction.Disable();
 
     private void OnDestroy() => _moveAction?.Dispose();
 
     private void FixedUpdate()
     {
-        Vector2 input = ReadInput();
+        var input = ReadInput();
         CurrentInput = input;
 
-        float speed = player != null
+        var speed = player != null
             ? player.MoveSpeed
             : 5f;
 
-        Vector2 target = new Vector2(
+        var target = new Vector2(
             input.x,
             input.y * isometricYScale
         ) * speed;
@@ -123,96 +115,25 @@ public class PlayerController : MonoBehaviour
             )
             : target;
 
-        Vector2 requestedMove =
-            _velocity * Time.fixedDeltaTime;
-
-        Vector2 allowedMove = dungeonGenerator == null ? requestedMove : Vector2.zero;
-
-        if (dungeonGenerator != null &&
-            dungeonGenerator.WalkableFloorReady)
-        {
-            // Use the physics position rather than the
-            // interpolated Transform position.
-            Vector3 feetOffset = feet != null
-                ? feet.position - transform.position
-                : Vector3.zero;
-
-            Vector3 start = new Vector3(
-                _rigidbody.position.x,
-                _rigidbody.position.y,
-                transform.position.z
-            ) + feetOffset;
-
-            float fraction =
-                dungeonGenerator.GetWalkableMoveFraction(
-                    start,
-                    start + (Vector3)requestedMove
-                );
-
-            allowedMove = requestedMove * fraction;
-
-            // Try sliding along one world axis when blocked.
-            if (fraction < 1f)
-            {
-                Vector2 xMove = new Vector2(
-                    requestedMove.x,
-                    0f
-                );
-
-                Vector2 yMove = new Vector2(
-                    0f,
-                    requestedMove.y
-                );
-
-                xMove *=
-                    dungeonGenerator.GetWalkableMoveFraction(
-                        start,
-                        start + (Vector3)xMove
-                    );
-
-                yMove *=
-                    dungeonGenerator.GetWalkableMoveFraction(
-                        start,
-                        start + (Vector3)yMove
-                    );
-
-                if (xMove.sqrMagnitude >
-                    allowedMove.sqrMagnitude)
-                {
-                    allowedMove = xMove;
-                }
-
-                if (yMove.sqrMagnitude >
-                    allowedMove.sqrMagnitude)
-                {
-                    allowedMove = yMove;
-                }
-            }
-        }
-
-        _velocity = allowedMove / Time.fixedDeltaTime;
         _rigidbody.linearVelocity = _velocity;
-
-        UpdateAnimation(new Vector2(
-            _velocity.x,
-            _velocity.y / isometricYScale
-        ));
 
         if (player != null)
             player.OnMovementUpdated(_velocity);
     }
 
+    // Merges keyboard or joystick input into a clamped vector.
     private Vector2 ReadInput()
     {
-        Vector2 input =
-            _moveAction.ReadValue<Vector2>();
+        var input = _moveAction.ReadValue<Vector2>();
 
-        VirtualJoystick stick = joystick != null
+        var stick = joystick != null
             ? joystick
             : VirtualJoystick.Move;
 
         if (stick != null)
             input += stick.Direction;
+
+        UpdateAnimation(input);
 
         return Vector2.ClampMagnitude(input, 1f);
     }
