@@ -9,12 +9,25 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField] private RoomCatalogue roomCatalogue;
     [SerializeField] private Tilemap dungeonFloor;
 
+    [Header("Boss Room Placement")]
+    [Tooltip("The exact Minotaur room prefab used by the Room Catalogue.")]
+    [SerializeField] private RoomDefinition minotaurRoomPrefab;
+
+    [SerializeField, Min(1)]
+    private int bossDistanceAttempts = 60;
+
+    [Tooltip(
+        "Minimum lead in floor-cell steps over every other room. " +
+        "1 means strictly farther; 0 allows a tie."
+    )]
+    [SerializeField, Min(0)]
+    private int minimumBossDistanceLead = 1;
+
     [Header("Dungeon Area — Tile Coordinates")]
     [SerializeField] private Vector2Int dungeonOrigin;
 
     [SerializeField]
-    private Vector2Int dungeonSize =
-        new Vector2Int(80, 80);
+    private Vector2Int dungeonSize = new Vector2Int(80, 80);
 
     [Header("Rooms")]
     [SerializeField, Min(1)] private int roomCount = 4;
@@ -26,9 +39,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField] private bool generateOnStart = true;
     [SerializeField] private int seed = 12345;
     [SerializeField] private bool useFixedSeed = false;
-
-    [SerializeField]
-    private TileMapVisualizer tilemapVisualizer;
+    [SerializeField] private TileMapVisualizer tilemapVisualizer;
 
     [Header("Corridor Width")]
     [Tooltip("0 = 1 cell wide, 1 = 3 cells, 2 = 5 cells.")]
@@ -51,7 +62,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
     private int mazeSpacing = 6;
 
     [SerializeField, Range(0f, 0.3f)]
-    private float mazeLoopChance = 0.08f; [Header("Maze Layout")]
+    private float mazeLoopChance = 0.08f;
 
     [SerializeField]
     private CorridorWallPainter corridorWallPainter;
@@ -77,7 +88,6 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField, HideInInspector]
     private GameObject generatedRoomRoot;
 
-    // Corridor floor plus every generated room's floor.
     private readonly List<Tilemap> walkableFloors =
         new List<Tilemap>();
 
@@ -118,9 +128,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
         if (generatedRoomRoot != null)
         {
             RoomDefinition[] rooms =
-                generatedRoomRoot.GetComponentsInChildren<
-                    RoomDefinition
-                >(true);
+                generatedRoomRoot
+                    .GetComponentsInChildren<RoomDefinition>(true);
 
             foreach (RoomDefinition room in rooms)
             {
@@ -148,11 +157,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
                 continue;
             }
 
-            // These are planar 2D floors on tile layer zero.
             Vector3 probe = worldPosition;
-
-            probe.z =
-                floor.CellToWorld(Vector3Int.zero).z;
+            probe.z = floor.CellToWorld(Vector3Int.zero).z;
 
             Vector3Int cell = floor.WorldToCell(probe);
             cell.z = 0;
@@ -164,8 +170,6 @@ public class DesignedDungeonGenerator : MonoBehaviour
         return false;
     }
 
-    // Check the whole movement path, including any empty
-    // cells between the start and destination.
     public float GetWalkableMoveFraction(
         Vector3 start,
         Vector3 end)
@@ -212,17 +216,13 @@ public class DesignedDungeonGenerator : MonoBehaviour
             Vector2 b = (Vector2)end - origin;
 
             AddFloorCrossings(
-                (a.x * yAxis.y - a.y * yAxis.x)
-                    / determinant,
-                (b.x * yAxis.y - b.y * yAxis.x)
-                    / determinant
+                (a.x * yAxis.y - a.y * yAxis.x) / determinant,
+                (b.x * yAxis.y - b.y * yAxis.x) / determinant
             );
 
             AddFloorCrossings(
-                (xAxis.x * a.y - xAxis.y * a.x)
-                    / determinant,
-                (xAxis.x * b.y - xAxis.y * b.x)
-                    / determinant
+                (xAxis.x * a.y - xAxis.y * a.x) / determinant,
+                (xAxis.x * b.y - xAxis.y * b.x) / determinant
             );
         }
 
@@ -244,7 +244,6 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
             if (!IsWalkablePosition(midpoint))
             {
-                // Stop slightly before the empty cell.
                 return Mathf.Max(
                     0f,
                     before - 0.0001f / distance
@@ -280,8 +279,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
              boundary <= last;
              boundary++)
         {
-            float fraction =
-                (boundary - start) / delta;
+            float fraction = (boundary - start) / delta;
 
             if (fraction > 0f && fraction < 1f)
                 floorCrossings.Add(fraction);
@@ -291,25 +289,31 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [ContextMenu("Generate Dungeon")]
     public void GenerateDungeon()
     {
-        if (roomCatalogue == null || dungeonFloor == null)
+        if (roomCatalogue == null ||
+            dungeonFloor == null ||
+            minotaurRoomPrefab == null)
         {
             Debug.LogError(
-                "Assign Room Catalogue and Dungeon Floor.",
+                "Assign Room Catalogue, Dungeon Floor " +
+                "and Minotaur Room Prefab.",
                 this
             );
             return;
         }
 
-        if (roomCount < 1 ||
+        if (roomCount < 2 ||
             roomSpacing < 1 ||
             dungeonSize.x < 1 ||
             dungeonSize.y < 1 ||
             layoutAttempts < 1 ||
-            attemptsPerRoom < 1)
+            attemptsPerRoom < 1 ||
+            bossDistanceAttempts < 1 ||
+            minimumBossDistanceLead < 0)
         {
             Debug.LogError(
-                "Room count, spacing, size and attempt limits " +
-                "must be positive.",
+                "Generate at least two rooms and use positive " +
+                "layout/attempt settings and a nonnegative " +
+                "boss distance lead.",
                 this
             );
             return;
@@ -331,31 +335,152 @@ public class DesignedDungeonGenerator : MonoBehaviour
             List<SelectedRoom> selectedRooms =
                 SelectRooms(random);
 
+            FindSpecialRoomIndices(
+                selectedRooms,
+                out int tutorialIndex,
+                out int bossIndex
+            );
+
             List<PlacedRoom> layout =
                 CreateLayout(selectedRooms, random);
 
             if (layout == null)
             {
                 Debug.LogError(
-                    "Could not fit all selected rooms. " +
+                    "Could not fit the selected rooms. " +
                     "Increase Dungeon Size or reduce Room Count. " +
-                    "The previous rooms were kept.",
+                    "The previous dungeon was kept.",
                     this
                 );
                 return;
             }
 
-            SpawnRooms(layout, random);
-
-            Debug.Log(
-                $"Placed {layout.Count} rooms. Seed: {seed}",
-                this
-            );
+            if (SpawnRooms(
+                layout,
+                selectedRooms,
+                tutorialIndex,
+                bossIndex,
+                random))
+            {
+                Debug.Log(
+                    $"Placed {layout.Count} rooms. " +
+                    $"Seed: {generationSeed}. " +
+                    "Minotaur room is farthest.",
+                    this
+                );
+            }
         }
         catch (Exception exception)
         {
             Debug.LogException(exception, this);
         }
+    }
+
+    private void FindSpecialRoomIndices(
+        List<SelectedRoom> selectedRooms,
+        out int tutorialIndex,
+        out int bossIndex)
+    {
+        tutorialIndex = -1;
+        bossIndex = -1;
+
+        for (int i = 0; i < selectedRooms.Count; i++)
+        {
+            RoomDefinition prefab = selectedRooms[i].prefab;
+
+            if (prefab.PlayerSpawnPoint != null)
+            {
+                if (tutorialIndex >= 0)
+                {
+                    throw new InvalidOperationException(
+                        "The selection contains multiple tutorial rooms. " +
+                        "Generate exactly one room with a Player Spawn Point."
+                    );
+                }
+
+                tutorialIndex = i;
+            }
+
+            if (prefab == minotaurRoomPrefab)
+            {
+                if (bossIndex >= 0)
+                {
+                    throw new InvalidOperationException(
+                        "The selection contains multiple copies of " +
+                        "the Minotaur room. Generate it exactly once."
+                    );
+                }
+
+                bossIndex = i;
+            }
+        }
+
+        if (tutorialIndex < 0 ||
+            bossIndex < 0 ||
+            tutorialIndex == bossIndex)
+        {
+            throw new InvalidOperationException(
+                "The Room Catalogue must select exactly one tutorial " +
+                "room and one separate Minotaur room. " +
+                "Minotaur Room Prefab must match the exact catalogue prefab."
+            );
+        }
+    }
+
+    private bool BossIsFarthest(
+        int[] distances,
+        int tutorialIndex,
+        int bossIndex,
+        out string reason)
+    {
+        for (int i = 0; i < distances.Length; i++)
+        {
+            if (distances[i] < 0)
+            {
+                reason =
+                    $"Room index {i} was unreachable " +
+                    "from the tutorial spawn.";
+
+                return false;
+            }
+        }
+
+        int nextFarthest = 0;
+
+        for (int i = 0; i < distances.Length; i++)
+        {
+            if (i != tutorialIndex && i != bossIndex)
+            {
+                nextFarthest = Mathf.Max(
+                    nextFarthest,
+                    distances[i]
+                );
+            }
+        }
+
+        bool accepted =
+            distances[bossIndex] >=
+            nextFarthest + minimumBossDistanceLead;
+
+        reason =
+            $"Minotaur distance {distances[bossIndex]}, " +
+            $"next farthest {nextFarthest}, " +
+            $"required lead {minimumBossDistanceLead}.";
+
+        return accepted;
+    }
+
+    private void DiscardCandidateRooms(GameObject root)
+    {
+        if (root == null)
+            return;
+
+        root.SetActive(false);
+
+        if (Application.isPlaying)
+            Destroy(root);
+        else
+            DestroyImmediate(root);
     }
 
     private HashSet<Vector2Int> SmoothCorridorFloor(
@@ -495,8 +620,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
             return;
         }
 
-        RoomDefinition tutorialRoom =
-            rooms[tutorialRoomIndex];
+        RoomDefinition tutorialRoom = rooms[tutorialRoomIndex];
 
         player.position =
             tutorialRoom.PlayerSpawnPoint.position;
@@ -600,7 +724,6 @@ public class DesignedDungeonGenerator : MonoBehaviour
             });
         }
 
-        // Fit larger rooms first.
         selected.Sort((a, b) =>
         {
             long areaA =
@@ -671,11 +794,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
         int maximumY =
             dungeonArea.yMax - roomSpacing - height;
 
-        if (maximumX < minimumX ||
-            maximumY < minimumY)
-        {
+        if (maximumX < minimumX || maximumY < minimumY)
             return null;
-        }
 
         for (int attempt = 0;
              attempt < attemptsPerRoom;
@@ -729,8 +849,11 @@ public class DesignedDungeonGenerator : MonoBehaviour
         return null;
     }
 
-    private void SpawnRooms(
+    private bool SpawnRooms(
         List<PlacedRoom> layout,
+        List<SelectedRoom> selectedRooms,
+        int tutorialIndex,
+        int bossIndex,
         System.Random random)
     {
         if (tilemapVisualizer == null ||
@@ -751,117 +874,153 @@ public class DesignedDungeonGenerator : MonoBehaviour
         List<RectInt> bounds =
             new List<RectInt>();
 
-        HashSet<Vector2Int> corridors;
+        HashSet<Vector2Int> corridors = null;
+
+        bool accepted = false;
+        string reason = "No candidate was tested.";
+
+        int[] acceptedDistances = null;
+        int acceptedAttempt = 0;
 
         try
         {
+            // Reuse these candidates while trying new layouts.
             foreach (PlacedRoom placement in layout)
             {
-#if UNITY_EDITOR
-                RoomDefinition source =
-                    placement.selected.prefab;
-
-                string prefabPath =
-                    UnityEditor.AssetDatabase.GetAssetPath(
-                        source.gameObject
-                    );
-
-                Debug.Log(
-                    $"ROOM SOURCE\n" +
-                    $"Prefab: {prefabPath}\n" +
-                    $"Room component: {source.name}",
-                    source
-                );
-#endif
-
-                RoomDefinition instance = Instantiate(
+                instances.Add(Instantiate(
                     placement.selected.prefab,
                     newRoot.transform,
                     false
-                );
-
-                Vector3Int anchorCell =
-                    instance.GetAnchorCell();
-
-                Vector3 anchorOffset =
-                    instance.PlacementAnchor.position -
-                    instance.FloorTilemap.GetCellCenterWorld(
-                        anchorCell
-                    );
-
-                Debug.Log(
-                    $"CLONED ANCHOR BEFORE PLACEMENT\n" +
-                    $"Position: {instance.PlacementAnchor.position.ToString("F6")}\n" +
-                    $"Offset: {anchorOffset.ToString("F6")}",
-                    instance
-                );
-
-                instance.PlaceAt(
-                    dungeonFloor,
-                    placement.destinationAnchor
-                );
-
-                instances.Add(instance);
-                bounds.Add(placement.bounds);
+                ));
             }
 
-            RectInt dungeonArea =
-                new RectInt(dungeonOrigin, dungeonSize);
-
-            corridors = RoomCorridorBuilder.Build(
-    instances,
-    bounds,
-    dungeonFloor,
-    new RectInt(dungeonOrigin, dungeonSize),
-    random,
-    Mathf.Max(mazeSpacing, corridorRadius * 2 + 2),
-    mazeLoopChance
-);
-
-            AddRandomBranches(
-                corridors,
-                bounds,
-                dungeonArea,
-                random
-            );
-
-            corridors = WidenCorridors(
-                corridors,
-                bounds,
-                dungeonArea
-            );
-
-            for (int pass = 0;
-                 pass < smoothingPasses;
-                 pass++)
+            for (int attempt = 0;
+                 attempt < bossDistanceAttempts;
+                 attempt++)
             {
-                corridors = SmoothCorridorFloor(
+                if (attempt > 0)
+                    layout = CreateLayout(selectedRooms, random);
+
+                if (layout == null)
+                {
+                    reason =
+                        "The selected rooms did not fit " +
+                        "in the dungeon area.";
+
+                    continue;
+                }
+
+                bounds.Clear();
+
+                for (int i = 0; i < layout.Count; i++)
+                {
+                    instances[i].PlaceAt(
+                        dungeonFloor,
+                        layout[i].destinationAnchor
+                    );
+
+                    bounds.Add(layout[i].bounds);
+                }
+
+                RectInt dungeonArea =
+                    new RectInt(dungeonOrigin, dungeonSize);
+
+                try
+                {
+                    corridors = RoomCorridorBuilder.Build(
+                        instances,
+                        bounds,
+                        dungeonFloor,
+                        dungeonArea,
+                        random,
+                        Mathf.Max(
+                            mazeSpacing,
+                            corridorRadius * 2 + 2
+                        ),
+                        mazeLoopChance
+                    );
+                }
+                catch (InvalidOperationException exception) when (
+                    exception.Message.StartsWith(
+                        "An entrance cannot reach the corridor network",
+                        StringComparison.Ordinal))
+                {
+                    reason = exception.Message;
+                    continue;
+                }
+
+                AddRandomBranches(
+                    corridors,
+                    bounds,
+                    dungeonArea,
+                    random
+                );
+
+                corridors = WidenCorridors(
                     corridors,
                     bounds,
                     dungeonArea
                 );
+
+                for (int pass = 0;
+                     pass < smoothingPasses;
+                     pass++)
+                {
+                    corridors = SmoothCorridorFloor(
+                        corridors,
+                        bounds,
+                        dungeonArea
+                    );
+                }
+
+                // Check final geometry, including any new shortcuts.
+                int[] distances = RoomRouteDistances.Calculate(
+                    instances,
+                    tutorialIndex,
+                    corridors,
+                    dungeonFloor
+                );
+
+                if (!BossIsFarthest(
+                    distances,
+                    tutorialIndex,
+                    bossIndex,
+                    out reason))
+                {
+                    continue;
+                }
+
+                accepted = true;
+                acceptedDistances = distances;
+                acceptedAttempt = attempt + 1;
+                break;
+            }
+
+            if (!accepted)
+            {
+                DiscardCandidateRooms(newRoot);
+
+                Debug.LogError(
+                    "No layout made the Minotaur room farthest " +
+                    $"after {bossDistanceAttempts} attempts. " +
+                    $"{reason} The previous dungeon was kept. " +
+                    "Try another seed, increase attempts, or adjust " +
+                    "dungeon size/room spacing.",
+                    this
+                );
+
+                return false;
             }
         }
         catch
         {
-            if (Application.isPlaying)
-                Destroy(newRoot);
-            else
-                DestroyImmediate(newRoot);
-
+            DiscardCandidateRooms(newRoot);
             throw;
         }
 
-        // Replace old rooms only after routing succeeds.
+        // Replace the old dungeon only after a candidate passes.
         if (generatedRoomRoot != null)
-        {
-            generatedRoomRoot.SetActive(false);
-
-            if (Application.isPlaying)
-                Destroy(generatedRoomRoot);
-            else
-                DestroyImmediate(generatedRoomRoot);
-        }
+            DiscardCandidateRooms(generatedRoomRoot);
 
         WalkableFloorReady = false;
         generatedRoomRoot = newRoot;
@@ -886,6 +1045,25 @@ public class DesignedDungeonGenerator : MonoBehaviour
                 random
             );
         }
+
+        List<string> report = new List<string>();
+
+        for (int i = 0; i < instances.Count; i++)
+        {
+            report.Add(
+                $"{instances[i].name}: " +
+                $"{acceptedDistances[i]} steps"
+            );
+        }
+
+        Debug.Log(
+            "Accepted boss-distance layout on attempt " +
+            $"{acceptedAttempt}. " +
+            string.Join("; ", report),
+            this
+        );
+
+        return true;
     }
 
     private HashSet<Vector2Int> WidenCorridors(
@@ -966,7 +1144,6 @@ public class DesignedDungeonGenerator : MonoBehaviour
                         dungeonCell.y
                     );
 
-                    // Protect floor, walls and decorations.
                     protectedCells.Add(position);
 
                     if (tilemap == room.FloorTilemap)
@@ -1093,8 +1270,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
                     bool touchesOtherCorridor = false;
 
-                    foreach (Vector2Int neighborDirection in
-                             directions)
+                    foreach (Vector2Int neighborDirection in directions)
                     {
                         Vector2Int neighbor =
                             candidate + neighborDirection;
@@ -1119,9 +1295,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
                 Vector2Int chosenDirection;
 
-                if (availableDirections.Contains(
-                        previousDirection
-                    ) &&
+                if (availableDirections.Contains(previousDirection) &&
                     random.NextDouble() < straightPreference)
                 {
                     chosenDirection = previousDirection;
