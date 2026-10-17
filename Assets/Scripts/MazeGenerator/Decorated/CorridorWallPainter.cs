@@ -21,6 +21,10 @@ public class CorridorWallPainter : MonoBehaviour
     [SerializeField] private Vector3 insideJoinOffset;
     [SerializeField] private Vector3 outsideJoinOffset;
 
+    [Header("Invisible Walls")]
+    [SerializeField] private Tilemap invisibleWalls;
+    [SerializeField] private TileBase invisibleWallTile;
+
     public void Paint(
     HashSet<Vector2Int> corridorFloor,
     HashSet<Vector2Int> allFloor,
@@ -95,11 +99,75 @@ public class CorridorWallPainter : MonoBehaviour
             Vector3.zero
         );
 
-        PaintCells(
-            wallsAlongY,
-            straightAlongY,
-            yEdges,
-            Vector3.zero
+        PaintInvisibleWalls(
+    corridorFloor,
+    allFloor,
+    protectedCells
+);
+    }
+
+    private void PaintInvisibleWalls(
+        HashSet<Vector2Int> corridorFloor,
+        HashSet<Vector2Int> allFloor,
+        HashSet<Vector2Int> protectedCells)
+    {
+        if (invisibleWalls == null || invisibleWallTile == null)
+        {
+            throw new InvalidOperationException(
+                "Assign Invisible Walls and Invisible Wall Tile."
+            );
+        }
+
+        if (invisibleWalls == wallsAlongX ||
+            invisibleWalls == wallsAlongY ||
+            invisibleWalls == corners)
+        {
+            throw new InvalidOperationException(
+                "Invisible Walls must use a separate Tilemap."
+            );
+        }
+
+        invisibleWalls.ClearAllTiles();
+
+        Vector2Int[] directions =
+        {
+        Vector2Int.up,
+        Vector2Int.right,
+        Vector2Int.down,
+        Vector2Int.left,
+
+        new Vector2Int(1, 1),
+        new Vector2Int(1, -1),
+        new Vector2Int(-1, -1),
+        new Vector2Int(-1, 1)
+    };
+
+        HashSet<Vector2Int> boundaryCells =
+            new HashSet<Vector2Int>();
+
+        foreach (Vector2Int floor in corridorFloor)
+        {
+            foreach (Vector2Int direction in directions)
+            {
+                Vector2Int candidate = floor + direction;
+
+                // Never cover walkable floor or protected room tiles.
+                if (CanPaint(candidate, allFloor, protectedCells))
+                    boundaryCells.Add(candidate);
+            }
+        }
+
+        foreach (Vector2Int position in boundaryCells)
+        {
+            invisibleWalls.SetTile(
+                new Vector3Int(position.x, position.y, 0),
+                invisibleWallTile
+            );
+        }
+
+        Debug.Log(
+            $"Painted {boundaryCells.Count} invisible boundary tiles.",
+            this
         );
     }
 
