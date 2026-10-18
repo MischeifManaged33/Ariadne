@@ -7,16 +7,12 @@ using UnityEngine.InputSystem;
 public class AriadneThread : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip(
-        "Ground contact point on the player. " +
-        "Defaults to this Transform."
-    )]
     [SerializeField] private Transform followPoint;
 
-    [Tooltip(
-        "The player's health component. Must implement IDamagable."
-    )]
-    [SerializeField] private MonoBehaviour healthSource;
+    [Tooltip("Player health component implementing IDamagable.")]
+    private PlayerHealth health;
+    [SerializeField]
+    private MonoBehaviour healthSource;
 
     [Header("Spool")]
     [SerializeField, Min(0.1f)]
@@ -32,15 +28,11 @@ public class AriadneThread : MonoBehaviour
     private float healthPerUnitRecovered = 0.5f;
 
     [Tooltip(
-        "Turn off when your existing interaction script " +
-        "calls TryStartWinding instead."
+        "Disable when your existing interaction manager " +
+        "calls Interact() instead."
     )]
     [SerializeField] private bool listenForE = true;
 
-    [Tooltip(
-        "Large position jumps break the trail instead of " +
-        "drawing a line across a teleport. This does not refill it."
-    )]
     [SerializeField, Min(0.1f)]
     private float teleportBreakDistance = 5f;
 
@@ -84,15 +76,23 @@ public class AriadneThread : MonoBehaviour
             : 0f;
 
     public bool IsWinding { get; private set; }
-
-    public bool IsOutOfThread =>
-        RemainingThread <= Epsilon;
-
+    public bool IsOutOfThread => RemainingThread <= Epsilon;
     public bool TrailDetached => detached;
+    public int ConnectionCount => knots.Count;
 
     public event Action<float, float> ThreadAmountChanged;
 
+    private class ThreadKnot
+    {
+        public ThreadConnectionPoint point;
+        public int vertexIndex;
+        public float distanceFromStart;
+    }
+
     private const float Epsilon = 0.00001f;
+
+    private readonly List<ThreadKnot> knots =
+        new List<ThreadKnot>();
 
     private readonly List<Vector3> points =
         new List<Vector3>();
@@ -109,7 +109,6 @@ public class AriadneThread : MonoBehaviour
     private Vector3[] renderBuffer = new Vector3[0];
 
     private LineRenderer line;
-    private IDamagable health;
 
     private float usedThread;
     private bool detached;
@@ -131,40 +130,26 @@ public class AriadneThread : MonoBehaviour
 
     private void ResolveHealth()
     {
-        if (healthSource != null)
+        health = healthSource as PlayerHealth;
+
+        if (health == null && followPoint != null)
+            health = followPoint.GetComponentInParent<PlayerHealth>();
+
+        if (health == null)
+            health = PlayerHealth.Current;
+
+        if (health != null)
         {
-            health = healthSource as IDamagable;
-
-            if (health == null)
-            {
-                Debug.LogError(
-                    "AriadneThread Health Source must implement " +
-                    "IDamagable. Assign the player's actual " +
-                    "health component.",
-                    this
-                );
-            }
-
-            return;
+            healthSource = health;
         }
-
-        foreach (MonoBehaviour component in
-                 followPoint.GetComponentsInParent<MonoBehaviour>(true))
+        else
         {
-            if (component is IDamagable candidate)
-            {
-                healthSource = component;
-                health = candidate;
-                return;
-            }
+            Debug.LogWarning(
+                "AriadneThread: assign the player's PlayerHealth " +
+                "component to Health Source.",
+                this
+            );
         }
-
-        Debug.LogWarning(
-            "Thread visuals will work, but healing needs a " +
-            "player health component implementing IDamagable. " +
-            "Assign Health Source.",
-            this
-        );
     }
 
     private void ConfigureRenderer()
@@ -199,7 +184,6 @@ public class AriadneThread : MonoBehaviour
     {
         Vector3 position = followPoint.position;
         position.z += visualZOffset;
-
         return position;
     }
 
@@ -214,8 +198,6 @@ public class AriadneThread : MonoBehaviour
             Vector2.Distance(lastFollowPosition, position)
                 > teleportBreakDistance)
         {
-            // Avoid drawing a line across a teleport.
-            // Teleports do not grant free thread or health.
             if (usedThread > Epsilon)
             {
                 detached = true;
@@ -230,11 +212,21 @@ public class AriadneThread : MonoBehaviour
         lastFollowPosition = position;
         hasLastFollowPosition = true;
 
-        if (listenForE &&
-            Keyboard.current != null &&
-            Keyboard.current.eKey.wasPressedThisFrame)
+        if (listenForE)
         {
-            TryStartWinding();
+            var keyboard = Keyboard.current;
+
+            if (keyboard != null &&
+                keyboard.eKey.wasPressedThisFrame)
+            {
+                Interact();
+            }
+
+            // Stop immediately when E is no longer held.
+            if (keyboard == null || !keyboard.eKey.isPressed)
+            {
+                StopWinding();
+            }
         }
 
         if (Time.deltaTime > 0f)
@@ -252,6 +244,11 @@ public class AriadneThread : MonoBehaviour
         RenderThread();
     }
 
+    public void StopWinding()
+    {
+        IsWinding = false;
+    }
+
     private void LayThread(Vector3 position)
     {
         if (points.Count == 0)
@@ -262,8 +259,6 @@ public class AriadneThread : MonoBehaviour
         }
 
         Vector3 last = points[points.Count - 1];
-
-        // Count ground movement, not visual depth.
         position.z = last.z;
 
         float distance = Vector2.Distance(last, position);
@@ -279,13 +274,12 @@ public class AriadneThread : MonoBehaviour
         if (length <= Epsilon)
             return;
 
-        Vector3 endpoint = Vector3.Lerp(
+        points.Add(Vector3.Lerp(
             last,
             position,
             length / distance
-        );
+        ));
 
-        points.Add(endpoint);
         pointTimes.Add(Time.time);
 
         usedThread = Mathf.Min(
@@ -299,8 +293,100 @@ public class AriadneThread : MonoBehaviour
         NotifyAmountChanged();
     }
 
-    // Call from your existing interaction system if desired.
-    // One press starts winding; holding E is not required.
+    // Call this from your existing interaction manager if needed.
+    public void Interact()
+    {
+        if (IsWinding)
+            return;
+
+        ThreadConnectionPoint point =
+            ThreadConnectionPoint.FindNearestAvailable(
+                FollowPosition()
+            );
+
+        if (point != null)
+        {
+            TryTieAt(point);
+            return;
+        }
+
+        TryStartWinding();
+    }
+
+    public bool TryTieAt(ThreadConnectionPoint connection)
+    {
+        if (connection == null ||
+            IsWinding ||
+            connection.IsTied ||
+            !connection.IsInRange(FollowPosition()))
+        {
+            return false;
+        }
+
+        if (detached)
+        {
+            Debug.Log(
+                "Recover the detached/empty trail " +
+                "before tying a new connection.",
+                this
+            );
+
+            return false;
+        }
+
+        if (points.Count == 0)
+        {
+            points.Add(FollowPosition());
+            pointTimes.Add(Time.time);
+        }
+
+        Vector3 last = points[points.Count - 1];
+
+        Vector3 target = connection.Position;
+        target.z = last.z;
+
+        float length = Vector2.Distance(last, target);
+
+        if (length > RemainingThread + Epsilon)
+        {
+            Debug.Log(
+                "Not enough thread to reach this connection point. " +
+                "Wind some thread back first.",
+                this
+            );
+
+            return false;
+        }
+
+        if (!connection.TryAttach(this))
+            return false;
+
+        if (length > Epsilon)
+        {
+            points.Add(target);
+            pointTimes.Add(Time.time);
+
+            usedThread = Mathf.Min(
+                threadLength,
+                usedThread + length
+            );
+        }
+
+        knots.Add(new ThreadKnot
+        {
+            point = connection,
+            vertexIndex = points.Count - 1,
+            distanceFromStart = usedThread
+        });
+
+        if (IsOutOfThread)
+            detached = true;
+
+        NotifyAmountChanged();
+
+        return true;
+    }
+
     public bool TryStartWinding()
     {
         if (IsWinding || usedThread <= Epsilon)
@@ -310,22 +396,78 @@ public class AriadneThread : MonoBehaviour
         return true;
     }
 
+    public void ForgetConnection(ThreadConnectionPoint point)
+    {
+        for (int i = knots.Count - 1; i >= 0; i--)
+        {
+            if (knots[i].point == point)
+                knots.RemoveAt(i);
+        }
+    }
+
+    private bool IsKnotVertex(int index)
+    {
+        foreach (ThreadKnot knot in knots)
+        {
+            if (knot.point != null &&
+                knot.point.Owner == this &&
+                knot.vertexIndex == index)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void ReleaseRewoundConnections()
+    {
+        for (int i = knots.Count - 1; i >= 0; i--)
+        {
+            ThreadKnot knot = knots[i];
+
+            // Arriving at a knot keeps it connected.
+            // Moving past its recorded distance releases it.
+            if (knot.point != null &&
+                usedThread >= knot.distanceFromStart - Epsilon)
+            {
+                continue;
+            }
+
+            knots.RemoveAt(i);
+
+            if (knot.point != null)
+                knot.point.Detach(this);
+        }
+    }
+
+    private void BreakAllConnections()
+    {
+        while (knots.Count > 0)
+        {
+            ThreadKnot knot = knots[knots.Count - 1];
+            knots.RemoveAt(knots.Count - 1);
+
+            if (knot.point != null)
+                knot.point.Detach(this);
+        }
+    }
+
     private void WindThread(float budget)
     {
         float recovered = 0f;
+        int removedVertices = 0;
 
-        // Recall from the oldest end toward the newest end.
+        // Recover the oldest end first, moving toward the player.
         while (budget > Epsilon && points.Count > 1)
         {
-            float segment = Vector2.Distance(
-                points[0],
-                points[1]
-            );
+            float segment = Vector2.Distance(points[0], points[1]);
 
             if (segment <= Epsilon)
             {
                 points.RemoveAt(0);
                 pointTimes.RemoveAt(0);
+                removedVertices++;
                 continue;
             }
 
@@ -335,6 +477,7 @@ public class AriadneThread : MonoBehaviour
             {
                 points.RemoveAt(0);
                 pointTimes.RemoveAt(0);
+                removedVertices++;
             }
             else
             {
@@ -350,28 +493,25 @@ public class AriadneThread : MonoBehaviour
         }
 
         recovered = Mathf.Min(recovered, usedThread);
+        usedThread = Mathf.Max(0f, usedThread - recovered);
 
-        usedThread = Mathf.Max(
-            0f,
-            usedThread - recovered
-        );
+        ReleaseRewoundConnections(recovered, removedVertices);
 
         if (recovered > 0f)
         {
-            if (healthSource != null &&
-                health != null &&
-                health.IsAlive)
-            {
-                health.Heal(
-                    recovered * healthPerUnitRecovered
-                );
-            }
+            if (health == null)
+                ResolveHealth();
+
+            if (health != null && health.CurrentHealth > 0f)
+                health.Heal(recovered * healthPerUnitRecovered);
 
             NotifyAmountChanged();
         }
 
         if (points.Count <= 1 || usedThread <= Epsilon)
         {
+            BreakAllConnections();
+
             points.Clear();
             pointTimes.Clear();
 
@@ -380,15 +520,44 @@ public class AriadneThread : MonoBehaviour
             IsWinding = false;
 
             NotifyAmountChanged();
-
-            // Next frame begins a new trail at the player's feet.
         }
     }
 
-    // Use when starting a new dungeon/run.
-    // This refills thread without restoring health.
+    private void ReleaseRewoundConnections(
+        float recovered,
+        int removedVertices)
+    {
+        for (int i = knots.Count - 1; i >= 0; i--)
+        {
+            ThreadKnot knot = knots[i];
+
+            // Update the knot relative to the remaining thread.
+            knot.distanceFromStart -= recovered;
+            knot.vertexIndex = Mathf.Max(
+                0,
+                knot.vertexIndex - removedVertices
+            );
+
+            // Keep the connection until winding passes its location.
+            if (knot.point != null &&
+                knot.distanceFromStart >= -Epsilon)
+            {
+                continue;
+            }
+
+            knots.RemoveAt(i);
+
+            if (knot.point != null)
+            {
+                knot.point.Detach(this);
+            }
+        }
+    }
+
     public void ResetSpool()
     {
+        BreakAllConnections();
+
         points.Clear();
         pointTimes.Clear();
 
@@ -421,12 +590,13 @@ public class AriadneThread : MonoBehaviour
 
         relaxedPoints.Clear();
 
-        // Recently laid points flutter slightly, then settle.
         for (int i = 0; i < points.Count; i++)
         {
             Vector3 point = points[i];
 
-            if (i > 0 && i < points.Count - 1)
+            if (i > 0 &&
+                i < points.Count - 1 &&
+                !IsKnotVertex(i))
             {
                 Vector2 tangent =
                     points[i + 1] - points[i - 1];
@@ -466,7 +636,6 @@ public class AriadneThread : MonoBehaviour
         renderPoints.Clear();
         renderPoints.Add(relaxedPoints[0]);
 
-        // Round sharp corners with small quadratic curves.
         for (int i = 1; i < relaxedPoints.Count - 1; i++)
         {
             Vector3 previous = relaxedPoints[i - 1];
@@ -479,7 +648,9 @@ public class AriadneThread : MonoBehaviour
             float after =
                 Vector3.Distance(point, next);
 
-            if (cornerRounding <= 0f ||
+            // A tied vertex must stay exactly on its connection.
+            if (IsKnotVertex(i) ||
+                cornerRounding <= 0f ||
                 before <= Epsilon ||
                 after <= Epsilon)
             {
@@ -507,12 +678,11 @@ public class AriadneThread : MonoBehaviour
             {
                 float t = (float)sample / samples;
 
-                Vector3 roundedPoint =
+                renderPoints.Add(
                     (1f - t) * (1f - t) * entry +
                     2f * (1f - t) * t * point +
-                    t * t * exit;
-
-                renderPoints.Add(roundedPoint);
+                    t * t * exit
+                );
             }
         }
 
@@ -533,11 +703,17 @@ public class AriadneThread : MonoBehaviour
         line.SetPositions(renderBuffer);
     }
 
+    private void OnDestroy()
+    {
+        BreakAllConnections();
+    }
+
     private void OnValidate()
     {
         threadLength = Mathf.Max(0.1f, threadLength);
         pointSpacing = Mathf.Max(0.01f, pointSpacing);
         windingSpeed = Mathf.Max(0.01f, windingSpeed);
+
         healthPerUnitRecovered =
             Mathf.Max(0f, healthPerUnitRecovered);
     }
