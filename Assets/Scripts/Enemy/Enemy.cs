@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     [Header("Health")]
     [SerializeField, Min(1f)]
     private float maxHealth = 50f;
+    [SerializeField]
+    private bool showHealthBar = false;
 
 
     [Header("Death")]
@@ -50,6 +52,11 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     public float CurrentHealth { get; private set; }
     public float Normalized => maxHealth > 0f ? CurrentHealth / maxHealth : 0f;
     public bool IsAlive => CurrentHealth > 0f;
+
+    public bool ShowHealthBar {
+        get => showHealthBar;
+        set => showHealthBar = value;
+    }
 
     public bool IsKnockedBack => _knockback.sqrMagnitude > 0f;
 

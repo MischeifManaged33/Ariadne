@@ -1,7 +1,6 @@
 using UnityEngine;
 
 // Pulls the hit flash logic out of player
-// Now applicable anywhere
 [DisallowMultipleComponent]
 public class HitFlash : MonoBehaviour
 {
@@ -18,13 +17,13 @@ public class HitFlash : MonoBehaviour
 
     private void Reset()
     {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = FindSprite();
     }
 
     private void Awake()
     {
         if (spriteRenderer == null)
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer = FindSprite();
         if (spriteRenderer != null)
             _baseColor = spriteRenderer.color;
     }
@@ -55,6 +54,17 @@ public class HitFlash : MonoBehaviour
         }
 
         spriteRenderer.color = Color.Lerp(_baseColor, flashColor, remaining / flashDuration);
+    }
+
+    // Special case for health bars
+    private SpriteRenderer FindSprite()
+    {
+        foreach (var candidate in GetComponentsInChildren<SpriteRenderer>()) {
+            if (candidate.GetComponentInParent<EnemyHealthBar>() == null)
+                return candidate;
+        }
+
+        return null;
     }
 
     public static HitFlash GetOrAdd(GameObject target)
