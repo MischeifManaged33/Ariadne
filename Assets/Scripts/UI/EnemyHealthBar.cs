@@ -14,8 +14,6 @@ public class EnemyHealthBar : MonoBehaviour
     private SpriteRenderer trailRenderer;
 
     [Header("Visibility")]
-    [SerializeField]
-    private bool onlyShowWhenDamaged = false;
     [SerializeField, Min(0f)]
     private float fadeInDuration = 0.15f;
     [SerializeField, Min(0f)]
@@ -62,6 +60,8 @@ public class EnemyHealthBar : MonoBehaviour
     private float _alpha = -1f;
     private float _hideAtTime = Mathf.Infinity;
     private bool _hiddenByDeath;
+    private bool _dead;
+    private bool _revealed;
     private bool _started;
 
     private void Reset()
@@ -149,15 +149,18 @@ public class EnemyHealthBar : MonoBehaviour
         UpdatePunch(dt);
     }
 
+    // Only shows healthbar on the first hit
     private bool WantsVisible =>
-        enemy != null && enemy.ShowHealthBar && !_hiddenByDeath
-        && (!onlyShowWhenDamaged || _target < 1f || _trail < 1f);
+        enemy != null && enemy.ShowHealthBar && _revealed && !_hiddenByDeath;
 
     private void OnHealthChanged(float current, float max)
     {
         _target = max > 0f ? Mathf.Clamp01(current / max) : 0f;
 
-        if (current > 0f) {
+        // Revived, so start hidden again
+        if (_dead && current > 0f) {
+            _dead = false;
+            _revealed = false;
             _hiddenByDeath = false;
             _hideAtTime = Mathf.Infinity;
         }
@@ -165,6 +168,7 @@ public class EnemyHealthBar : MonoBehaviour
 
     private void OnDamaged(float amount)
     {
+        _revealed = true;
         _trailHoldUntil = Time.time + trailDelay;
 
         if (damagePunch > 0f)
@@ -173,6 +177,8 @@ public class EnemyHealthBar : MonoBehaviour
 
     private void OnDied()
     {
+        _dead = true;
+
         if (hideAfterDeathDelay <= 0f)
             _hiddenByDeath = true;
         else
