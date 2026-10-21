@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 8133561526359348532}
   - component: {fileID: 2976674229660184274}
   - component: {fileID: 4121504570387299883}
+  - component: {fileID: 1494036083608487961}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -441,6 +442,7 @@ MonoBehaviour:
   player: {fileID: 7641320799291343612}
   joystick: {fileID: 0}
   animator: {fileID: 6733127777005113617}
+  dash: {fileID: 0}
   acceleration: 60
   isometricYScale: 0.5
 --- !u!114 &2581880639867805479
@@ -711,6 +713,30 @@ MonoBehaviour:
   flutterAmount: 0.27
   settlingTime: 0.47
   flutterSpeed: 8
+--- !u!114 &1494036083608487961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6319265570091660172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b038519569d8cc04aa83cd89f17f5495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
+  controller: {fileID: 7405922173783178614}
+  health: {fileID: 2581880639867805479}
+  distance: 4
+  duration: 0.15
+  cooldown: 1
+  dashSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &8462676818140494945
 GameObject:
   m_ObjectHideFlags: 0
