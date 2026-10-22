@@ -8,9 +8,6 @@ public class TransparentWalls : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Camera mainCamera;
 
-    // Add every wall Tilemap to this array.
-    [SerializeField] private Tilemap[] wallTilemaps;
-
     [Header("Fade Settings")]
     [SerializeField, Range(0f, 1f)]
     private float fadeAlpha = 0f;
@@ -38,8 +35,7 @@ public class TransparentWalls : MonoBehaviour
 
     private void LateUpdate()
     {
-
-        if (player == null || wallTilemaps == null)
+        if (player == null || mainCamera == null)
         {
             return;
         }
@@ -53,7 +49,7 @@ public class TransparentWalls : MonoBehaviour
 
         Dictionary<Tilemap, HashSet<Vector3Int>> wallsToKeepFaded = new Dictionary<Tilemap, HashSet<Vector3Int>>();
 
-        foreach(Tilemap tilemap in wallTilemaps)
+        foreach (Tilemap tilemap in TransparentWallTilemap.RegisteredTilemaps)
         {
             if (tilemap == null)
                 continue;
@@ -65,12 +61,18 @@ public class TransparentWalls : MonoBehaviour
 
                 Vector3 wallWorldPosition = tilemap.GetCellCenterWorld(wallCell);
                 Vector3 wallScreenPosition = mainCamera.WorldToScreenPoint(wallWorldPosition);
+
                 float distanceInFront = playerScreenPosition.y - wallScreenPosition.y;
                 bool wasAlreadyFaded = IsWallFaded(tilemap, wallCell);
 
-                bool shouldStartFading = distanceInFront >= 0f && distanceInFront <= foregroundDepthPixels;
+                bool shouldStartFading =
+                    distanceInFront >= 0f &&
+                    distanceInFront <= foregroundDepthPixels;
 
-                bool shouldRemainFaded = wasAlreadyFaded && distanceInFront >= -foregroundBufferPixels && distanceInFront <= foregroundBufferPixels;
+                bool shouldRemainFaded =
+                    wasAlreadyFaded &&
+                    distanceInFront >= -foregroundBufferPixels &&
+                    distanceInFront <= foregroundBufferPixels;
 
                 if (shouldStartFading || shouldRemainFaded)
                 {

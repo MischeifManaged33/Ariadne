@@ -61,6 +61,9 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField, Min(4)]
     private int mazeSpacing = 6;
 
+    [SerializeField]
+    private CorridorWallDecorationSpawner corridorDecorations;
+
     [SerializeField, Range(0f, 0.3f)]
     private float mazeLoopChance = 0.08f;
 
@@ -887,11 +890,14 @@ public class DesignedDungeonGenerator : MonoBehaviour
             // Reuse these candidates while trying new layouts.
             foreach (PlacedRoom placement in layout)
             {
-                instances.Add(Instantiate(
+                RoomDefinition room = Instantiate(
                     placement.selected.prefab,
                     newRoot.transform,
                     false
-                ));
+                );
+
+                RegisterRoomWalls(room);
+                instances.Add(room);
             }
 
             for (int attempt = 0;
@@ -1030,6 +1036,16 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
         GenerateCorridorWalls(corridors, instances);
 
+        if (corridorDecorations != null)
+        {
+            corridorDecorations.Spawn(
+                corridors,
+                dungeonFloor,
+                instances,
+                random
+            );
+        }
+
         generatedRoomRoot.SetActive(true);
 
         PositionCharacters(instances, random);
@@ -1065,6 +1081,49 @@ public class DesignedDungeonGenerator : MonoBehaviour
 
         return true;
     }
+
+    private void RegisterRoomWalls(RoomDefinition room)
+    {
+        Tilemap[] tilemaps =
+            room.GetComponentsInChildren<Tilemap>(true);
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            // Never register the room's floor.
+            if (tilemap == room.FloorTilemap)
+                continue;
+
+            string tilemapName = tilemap.gameObject.name;
+
+            // Leave invisible collision Tilemaps alone.
+            if (tilemapName.IndexOf(
+                "Invisible",
+                StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                continue;
+            }
+
+            bool isWall =
+                tilemapName.IndexOf(
+                    "Wall",
+                    StringComparison.OrdinalIgnoreCase) >= 0;
+
+            bool isCorner =
+                tilemapName.IndexOf(
+                    "Corner",
+                    StringComparison.OrdinalIgnoreCase) >= 0;
+
+            if (!isWall && !isCorner)
+                continue;
+
+            if (tilemap.GetComponent<TransparentWallTilemap>() == null)
+            {
+                tilemap.gameObject
+                    .AddComponent<TransparentWallTilemap>();
+            }
+        }
+    }
+
 
     private HashSet<Vector2Int> WidenCorridors(
         HashSet<Vector2Int> corridors,
