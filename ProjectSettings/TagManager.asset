@@ -83,11 +83,11 @@ TagManager:
   - name: Decor
     uniqueID: 1429553387
     locked: 0
-  - name: TopDecor
-    uniqueID: 2043864919
-    locked: 0
   - name: TableDecor
     uniqueID: 1977154461
+    locked: 0
+  - name: TopDecor
+    uniqueID: 2043864919
     locked: 0
   - name: ThroneTop
     uniqueID: 1112240331
