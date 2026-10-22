@@ -17,6 +17,9 @@ public class PlayerWeapon : MonoBehaviour
     private SpriteRenderer weaponRenderer;
     [SerializeField]
     private AttackIndicator indicator;
+    // Used instead of the fan when a bow is equipped
+    [SerializeField]
+    private RectIndicator rectIndicator;
     [SerializeField]
     private Player player;
     [SerializeField]
@@ -35,8 +38,14 @@ public class PlayerWeapon : MonoBehaviour
     private float tapThreshold = 0.25f;
 
     public event Action<Vector2> Attacked;
+    // Bow shots; direction and charge from 0 to 1
+    public event Action<Vector2, float> Fired;
 
     public bool IsAiming { get; private set; }
+
+    public bool IsCharging => _charging;
+
+    public float Charge => _charging && Bow != null ? Bow.Charge(Time.time - _chargeStartTime) : 0f;
 
     public Vector2 AimDirection { get; private set; } = Vector2.right;
 
@@ -46,11 +55,22 @@ public class PlayerWeapon : MonoBehaviour
     private VirtualJoystick _boundJoystick;
     private float _nextAttackTime;
 
+    private bool _charging;
+    private bool _chargedByStick;
+    private bool _stickAimed;
+    private bool _pressBlockedByUI;
+    private bool _fullChargeFlashed;
+    private float _chargeStartTime;
+
     private readonly HashSet<IDamagable> _struck = new();
 
     public Vector2 Origin => weaponPivot != null ? (Vector2)weaponPivot.position : (Vector2)transform.position;
 
     public WeaponData EquippedWeapon => equippedWeapon;
+
+    private BowData Bow => equippedWeapon as BowData;
+
+    private bool StickHeld => _boundJoystick != null && _boundJoystick.IsPressed;
 
     public bool CanAttack => equippedWeapon != null && Time.time >= _nextAttackTime;
 
@@ -86,6 +106,7 @@ public class PlayerWeapon : MonoBehaviour
         _fireAction.Disable();
 
         BindJoystick(null);
+        CancelCharge();
     }
 
     private void OnDestroy()
@@ -96,22 +117,28 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Update()
     {
-        if (PauseMenu.IsPaused)
+        if (PauseMenu.IsPaused) {
+            // Drop the draw, and make the click that unpauses not start a new one
+            CancelCharge();
+            _pressBlockedByUI = true;
             return;
+        }
 
         if (_boundJoystick == null)
             BindJoystick(aimJoystick != null ? aimJoystick : VirtualJoystick.Aim);
 
-        if (_boundJoystick != null && _boundJoystick.IsPressed)
+        if (StickHeld)
             UpdateStickAim();
         else
             UpdatePointerAim();
 
+        UpdateBow();
         UpdateIndicator();
     }
 
     public void Equip(WeaponData newWeapon)
     {
+        CancelCharge();
         equippedWeapon = newWeapon;
 
         if (weaponRenderer != null)
@@ -125,6 +152,9 @@ public class PlayerWeapon : MonoBehaviour
         var tilt = _boundJoystick.Direction;
         if (tilt.sqrMagnitude > 0.0001f)
             AimDirection = ToGround(tilt);
+
+        if (tilt.magnitude >= tapThreshold)
+            _stickAimed = true;
     }
 
     private void UpdatePointerAim()
@@ -150,8 +180,12 @@ public class PlayerWeapon : MonoBehaviour
 
         IsAiming = alwaysShowPointerAim || _fireAction.IsPressed();
 
-        if (_fireAction.WasPressedThisFrame() && !IsPointerOverUI())
-            Attack(AimDirection);
+        if (_fireAction.WasPressedThisFrame()) {
+            _pressBlockedByUI = IsPointerOverUI();
+
+            if (!_pressBlockedByUI && Bow == null)
+                Attack(AimDirection);
+        }
     }
 
     private static bool IsPointerOverUI()
@@ -162,6 +196,20 @@ public class PlayerWeapon : MonoBehaviour
     private void OnStickReleased(Vector2 tilt)
     {
         IsAiming = false;
+
+        if (Bow != null) {
+            if (!_charging || !_chargedByStick)
+                return;
+
+            // A quick flick still fires where the stick last pointed
+            var aimed = tilt.magnitude >= tapThreshold ? ToGround(tilt)
+                : _stickAimed ? AimDirection
+                : ToGround(player != null ? player.Facing : Vector2.down);
+
+            AimDirection = aimed;
+            FireArrow(aimed);
+            return;
+        }
 
         var direction = tilt.magnitude >= tapThreshold ? ToGround(tilt)
             : ToGround(player != null ? player.Facing : Vector2.down);
@@ -219,6 +267,100 @@ public class PlayerWeapon : MonoBehaviour
         Attacked?.Invoke(groundDirection);
     }
 
+    // Charging starts whenever the button or stick is held and the bow is ready,
+    // so holding through the cooldown starts the next draw straight away
+    private void UpdateBow()
+    {
+        var bow = Bow;
+        if (bow == null) {
+            CancelCharge();
+            return;
+        }
+
+        if (!_charging) {
+            if (!CanAttack)
+                return;
+
+            if (StickHeld)
+                BeginCharge(true);
+            else if (_fireAction.IsPressed() && !_pressBlockedByUI)
+                BeginCharge(false);
+
+            return;
+        }
+
+        if (_chargedByStick) {
+            // Release normally arrives through OnStickReleased; this covers losing the stick mid draw
+            if (!StickHeld)
+                CancelCharge();
+        }
+        else if (!_fireAction.IsPressed()) {
+            FireArrow(AimDirection);
+            return;
+        }
+
+        if (!_fullChargeFlashed && Charge >= 1f) {
+            _fullChargeFlashed = true;
+
+            if (rectIndicator != null)
+                rectIndicator.Flash();
+        }
+    }
+
+    private void BeginCharge(bool byStick)
+    {
+        _charging = true;
+        _chargedByStick = byStick;
+        _stickAimed = false;
+        _fullChargeFlashed = false;
+        _chargeStartTime = Time.time;
+
+        Bow.sounds.PlayWindup(Origin);
+    }
+
+    private void CancelCharge()
+    {
+        _charging = false;
+        _chargedByStick = false;
+        _stickAimed = false;
+        _fullChargeFlashed = false;
+    }
+
+    private void FireArrow(Vector2 groundDirection)
+    {
+        var bow = Bow;
+        var charge = Charge;
+
+        CancelCharge();
+
+        if (bow == null || !CanAttack || PauseMenu.IsPaused)
+            return;
+
+        _nextAttackTime = Time.time + bow.attackCooldown;
+
+        var spawn = Origin + Isometric.ToScreen(groundDirection * bow.spawnOffset, isometricYScale);
+
+        bow.sounds.PlaySwing(spawn);
+
+        if (bow.arrowPrefab != null) {
+            var arrow = Instantiate(bow.arrowPrefab, new Vector3(spawn.x, spawn.y, transform.position.z),
+                Quaternion.identity);
+
+            // The indicator measures from the origin, so take off the part covered by the spawn offset
+            arrow.Launch(groundDirection, isometricYScale, bow.DamageAt(charge), bow.SpeedAt(charge),
+                Mathf.Max(0f, bow.DistanceAt(charge) - bow.spawnOffset), bow.KnockbackAt(charge),
+                enemyLayers, bow.sounds);
+        }
+        else {
+            Debug.LogWarning($"{bow.name} has no arrow prefab assigned.", bow);
+        }
+
+        if (rectIndicator != null)
+            rectIndicator.Flash();
+
+        Fired?.Invoke(groundDirection, charge);
+    }
+
     private bool InsideFan(Vector2 origin, Vector2 groundDirection, float halfAngle, Collider2D candidate)
     {
         var relative = ToGroundSpace(candidate.ClosestPoint(origin) - origin);
@@ -234,10 +376,24 @@ public class PlayerWeapon : MonoBehaviour
 
     private void UpdateIndicator()
     {
+        var bow = Bow;
+
+        if (rectIndicator != null) {
+            if (bow != null) {
+                var fill = _charging ? bow.DistanceAt(Charge) / bow.maxDistance : 0f;
+
+                rectIndicator.Aim(Origin, AimDirection, bow.maxDistance, bow.indicatorWidth, fill, isometricYScale);
+                rectIndicator.SetVisible(_charging || (IsAiming && CanAttack));
+            }
+            else {
+                rectIndicator.SetVisible(false);
+            }
+        }
+
         if (indicator == null)
             return;
 
-        if (equippedWeapon == null) {
+        if (equippedWeapon == null || bow != null) {
             indicator.SetVisible(false);
             return;
         }
@@ -278,6 +434,13 @@ public class PlayerWeapon : MonoBehaviour
             return;
 
         var origin = Origin;
+
+        if (equippedWeapon is BowData bow) {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(origin, origin + Isometric.ToScreen(AimDirection * bow.maxDistance, isometricYScale));
+            return;
+        }
+
         var half = equippedWeapon.attackAngle * 0.5f;
         var heading = Mathf.Atan2(AimDirection.y, AimDirection.x) * Mathf.Rad2Deg;
 

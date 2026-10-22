@@ -56,12 +56,6 @@ TagManager:
   - name: Wall2
     uniqueID: 1947433991
     locked: 0
-  - name: Wall3
-    uniqueID: 1184337027
-    locked: 0
-  - name: Wall4
-    uniqueID: 1734486673
-    locked: 0
   - name: WallDecor
     uniqueID: 3183167243
     locked: 0
@@ -77,14 +71,26 @@ TagManager:
   - name: Player
     uniqueID: 3027823411
     locked: 0
-  - name: Topwall
-    uniqueID: 573366377
-    locked: 0
   - name: Decor
     uniqueID: 1429553387
     locked: 0
   - name: TableDecor
     uniqueID: 1977154461
+    locked: 0
+  - name: Frontwall
+    uniqueID: 1563029167
+    locked: 0
+  - name: Frontwall2
+    uniqueID: 2556474867
+    locked: 0
+  - name: Wall3
+    uniqueID: 1184337027
+    locked: 0
+  - name: Wall4
+    uniqueID: 1734486673
+    locked: 0
+  - name: Topwall
+    uniqueID: 573366377
     locked: 0
   - name: TopDecor
     uniqueID: 2043864919
