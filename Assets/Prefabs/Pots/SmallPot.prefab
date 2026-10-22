@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1482454914583283929}
   - component: {fileID: 6600709132158544513}
   m_Layer: 0
-  m_Name: BreakablePots 3
+  m_Name: SmallPot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,10 +80,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
+  m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -128,8 +128,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.024206161, y: -0.656229}
-  m_Radius: 0.67529106
+  m_Offset: {x: -0.026704788, y: -0.7905712}
+  m_Radius: 0.59713936
 --- !u!114 &6600709132158544513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,3 +150,24 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites:
+  - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
+  - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
+  - {fileID: -6796437846595873801, guid: f338b9637d0cd0c40b6669f254ca76f3, type: 3}
+  - {fileID: -4745890578339744776, guid: 282ea8b3f2759d244b83f969861aa120, type: 3}
+  - {fileID: 6874711597149295681, guid: 59e5280d164ad824dbf2b891f4dfe791, type: 3}
+  - {fileID: -7512321912733593584, guid: 42c3a6b75a61c0a459e99a0ceaafd5a3, type: 3}
+  - {fileID: 5792505994863077693, guid: 42459cccd75293946b0cc5e342acffde, type: 3}
+  - {fileID: -7717096248578058685, guid: e471cd86f6bb6d843b14524de37cbd68, type: 3}
+  - {fileID: 4040052250029019652, guid: 121012c501b802545a79635300f80be2, type: 3}
+  - {fileID: 2993172761076546472, guid: 10848f46a03065f46828ebcf56eafd7e, type: 3}
+  minShards: 4
+  maxShards: 5
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5

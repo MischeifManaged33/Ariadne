@@ -125,7 +125,7 @@ public class Arrow : MonoBehaviour
             if (target != null && target.IsAlive) {
                 target.TakeDamage(_damage);
 
-                if (_knockback > 0f && target is IKnockbackable knockable)
+                if (target is IKnockbackable knockable)
                     knockable.ApplyKnockback(_groundDirection, _knockback);
 
                 _sounds?.PlayImpact(enemyHit.point);
