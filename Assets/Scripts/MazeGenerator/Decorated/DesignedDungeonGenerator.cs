@@ -61,6 +61,9 @@ public class DesignedDungeonGenerator : MonoBehaviour
     [SerializeField, Min(4)]
     private int mazeSpacing = 6;
 
+    [SerializeField]
+    private CorridorWallDecorationSpawner corridorDecorations;
+
     [SerializeField, Range(0f, 0.3f)]
     private float mazeLoopChance = 0.08f;
 
@@ -1029,6 +1032,16 @@ public class DesignedDungeonGenerator : MonoBehaviour
         tilemapVisualizer.PaintFloorTiles(corridors);
 
         GenerateCorridorWalls(corridors, instances);
+
+        if (corridorDecorations != null)
+        {
+            corridorDecorations.Spawn(
+                corridors,
+                dungeonFloor,
+                instances,
+                random
+            );
+        }
 
         generatedRoomRoot.SetActive(true);
 
