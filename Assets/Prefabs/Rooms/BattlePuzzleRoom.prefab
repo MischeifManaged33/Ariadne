@@ -1584,7 +1584,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -1840,7 +1840,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -7942,7 +7942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9212945950203676215, guid: f17a7855c879921449f3087b45b9f8bb, type: 3}
       propertyPath: m_SortingLayer
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9212945950203676215, guid: f17a7855c879921449f3087b45b9f8bb, type: 3}
       propertyPath: m_SortingLayerID
@@ -8074,7 +8074,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9212945950203676215, guid: 1b84b861549189d44aff3dfd9f87c1fd, type: 3}
       propertyPath: m_SortingLayer
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9212945950203676215, guid: 1b84b861549189d44aff3dfd9f87c1fd, type: 3}
       propertyPath: m_SortingLayerID
@@ -8144,7 +8144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9212945950203676215, guid: 825d623d08cd5f5448c728ddf7584967, type: 3}
       propertyPath: m_SortingLayer
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9212945950203676215, guid: 825d623d08cd5f5448c728ddf7584967, type: 3}
       propertyPath: m_SortingLayerID
