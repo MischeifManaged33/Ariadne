@@ -2022,7 +2022,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -2479,7 +2479,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -2571,7 +2571,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -2688,6 +2688,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &28441405
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2770,7 +2781,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -2862,7 +2873,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -2930,6 +2941,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &34923295
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3012,7 +3034,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -3351,7 +3373,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -3832,7 +3854,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -4039,7 +4061,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -4231,6 +4253,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &49317367
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4313,7 +4346,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -4381,6 +4414,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &51470009
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4463,7 +4507,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -4555,7 +4599,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -4623,6 +4667,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &59562707
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4705,7 +4760,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -4798,7 +4853,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -5583,7 +5638,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -5651,6 +5706,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &65575925
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5733,7 +5799,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -5997,7 +6063,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -6299,6 +6365,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &72488118
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6381,7 +6458,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -6449,6 +6526,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &73991551
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6531,7 +6619,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -6623,7 +6711,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -6795,7 +6883,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -6989,7 +7077,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -7057,6 +7145,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &106263391
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7139,7 +7238,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -7231,7 +7330,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -7299,6 +7398,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &112582800
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7381,7 +7491,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -7449,6 +7559,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &112787260
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7531,7 +7652,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -7599,6 +7720,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &113409124
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7681,7 +7813,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -7951,6 +8083,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &129394580
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -8033,7 +8176,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -8126,7 +8269,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -8432,7 +8575,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -8960,7 +9103,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -9256,7 +9399,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -9573,7 +9716,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -9755,7 +9898,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -9823,6 +9966,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &161666286
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -9905,7 +10059,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -9973,6 +10127,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &164544334
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -10055,7 +10220,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -13100,7 +13265,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -13192,7 +13357,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -13309,6 +13474,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &186615857
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -13391,7 +13567,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -13573,7 +13749,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -14054,7 +14230,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -14243,6 +14419,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &221845022
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -14325,7 +14512,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -14454,6 +14641,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &237698840
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -14536,7 +14734,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -14718,7 +14916,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -14810,7 +15008,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -14878,6 +15076,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &247141467
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -14960,7 +15169,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -15257,7 +15466,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -15824,6 +16033,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &275842047
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -15906,7 +16126,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -16387,7 +16607,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -17373,7 +17593,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -17570,7 +17790,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -18316,7 +18536,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -18409,7 +18629,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -26126,7 +26346,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -26721,7 +26941,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -26813,7 +27033,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -27512,6 +27732,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &329516905
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -27594,7 +27825,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -28622,7 +28853,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -28690,6 +28921,17 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &347895660
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -28772,7 +29014,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4666047941633959030, guid: 28ee6bed4e6fe9a4299c3ed44f98a8ff, type: 3}
@@ -28864,7 +29106,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -29234,7 +29476,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -30196,7 +30438,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -30344,6 +30586,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &376293697
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -30426,7 +30679,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -30591,6 +30844,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &384486780
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -30673,7 +30937,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -39254,6 +39518,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &392214797
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -39336,7 +39611,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -39662,7 +39937,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -39817,7 +40092,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -40114,6 +40389,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &417562225
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -40196,7 +40482,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -40378,6 +40664,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &422357466
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -40460,7 +40757,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -40876,7 +41173,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -40969,7 +41266,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1112240331
-  m_SortingLayer: 17
+  m_SortingLayer: 19
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -41226,7 +41523,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -41433,7 +41730,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -41990,7 +42287,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2029670805
-  m_SortingLayer: 10
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -42187,7 +42484,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -42489,7 +42786,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -42581,7 +42878,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -42744,7 +43041,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -43533,7 +43830,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -43872,7 +44169,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -44076,7 +44373,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -44410,7 +44707,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -44706,7 +45003,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -45045,7 +45342,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -45137,7 +45434,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -45230,7 +45527,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -45781,7 +46078,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -46317,6 +46614,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &526633052
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -46399,7 +46707,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -46738,7 +47046,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -47122,7 +47430,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -47448,7 +47756,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -47540,7 +47848,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -47633,7 +47941,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -48269,7 +48577,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -48337,6 +48645,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &560571155
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -48419,7 +48738,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -48552,7 +48871,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -48710,6 +49029,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &573289065
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -48792,7 +49122,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -48885,7 +49215,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -49171,7 +49501,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -49263,7 +49593,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -50487,7 +50817,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -50555,6 +50885,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &621845259
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -50637,7 +50978,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -50729,7 +51070,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -50821,7 +51162,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -50913,7 +51254,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -50981,6 +51322,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &635363956
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -51063,7 +51415,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -51155,7 +51507,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -51223,6 +51575,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &640298710
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -51305,7 +51668,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -51373,6 +51736,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &644343176
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -51455,7 +51829,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -51548,7 +51922,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -52653,6 +53027,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &649370502
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -52735,7 +53120,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -53421,7 +53806,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -53584,7 +53969,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -53756,6 +54141,17 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &705077850
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -53838,7 +54234,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4666047941633959030, guid: 28ee6bed4e6fe9a4299c3ed44f98a8ff, type: 3}
@@ -54135,7 +54531,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -54384,7 +54780,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -54805,7 +55201,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -55031,7 +55427,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -55189,6 +55585,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &746423522
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -55271,7 +55678,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -55363,7 +55770,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -55495,7 +55902,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -55855,7 +56262,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -55947,7 +56354,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -56286,7 +56693,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -56418,7 +56825,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -56826,6 +57233,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &787800646
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -56908,7 +57326,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -57040,7 +57458,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -57644,7 +58062,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 23ffa6716ef4d9f41ac4130036e415c1, type: 3}
@@ -57941,7 +58359,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -58125,6 +58543,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &819855568
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -58207,7 +58636,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -58482,7 +58911,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -58718,7 +59147,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -58964,7 +59393,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -59056,7 +59485,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -59214,6 +59643,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &850653595
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -59296,7 +59736,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -59388,7 +59828,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -62940,7 +63380,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -63032,7 +63472,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -63125,7 +63565,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -64016,7 +64456,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -64084,6 +64524,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &890850946
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -64166,7 +64617,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -64372,7 +64823,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -69313,7 +69764,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -164984,7 +165435,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -165465,7 +165916,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -165533,6 +165984,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &913405934
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -165615,7 +166077,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -165994,7 +166456,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -166386,6 +166848,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &931047972
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -166468,7 +166941,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -166672,7 +167145,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -166765,7 +167238,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1112240331
-  m_SortingLayer: 17
+  m_SortingLayer: 19
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -167013,7 +167486,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -167181,6 +167654,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &953297376
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -167263,7 +167747,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -167355,7 +167839,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -167448,7 +167932,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -411238,7 +411722,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -411460,6 +411944,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &972620192
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -411542,7 +412037,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -411868,7 +412363,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -412050,7 +412545,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -413158,7 +413653,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -413676,7 +414171,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -413879,7 +414374,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -414491,6 +414986,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1025689655
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -414573,7 +415079,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -415871,7 +416377,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -415963,7 +416469,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -416444,7 +416950,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -416512,6 +417018,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1048090563
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -416594,7 +417111,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -416776,7 +417293,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -416868,7 +417385,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -417066,7 +417583,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -417834,7 +418351,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -417926,7 +418443,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -418018,7 +418535,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -418224,7 +418741,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -418316,7 +418833,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -418408,7 +418925,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -418500,7 +419017,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -418593,7 +419110,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -418889,7 +419406,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -418957,6 +419474,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1084361897
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -419039,7 +419567,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -419378,7 +419906,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -420246,6 +420774,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1088750509
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -420328,7 +420867,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -420396,6 +420935,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1089430462
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -420478,7 +421028,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -443980,6 +444530,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1094721216
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -444062,7 +444623,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -444369,7 +444930,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -444437,6 +444998,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1101716658
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -444519,7 +445091,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -444587,6 +445159,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1102650953
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -444669,7 +445252,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -444737,6 +445320,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1106068279
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -444819,7 +445413,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -444912,7 +445506,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 573366377
-  m_SortingLayer: 13
+  m_SortingLayer: 17
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -445816,6 +446410,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1112796821
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -445898,7 +446503,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -445990,7 +446595,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -446058,6 +446663,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1119009871
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -446140,7 +446756,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -446479,7 +447095,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -446571,7 +447187,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -446663,7 +447279,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -446756,7 +447372,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -447236,7 +447852,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -447717,7 +448333,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -447834,6 +448450,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1173783344
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -447916,7 +448543,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -448008,7 +448635,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -448101,7 +448728,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -448869,7 +449496,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -448937,6 +449564,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1176567991
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -449019,7 +449657,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -449087,6 +449725,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1189158438
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -449169,7 +449818,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -449237,6 +449886,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1192051053
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -449319,7 +449979,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -449645,7 +450305,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -450001,6 +450661,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1203746896
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -450083,7 +450754,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -450176,7 +450847,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -450788,7 +451459,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -451255,7 +451926,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -451347,7 +452018,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -451439,7 +452110,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -451531,7 +452202,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -451663,7 +452334,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -451870,7 +452541,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -452390,7 +453061,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -452716,7 +453387,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -452784,6 +453455,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1275676095
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -452866,7 +453548,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -453189,7 +453871,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -453460,6 +454142,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1316772457
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -453542,7 +454235,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -453635,7 +454328,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -453821,7 +454514,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -453913,7 +454606,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -454095,6 +454788,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1339491713
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -454177,7 +454881,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -454383,7 +455087,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -455755,7 +456459,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -455961,7 +456665,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -456141,6 +456845,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1368620477
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -456223,7 +456938,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -456355,7 +457070,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -456593,7 +457308,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -456685,7 +457400,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -456817,7 +457532,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 725097597
-  m_SortingLayer: 11
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -457367,7 +458082,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -457848,7 +458563,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -457980,7 +458695,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -458350,7 +459065,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -458843,7 +459558,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -459001,6 +459716,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1410775897
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -459083,7 +459809,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -459241,6 +459967,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1423009510
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -459323,7 +460060,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -459415,7 +460152,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -459483,6 +460220,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1429399924
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -459565,7 +460313,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -459657,7 +460405,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -459725,6 +460473,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1433245555
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -459807,7 +460566,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -460013,7 +460772,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -460106,7 +460865,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -460318,6 +461077,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1442573670
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -460400,7 +461170,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -460726,7 +461496,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -460858,7 +461628,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -461090,7 +461860,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -461737,6 +462507,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1457696842
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -461819,7 +462600,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -462001,6 +462782,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1470185373
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -462083,7 +462875,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -462984,7 +463776,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 23ffa6716ef4d9f41ac4130036e415c1, type: 3}
@@ -463449,7 +464241,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 23ffa6716ef4d9f41ac4130036e415c1, type: 3}
@@ -463541,7 +464333,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -463664,7 +464456,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -463732,6 +464524,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1502144405
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -463814,7 +464617,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -463907,7 +464710,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -464153,7 +464956,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -464861,7 +465664,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 30f618c3720afd24dbf09d0e50131b7c, type: 3}
@@ -464953,7 +465756,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -465434,7 +466237,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -465799,7 +466602,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -465916,6 +466719,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1554301501
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -465998,7 +466812,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -466256,7 +467070,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -466517,6 +467331,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1565974577
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -466599,7 +467424,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -466740,7 +467565,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -466898,6 +467723,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1578600705
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -466980,7 +467816,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -467048,6 +467884,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1583128296
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -467130,7 +467977,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -467222,7 +468069,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -467314,7 +468161,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -467406,7 +468253,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -467498,7 +468345,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -467590,7 +468437,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -467683,7 +468530,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -468359,7 +469206,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -468807,7 +469654,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -468939,7 +469786,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -469143,6 +469990,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1623443276
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -469225,7 +470083,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -469670,7 +470528,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -470525,7 +471383,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -471639,7 +472497,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -472536,7 +473394,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -472718,7 +473576,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -473057,7 +473915,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -473150,7 +474008,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -474038,6 +474896,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1663813648
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -474120,7 +474989,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -474188,6 +475057,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1674626356
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -474270,7 +475150,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -475761,7 +476641,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -475829,6 +476709,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1699314704
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -475911,7 +476802,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -476093,6 +476984,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1703168531
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -476175,7 +477077,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -476267,7 +477169,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -478995,7 +479897,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -479334,7 +480236,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -479763,7 +480665,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -480089,7 +480991,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -480423,6 +481325,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1747599059
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -480505,7 +481418,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -480598,7 +481511,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -480896,7 +481809,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -480964,6 +481877,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1754850431
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -481046,7 +481970,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -481138,7 +482062,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -481270,7 +482194,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -481566,7 +482490,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -481658,7 +482582,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -481750,7 +482674,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -482190,7 +483114,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -482282,7 +483206,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -482424,7 +483348,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -483014,7 +483938,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -483207,7 +484131,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2029670805
-  m_SortingLayer: 10
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -483369,6 +484293,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1788892711
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -483451,7 +484386,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -483519,6 +484454,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1791500712
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -483601,7 +484547,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -484082,7 +485028,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -484265,7 +485211,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -484571,7 +485517,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -484977,7 +485923,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -485069,7 +486015,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -485251,6 +486197,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1820930386
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -485333,7 +486290,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -485401,6 +486358,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1822280181
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -485483,7 +486451,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -486469,7 +487437,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -486871,6 +487839,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1832295005
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -486953,7 +487932,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -492081,6 +493060,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1839799718
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -492163,7 +493153,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -492256,7 +493246,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2029670805
-  m_SortingLayer: 10
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -492689,7 +493679,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -492896,7 +493886,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2029670805
-  m_SortingLayer: 10
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -493072,7 +494062,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -493140,6 +494130,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1877208167
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -493222,7 +494223,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -493290,6 +494291,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1880743418
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -493372,7 +494384,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -493465,7 +494477,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -494234,7 +495246,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -494846,6 +495858,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1888007801
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -494928,7 +495951,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -495267,7 +496290,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 579e88b337519a14983cc06affbc32d4, type: 3}
@@ -495486,7 +496509,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -500427,7 +501450,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -500609,6 +501632,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1905346875
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -500691,7 +501725,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -500783,7 +501817,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -501055,7 +502089,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -501123,6 +502157,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1914666257
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -501205,7 +502250,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -505094,7 +506139,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -505186,7 +506231,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -505318,7 +506363,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -505514,7 +506559,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -505606,7 +506651,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -505927,7 +506972,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -506539,6 +507584,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &1948851936
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -506621,7 +507677,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -506713,7 +507769,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -506806,7 +507862,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 14
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -507051,7 +508107,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -507183,7 +508239,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1111800053
-  m_SortingLayer: 8
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -507409,7 +508465,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -507554,7 +508610,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -507622,6 +508678,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2001251806
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -507704,7 +508771,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -507974,6 +509041,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2011811079
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -508056,7 +509134,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -508214,6 +509292,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2013359538
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -508296,7 +509385,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -508388,7 +509477,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -508456,6 +509545,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2018556599
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -508538,7 +509638,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -508630,7 +509730,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -508747,6 +509847,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2034463443
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -508829,7 +509940,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -508921,7 +510032,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -509103,7 +510214,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -509195,7 +510306,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -509894,6 +511005,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2054061306
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -509976,7 +511098,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -510068,7 +511190,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -510455,7 +511577,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 632217233
-  m_SortingLayer: 9
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3b48308b433276e44adbf3a920f07254, type: 3}
@@ -510844,7 +511966,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1184337027
-  m_SortingLayer: 6
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -511456,6 +512578,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2069717571
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -511538,7 +512671,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -511606,6 +512739,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2074614565
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -511688,7 +512832,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -511820,7 +512964,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -512326,6 +513470,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2084373995
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -512408,7 +513563,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -512500,7 +513655,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -512568,6 +513723,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2088641212
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -512650,7 +513816,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -512718,6 +513884,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2090069716
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -512800,7 +513977,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -513134,7 +514311,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -513202,6 +514379,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2104190259
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -513284,7 +514472,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 4827344060711687651, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -513376,7 +514564,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}
@@ -513469,7 +514657,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -513771,6 +514959,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2119974782
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -513853,7 +515052,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1359656914080464504, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -513921,6 +515120,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2130538509
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -514003,7 +515213,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1734486673
-  m_SortingLayer: 7
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -514484,7 +515694,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1797174317
-  m_SortingLayer: 18
+  m_SortingLayer: 20
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f361ce49305bcc246a1d30a3d539b315, type: 3}
@@ -514616,7 +515826,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2043864919
-  m_SortingLayer: 15
+  m_SortingLayer: 18
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -515070,6 +516280,17 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  shardSprites: []
+  minShards: 6
+  maxShards: 10
+  spreadAngle: 70
+  minSpeed: 2
+  maxSpeed: 4.5
+  hopSpeed: 4
+  maxSpin: 540
+  shardLifetime: 1.2
+  shardFadeDuration: 0.4
+  isometricYScale: 0.5
 --- !u!58 &2137816307
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -515152,7 +516373,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1977154461
-  m_SortingLayer: 16
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -515244,7 +516465,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 20
+  m_SortingLayer: 22
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
