@@ -126,14 +126,22 @@ public class CorridorWallPainter : MonoBehaviour
 
         foreach (Vector2Int floor in corridorFloor)
         {
-            Vector2Int xEdge = floor + Vector2Int.up;
-            Vector2Int yEdge = floor + Vector2Int.right;
+            Vector2Int upEdge = floor + Vector2Int.up;
+            Vector2Int downEdge = floor + Vector2Int.down;
+            Vector2Int rightEdge = floor + Vector2Int.right;
+            Vector2Int leftEdge = floor + Vector2Int.left;
 
-            if (CanPaint(xEdge, allFloor, protectedCells))
-                xEdges.Add(xEdge);
+            if (CanPaint(upEdge, allFloor, protectedCells))
+                xEdges.Add(upEdge);
 
-            if (CanPaint(yEdge, allFloor, protectedCells))
-                yEdges.Add(yEdge);
+            if (CanPaint(downEdge, allFloor, protectedCells))
+                xEdges.Add(downEdge);
+
+            if (CanPaint(rightEdge, allFloor, protectedCells))
+                yEdges.Add(rightEdge);
+
+            if (CanPaint(leftEdge, allFloor, protectedCells))
+                yEdges.Add(leftEdge);
         }
 
         PaintFace(
