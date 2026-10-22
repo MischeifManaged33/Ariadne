@@ -38,6 +38,7 @@ public class Petrification : MonoBehaviour
         Lock(GetComponentsInChildren<PlayerController>());
         Lock(GetComponentsInChildren<PlayerWeapon>());
         Lock(GetComponentsInChildren<PlayerInteractor>());
+        Lock(GetComponentsInChildren<PlayerDash>());
 
         if (_body != null) {
             _constraints = _body.constraints;

@@ -15,6 +15,10 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField]
     private LayerMask interactableLayers = ~0;
 
+    [Header("Highlight")]
+    [SerializeField]
+    private bool highlightInRange = true;
+
     public static PlayerInteractor Active { get; private set; }
 
     public IInteractable Target { get; private set; }
@@ -22,6 +26,8 @@ public class PlayerInteractor : MonoBehaviour
     private InputAction _interactAction;
     private ContactFilter2D _filter;
     private readonly List<Collider2D> _hits = new();
+    private readonly HashSet<InteractableHighlight> _highlighted = new();
+    private readonly HashSet<InteractableHighlight> _inRange = new();
 
     private void Awake()
     {
@@ -48,6 +54,9 @@ public class PlayerInteractor : MonoBehaviour
         _interactAction.Disable();
         Target = null;
 
+        _inRange.Clear();
+        UpdateHighlights();
+
         if (Active == this)
             Active = null;
     }
@@ -60,6 +69,7 @@ public class PlayerInteractor : MonoBehaviour
             return;
 
         Target = FindClosest();
+        UpdateHighlights();
 
         if (_interactAction.WasPressedThisFrame())
             Interact();
@@ -81,6 +91,7 @@ public class PlayerInteractor : MonoBehaviour
 
         IInteractable closest = null;
         var closestDistance = float.MaxValue;
+        _inRange.Clear();
 
         for (var i = 0; i < count; i++) {
             var hit = _hits[i];
@@ -88,6 +99,9 @@ public class PlayerInteractor : MonoBehaviour
 
             if (candidate == null || !candidate.CanInteract)
                 continue;
+
+            if (highlightInRange && candidate is Component component)
+                _inRange.Add(InteractableHighlight.GetOrAdd(component.gameObject));
 
             var distance = (hit.ClosestPoint(origin) - origin).sqrMagnitude;
             if (distance >= closestDistance)
@@ -98,6 +112,22 @@ public class PlayerInteractor : MonoBehaviour
         }
 
         return closest;
+    }
+
+    // Outline what just came into range, clear what left it
+    private void UpdateHighlights()
+    {
+        foreach (var highlight in _highlighted) {
+            if (highlight != null && !_inRange.Contains(highlight))
+                highlight.SetHighlighted(false);
+        }
+
+        _highlighted.Clear();
+
+        foreach (var highlight in _inRange) {
+            highlight.SetHighlighted(true);
+            _highlighted.Add(highlight);
+        }
     }
 
     private void OnDrawGizmosSelected()

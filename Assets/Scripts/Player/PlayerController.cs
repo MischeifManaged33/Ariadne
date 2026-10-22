@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
+    [SerializeField]
+    private PlayerDash dash;
+
     [Header("Movement")]
     [SerializeField, Min(0f)]
     private float acceleration = 60f;
@@ -25,13 +28,16 @@ public class PlayerController : MonoBehaviour
     private InputAction _moveAction;
     private Vector2 _velocity;
     private Vector2 lastMoveDirection = Vector2.down;
+    private bool _wasDashing;
 
     public Vector2 CurrentInput { get; private set; }
     public Vector2 CurrentVelocity => _velocity;
+    public Vector2 LastMoveDirection => lastMoveDirection;
 
     private void Reset()
     {
         player = GetComponent<Player>();
+        dash = GetComponent<PlayerDash>();
         ConfigureBody(GetComponent<Rigidbody2D>());
     }
 
@@ -64,6 +70,8 @@ public class PlayerController : MonoBehaviour
 
         if (player == null)
             player = GetComponent<Player>();
+        if (dash == null)
+            dash = GetComponent<PlayerDash>();
 
         _moveAction = new InputAction(
             "Move",
@@ -102,18 +110,29 @@ public class PlayerController : MonoBehaviour
             ? player.MoveSpeed
             : 5f;
 
-        var target = new Vector2(
-            input.x,
-            input.y * isometricYScale
-        ) * speed;
+        if (dash != null && dash.IsDashing)
+        {
+            _velocity = ToIsometric(dash.Direction) * dash.Speed;
+            _wasDashing = true;
+        }
+        else
+        {
+            if (_wasDashing)
+            {
+                _velocity = Vector2.ClampMagnitude(_velocity, speed);
+                _wasDashing = false;
+            }
 
-        _velocity = acceleration > 0f
-            ? Vector2.MoveTowards(
-                _velocity,
-                target,
-                acceleration * Time.fixedDeltaTime
-            )
-            : target;
+            var target = ToIsometric(input) * speed;
+
+            _velocity = acceleration > 0f
+                ? Vector2.MoveTowards(
+                    _velocity,
+                    target,
+                    acceleration * Time.fixedDeltaTime
+                )
+                : target;
+        }
 
         _rigidbody.linearVelocity = _velocity;
 
@@ -121,7 +140,6 @@ public class PlayerController : MonoBehaviour
             player.OnMovementUpdated(_velocity);
     }
 
-    // Merges keyboard or joystick input into a clamped vector.
     private Vector2 ReadInput()
     {
         var input = _moveAction.ReadValue<Vector2>();
@@ -137,6 +155,9 @@ public class PlayerController : MonoBehaviour
 
         return Vector2.ClampMagnitude(input, 1f);
     }
+
+    private Vector2 ToIsometric(Vector2 input) =>
+        new Vector2(input.x, input.y * isometricYScale);
 
     private static void ConfigureBody(Rigidbody2D body)
     {
