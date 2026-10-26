@@ -896,7 +896,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
                     false
                 );
 
-                RegisterRoomWalls(room);
+                //RegisterRoomWalls(room);
                 instances.Add(room);
             }
 
