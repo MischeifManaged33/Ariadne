@@ -134,6 +134,9 @@ GameObject:
   - component: {fileID: 6119955104361690364}
   - component: {fileID: 7691789763719217328}
   - component: {fileID: 2660575557615155100}
+  - component: {fileID: 2653484272300950206}
+  - component: {fileID: 909361585791461580}
+  - component: {fileID: 7902281406277046832}
   m_Layer: 3
   m_Name: Boss
   m_TagString: Untagged
@@ -258,6 +261,10 @@ MonoBehaviour:
     moveInterval: 1.5
     transitionDuration: 1
     speedMultiplier: 1
+  - healthThreshold: 0.7
+    moveInterval: 1.2
+    transitionDuration: 1
+    speedMultiplier: 1
   winTrigger: {fileID: 2660575557615155100}
   target: {fileID: 0}
   isometricYScale: 0.5
@@ -310,8 +317,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinotaurSwing
   phaseWeights:
   - 1
-  - 1
-  - 1
+  - 0
+  - 0
   cooldown: 2
   outOfRangeWeight: 0.15
   minRange: 0
@@ -354,6 +361,7 @@ MonoBehaviour:
   nearChance: 0.9
   farChance: 0.7
   chanceFalloff: 8
+  chanceLastPhase: 0
 --- !u!114 &6824502268628021772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,8 +376,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AxeThrow
   phaseWeights:
   - 1
-  - 1
-  - 1
+  - 0
+  - 0
   cooldown: 3.5
   outOfRangeWeight: 0.15
   minRange: 4
@@ -422,8 +430,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RetrieveAxe
   phaseWeights:
   - 2
-  - 1
-  - 1
+  - 0
+  - 0
   cooldown: 0
   outOfRangeWeight: 0
   minRange: 0
@@ -449,8 +457,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinotaurSlap
   phaseWeights:
   - 1
-  - 1
-  - 1
+  - 2
+  - 2
   cooldown: 1.5
   outOfRangeWeight: 0
   minRange: 0
@@ -493,6 +501,7 @@ MonoBehaviour:
   nearChance: 0.9
   farChance: 0.7
   chanceFalloff: 8
+  chanceLastPhase: 0
 --- !u!61 &6848416865245857674
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -596,6 +605,215 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinotaurWinTrigger
   winSceneName: Winner
+--- !u!114 &2653484272300950206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910907604388181261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2e8540a57f4d7f920cc03fe7b5d99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RockFall
+  count: 4
+  firstOnTarget: 1
+  scatterRadius: 5
+  minSpacing: 1.4
+  maxGrounded: 6
+  rock:
+    sprite: {fileID: -28289722412485493, guid: a2ab2ea6c73c47c429e4f876ab92685b, type: 3}
+    sortingLayer: Enemy
+    size: 0.8
+    radius: 2
+    damage: 15
+    dropHeight: 6
+    dropDuration: 0.35
+    startFill: 0.1
+    targetLayers:
+      serializedVersion: 2
+      m_Bits: 128
+    sounds:
+      windup:
+        Guid:
+          Data1: 0
+          Data2: 0
+          Data3: 0
+          Data4: 0
+        Path: 
+      swing:
+        Guid:
+          Data1: 0
+          Data2: 0
+          Data3: 0
+          Data4: 0
+        Path: 
+      impact:
+        Guid:
+          Data1: 0
+          Data2: 0
+          Data3: 0
+          Data4: 0
+        Path: 
+  warning: 0.65
+  stagger: 0.25
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 65
+  placementAttempts: 12
+--- !u!114 &909361585791461580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910907604388181261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0118d39859ce40b79d7cbeee6a412f83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinotaurCharge
+  phaseWeights:
+  - 0
+  - 4
+  - 4
+  cooldown: 8
+  outOfRangeWeight: 0
+  minRange: 2
+  maxRange: 16
+  attackId: 0
+  speed: 18
+  maxDuration: 1.8
+  turnSpeed: 50
+  damage: 25
+  bodyRadius: 0.5
+  skin: 0.05
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 65
+  windup: 1.2
+  trackFraction: 0.75
+  startFill: 0.1
+  targetRecovery: 0.5
+  wallRecovery: 0.8
+  missRecovery: 0.6
+  stunDuration: 2.2
+  rockFall: {fileID: 2653484272300950206}
+  indicator: {fileID: 0}
+  laneLength: 8
+  laneWidth: 1.4
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+  crashSounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+--- !u!114 &7902281406277046832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910907604388181261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b558f3087b14dfcb5f4068a407cfb0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RockThrow
+  phaseWeights:
+  - 0
+  - 1
+  - 1
+  cooldown: 2
+  outOfRangeWeight: 0
+  minRange: 0
+  maxRange: 100
+  attackId: 0
+  rockFall: {fileID: 2653484272300950206}
+  nearWeight: 1
+  farWeight: 3
+  nearDistance: 3
+  farDistance: 10
+  pickupRadius: 1
+  pickupDelay: 0.35
+  travelTimeout: 5
+  speedMultiplier: 1.2
+  holdHeight: 4.4
+  windup: 0.8
+  aimLockFraction: 0.3
+  startFill: 0.1
+  flightTime: 0.8
+  arcHeight: 3.5
+  impactRadius: 4.5
+  damage: 20
+  maxThrowRange: 12
+  recovery: 0.5
+  leadStrength: 0.8
+  maxLeadTime: 0.8
+  sounds:
+    windup:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    swing:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    impact:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
 --- !u!1 &6527149062573953775
 GameObject:
   m_ObjectHideFlags: 0

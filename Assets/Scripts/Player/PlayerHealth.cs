@@ -42,6 +42,7 @@ public class PlayerHealth : MonoBehaviour
     private float _invulnerableUntil;
     private float _flashUntil;
     private Color _baseColor = Color.white;
+    private Color _statusTint = Color.white;
 
     private void Reset()
     {
@@ -104,6 +105,30 @@ public class PlayerHealth : MonoBehaviour
         return applied;
     }
 
+    // DoT
+    public float TakeTickDamage(float amount)
+    {
+        if (amount <= 0f)
+            return 0f;
+
+        var applied = Mathf.Min(amount, CurrentHealth);
+        if (applied <= 0f)
+            return 0f;
+
+        CurrentHealth -= applied;
+
+        if (CurrentHealth <= 0)
+        {
+            SceneManager.LoadScene("Loser");
+        }
+
+        onDamaged?.Invoke(applied);
+        Damaged?.Invoke(applied);
+        RaiseHealthChanged();
+
+        return applied;
+    }
+
     // Restores health, returning health restored
     public float Heal(float amount)
     {
@@ -132,6 +157,10 @@ public class PlayerHealth : MonoBehaviour
     {
         CurrentHealth = maxHealth;
         _invulnerableUntil = 0f;
+
+        if (TryGetComponent<PlayerPoison>(out var poison))
+            poison.Clear();
+
         RaiseHealthChanged();
     }
 
@@ -147,20 +176,25 @@ public class PlayerHealth : MonoBehaviour
         _invulnerableUntil = Mathf.Max(_invulnerableUntil, Time.time + Mathf.Max(0f, seconds));
     }
 
+    // Coloring
+    public void SetStatusTint(Color tint) => _statusTint = tint;
+
     // Flashing the sprite on hit
     private void UpdateFlash()
     {
-        if (spriteRenderer == null || hitFlashDuration <= 0f)
+        if (spriteRenderer == null)
             return;
 
+        var rest = _baseColor * _statusTint;
+
         var remaining = _flashUntil - Time.time;
-        if (remaining <= 0f) {
-            if (spriteRenderer.color != _baseColor)
-                spriteRenderer.color = _baseColor;
+        if (remaining <= 0f || hitFlashDuration <= 0f) {
+            if (spriteRenderer.color != rest)
+                spriteRenderer.color = rest;
             return;
         }
 
-        spriteRenderer.color = Color.Lerp(_baseColor, hitFlashColor, remaining / hitFlashDuration);
+        spriteRenderer.color = Color.Lerp(rest, hitFlashColor, remaining / hitFlashDuration);
     }
 
     private void RaiseHealthChanged() => HealthChanged?.Invoke(CurrentHealth, maxHealth);

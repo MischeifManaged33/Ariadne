@@ -99,6 +99,15 @@ public class CircleIndicator : MonoBehaviour
 
     public void Flash() => _flashRemaining = flashDuration;
 
+    // For indicators made at runtime, which would otherwise be stuck on the default layer under the floor
+    public void SetSortingLayer(string layer)
+    {
+        sortingLayer = layer;
+
+        if (_renderer != null)
+            _renderer.sortingLayerName = layer;
+    }
+
     private void LateUpdate()
     {
         var target = _visible ? 1f : 0f;

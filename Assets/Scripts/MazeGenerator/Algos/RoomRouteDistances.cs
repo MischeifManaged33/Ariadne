@@ -76,6 +76,10 @@ public static class RoomRouteDistances
                     walkable.Add(cell);
             }
 
+            int validDoorwayCount = 0;
+            string doorwayProblem =
+                "No entrance passage crosses the edge of the room floor.";
+
             // Only authored doorway lanes connect a room to corridors.
             // This prevents measuring a shortcut through a side wall.
             foreach (RoomEntrance entrance in room.Entrances)
@@ -98,8 +102,12 @@ public static class RoomRouteDistances
                     }
 
                     if (room.IsBlockedCell(inside) ||
-                        room.IsBlockedCell(outside))
+    room.IsBlockedCell(outside))
                     {
+                        doorwayProblem =
+                            $"{entrance.name}: doorway cells {inside} -> {outside} " +
+                            "are marked blocked. Check Blocking Tilemaps.";
+
                         continue;
                     }
 
@@ -117,8 +125,19 @@ public static class RoomRouteDistances
 
                     AddDoorway(doorways, a, b);
                     AddDoorway(doorways, b, a);
+                    validDoorwayCount++;
                 }
             }
+            if (validDoorwayCount == 0)
+            {
+                throw new InvalidOperationException(
+                    $"{room.name}: no usable doorway was found. " +
+                    doorwayProblem +
+                    " Check entrance position, outward direction, passage " +
+                    "length, and saved entrance cells."
+                );
+            }
+
         }
 
         RoomDefinition tutorial = rooms[tutorialIndex];

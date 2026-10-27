@@ -77,6 +77,9 @@ TagManager:
   - name: TableDecor
     uniqueID: 1977154461
     locked: 0
+  - name: TableDecor2
+    uniqueID: 2854405419
+    locked: 0
   - name: Frontwall
     uniqueID: 1563029167
     locked: 0
