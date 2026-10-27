@@ -16,6 +16,14 @@ public class CorridorWallPainter : MonoBehaviour
     [SerializeField] private TileBase straightAlongY;
     [SerializeField] private TileBase connectorTile;
 
+    [Header("Front Wall Tilemaps")]
+    [SerializeField] private Tilemap frontWallsAlongX;
+    [SerializeField] private Tilemap frontWallsAlongY;
+
+    [Header("Front Wall Offsets — Local Units")]
+    [SerializeField] private Vector3 frontAlongXOffset;
+    [SerializeField] private Vector3 frontAlongYOffset;
+
     [Header("Wall Height")]
     [SerializeField, Min(1)]
     private int wallHeight = 3;
@@ -41,10 +49,6 @@ public class CorridorWallPainter : MonoBehaviour
     [SerializeField] private Vector3 insideJoinOffset;
     [SerializeField] private Vector3 outsideJoinOffset;
 
-    [Header("Invisible Walls")]
-    [SerializeField] private Tilemap invisibleWalls;
-    [SerializeField] private TileBase invisibleWallTile;
-
     [Serializable]
     private class HeightLayer
     {
@@ -63,9 +67,9 @@ public class CorridorWallPainter : MonoBehaviour
         new List<HeightLayer>();
 
     public void Paint(
-        HashSet<Vector2Int> corridorFloor,
-        HashSet<Vector2Int> allFloor,
-        HashSet<Vector2Int> protectedCells)
+    HashSet<Vector2Int> corridorFloor,
+    HashSet<Vector2Int> allFloor,
+    HashSet<Vector2Int> protectedCells)
     {
         if (corridorFloor == null ||
             allFloor == null ||
@@ -78,91 +82,146 @@ public class CorridorWallPainter : MonoBehaviour
 
         if (wallsAlongX == null ||
             wallsAlongY == null ||
-            straightAlongX == null ||
-            straightAlongY == null)
+            frontWallsAlongX == null ||
+            frontWallsAlongY == null ||
+            straightAlongX == null)
         {
             throw new InvalidOperationException(
-                "Assign both straight-wall Tilemaps and tiles."
+                "Assign all four visual wall Tilemaps, " +
+                "their straight-wall tiles, and the invisible wall references."
             );
         }
 
-        if (wallsAlongX == wallsAlongY)
+        Tilemap[] visualWalls =
         {
-            throw new InvalidOperationException(
-                "The two wall directions need separate Tilemaps."
-            );
+        wallsAlongX,
+        wallsAlongY,
+        frontWallsAlongX,
+        frontWallsAlongY
+    };
+
+        HashSet<Tilemap> uniqueMaps = new HashSet<Tilemap>();
+
+        foreach (Tilemap map in visualWalls)
+        {
+            if (!uniqueMaps.Add(map) ||
+                map == corners)
+            {
+                throw new InvalidOperationException(
+                    "Each wall direction, corners, and invisible walls " +
+                    "must use separate Tilemaps."
+                );
+            }
         }
 
-        if (invisibleWalls == null ||
-            invisibleWallTile == null)
+        // The front offsets are relative to the matching back wall.
+        if (frontWallsAlongX.transform.parent != wallsAlongX.transform.parent ||
+            frontWallsAlongY.transform.parent != wallsAlongY.transform.parent)
         {
             throw new InvalidOperationException(
-                "Assign Invisible Walls and Invisible Wall Tile."
-            );
-        }
-
-        if (invisibleWalls == wallsAlongX ||
-            invisibleWalls == wallsAlongY ||
-            invisibleWalls == corners)
-        {
-            throw new InvalidOperationException(
-                "Invisible Walls must use a separate Tilemap."
+                "Each front wall Tilemap must share a Grid parent " +
+                "with its matching back wall Tilemap."
             );
         }
 
         ClearHeightLayers();
 
-        wallsAlongX.ClearAllTiles();
-        wallsAlongY.ClearAllTiles();
+        ConfigureFrontWall(
+            frontWallsAlongX,
+            wallsAlongX,
+            frontAlongXOffset
+        );
+
+        ConfigureFrontWall(
+            frontWallsAlongY,
+            wallsAlongY,
+            frontAlongYOffset
+        );
+
+        foreach (Tilemap map in visualWalls)
+        {
+            map.ClearAllTiles();
+
+            // Automatically register all four base wall Tilemaps.
+            if (map.GetComponent<TransparentWallTilemap>() == null)
+            {
+                map.gameObject.AddComponent<TransparentWallTilemap>();
+            }
+        }
 
         if (corners != null)
             corners.ClearAllTiles();
 
-        HashSet<Vector2Int> xEdges =
-            new HashSet<Vector2Int>();
-
-        HashSet<Vector2Int> yEdges =
-            new HashSet<Vector2Int>();
+        HashSet<Vector2Int> backXEdges = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> backYEdges = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> frontXEdges = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> frontYEdges = new HashSet<Vector2Int>();
 
         foreach (Vector2Int floor in corridorFloor)
         {
             Vector2Int upEdge = floor + Vector2Int.up;
-            Vector2Int downEdge = floor + Vector2Int.down;
             Vector2Int rightEdge = floor + Vector2Int.right;
+            Vector2Int downEdge = floor + Vector2Int.down;
             Vector2Int leftEdge = floor + Vector2Int.left;
 
             if (CanPaint(upEdge, allFloor, protectedCells))
-                xEdges.Add(upEdge);
-
-            if (CanPaint(downEdge, allFloor, protectedCells))
-                xEdges.Add(downEdge);
+                backXEdges.Add(upEdge);
 
             if (CanPaint(rightEdge, allFloor, protectedCells))
-                yEdges.Add(rightEdge);
+                backYEdges.Add(rightEdge);
+
+            if (CanPaint(downEdge, allFloor, protectedCells))
+                frontXEdges.Add(downEdge);
 
             if (CanPaint(leftEdge, allFloor, protectedCells))
-                yEdges.Add(leftEdge);
+                frontYEdges.Add(leftEdge);
         }
 
         PaintFace(
             wallsAlongX,
             straightAlongX,
             bodyAlongX,
-            xEdges
+            backXEdges
         );
 
         PaintFace(
             wallsAlongY,
             straightAlongY,
             bodyAlongY,
-            yEdges
+            backYEdges
         );
 
-        PaintInvisibleWalls(
-            corridorFloor,
-            allFloor,
-            protectedCells
+        PaintFace(
+            frontWallsAlongX,
+            straightAlongX,
+            bodyAlongX,
+            frontXEdges
         );
+
+        PaintFace(
+            frontWallsAlongY,
+            straightAlongY,
+            bodyAlongY,
+            frontYEdges
+        );
+    }
+
+    private void ConfigureFrontWall(
+    Tilemap front,
+    Tilemap reference,
+    Vector3 offset)
+    {
+        front.transform.localPosition =
+            reference.transform.localPosition + offset;
+
+        front.transform.localRotation =
+            reference.transform.localRotation;
+
+        front.transform.localScale =
+            reference.transform.localScale;
+
+        front.orientation = reference.orientation;
+        front.orientationMatrix = reference.orientationMatrix;
     }
 
     private void PaintFace(
@@ -220,13 +279,12 @@ public class CorridorWallPainter : MonoBehaviour
         GameObject layerObject = new GameObject(
     source.name + " - Height " + (level + 1),
     typeof(Tilemap),
-    typeof(TilemapRenderer)
+    typeof(TilemapRenderer),
+    typeof(TilemapCollider2D)
 );
 
-        // Automatically register this generated wall layer.
         layerObject.AddComponent<TransparentWallTilemap>();
-
-        layerObject.layer = source.gameObject.layer;
+        layerObject.layer = LayerMask.NameToLayer("Walls");
 
         Transform layerTransform = layerObject.transform;
 
@@ -283,6 +341,8 @@ public class CorridorWallPainter : MonoBehaviour
 
             visualRenderer.enabled =
                 sourceRenderer.enabled;
+
+            visualRenderer.sortingLayerName = "Wall";
         }
 
         foreach (Vector3Int cell in cells)
@@ -364,7 +424,6 @@ public class CorridorWallPainter : MonoBehaviour
         HashSet<Vector2Int> allFloor,
         HashSet<Vector2Int> protectedCells)
     {
-        invisibleWalls.ClearAllTiles();
 
         Vector2Int[] directions =
         {
@@ -398,14 +457,6 @@ public class CorridorWallPainter : MonoBehaviour
             }
         }
 
-        foreach (Vector2Int cell in boundary)
-        {
-            invisibleWalls.SetTile(
-                new Vector3Int(cell.x, cell.y, 0),
-                invisibleWallTile
-            );
-        }
-
         Debug.Log(
             $"Painted {boundary.Count} invisible boundary tiles.",
             this
@@ -427,9 +478,7 @@ public class CorridorWallPainter : MonoBehaviour
         {
             if (layer.visual == null ||
                 layer.visual == wallsAlongX ||
-                layer.visual == wallsAlongY ||
-                layer.visual == corners ||
-                layer.visual == invisibleWalls)
+                layer.visual == wallsAlongY)
             {
                 continue;
             }
