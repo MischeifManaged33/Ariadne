@@ -5,13 +5,51 @@ using UnityEngine.Tilemaps;
 
 public class CorridorEnemySpawner : MonoBehaviour
 {
-    [Header("Enemies")]
-    [SerializeField]
-    private List<GameObject> enemyPrefabs =
-        new List<GameObject>();
+    [Serializable]
+    public class EnemyEntry
+    {
+        public GameObject prefab;
 
-    [SerializeField, Min(0)]
-    private int enemyCount = 10;
+        [Min(0f)]
+        public float startingWeight = 1f;
+
+        [Min(0f)]
+        public float endingWeight = 1f;
+
+        [Min(0.01f)]
+        public float radius = 0.5f;
+    }
+
+    [Header("Difficulty Progression")]
+    [SerializeField, Min(0.1f)]
+    private float minutesToMaximumDifficulty = 30f;
+
+    [Header("Enemies")]
+    [SerializeField] private List<EnemyEntry> enemies = new();
+
+    [SerializeField, Min(1)]
+    private int maximumLivingEnemies = 10;
+
+    [Header("Timing — Seconds")]
+    [SerializeField, Min(0f)]
+    private float startingGracePeriod = 15f;
+
+    [SerializeField, Min(0.1f)]
+    private float spawnInterval = 8f;
+
+    [SerializeField, Min(0.1f)]
+    private float retryInterval = 1f;
+
+    [Header("Camera")]
+    [SerializeField] private Camera mainCamera;
+
+    [Tooltip("Extra distance outside the camera, in viewport units.")]
+    [SerializeField, Min(0f)]
+    private float screenBuffer = 0.08f;
+
+    [Tooltip("How far beyond the buffer candidates may spawn.")]
+    [SerializeField, Min(0.01f)]
+    private float offscreenBand = 0.3f;
 
     [Header("Spacing — World Units")]
     [SerializeField, Min(0f)]
@@ -20,18 +58,37 @@ public class CorridorEnemySpawner : MonoBehaviour
     [SerializeField, Min(0f)]
     private float minimumDistanceBetweenEnemies = 2f;
 
-    [Header("Placement")]
-    [Tooltip(
-        "Added to each corridor floor-cell center. " +
-        "Keep X/Y at zero unless your prefab root needs adjustment."
-    )]
-    [SerializeField]
-    private Vector3 spawnOffset = Vector3.zero;
+    [SerializeField, Min(0.1f)]
+    private float maximumDistanceFromPlayer = 25f;
 
+    [Header("Placement")]
+    [SerializeField] private Vector3 spawnOffset;
+
+    [Tooltip("Include wall and enemy physics layers. Exclude floor layers.")]
+    [SerializeField] private LayerMask blockedLayers;
+
+    [SerializeField, Min(1)]
+    private int attemptsPerSpawn = 60;
+
+    private readonly List<Vector3> positions = new();
+    private readonly List<GameObject> livingEnemies = new();
+    private readonly List<EnemyEntry> eligibleEnemies = new();
+    private readonly List<float> eligibleWeights = new();
+
+    private Tilemap floor;
+    private Transform player;
+    private PlayerController playerController;
+    private System.Random random;
     [SerializeField, HideInInspector]
     private GameObject spawnedEnemyRoot;
 
-    public int SpawnedCount { get; private set; }
+    private float elapsedSeconds;
+    private float nextSpawnTime;
+    private bool initialized;
+    private bool runStarted;
+
+    public int SpawnedCount => livingEnemies.Count;
+    public float MinutesPlayed => elapsedSeconds / 60f;
 
     public void Spawn(
         HashSet<Vector2Int> corridorCells,
@@ -42,126 +99,177 @@ public class CorridorEnemySpawner : MonoBehaviour
     {
         if (corridorCells == null ||
             corridorFloor == null ||
+            player == null ||
             random == null)
         {
             throw new ArgumentException(
-                "Enemy spawning needs corridor cells, " +
-                "a floor Tilemap and a random generator."
+                "Enemy spawning needs corridor cells, floor, " +
+                "player and a random generator."
             );
-        }
-
-        List<GameObject> prefabs =
-            new List<GameObject>();
-
-        foreach (GameObject prefab in enemyPrefabs)
-        {
-            if (prefab != null &&
-                !prefabs.Contains(prefab))
-            {
-                prefabs.Add(prefab);
-            }
         }
 
         ClearSpawnedEnemies();
 
-        if (enemyCount <= 0)
-            return;
+        this.floor = corridorFloor;
+        this.player = player;
 
-        if (prefabs.Count == 0)
+        // Keep future enemy choices separate from the generator's RNG.
+        this.random = new System.Random(random.Next());
+
+        playerController =
+            player.GetComponentInChildren<PlayerController>(true);
+
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+
+        if (mainCamera == null)
         {
-            Debug.LogWarning(
-                "Assign at least one enemy prefab " +
-                "in CorridorEnemySpawner.",
-                this
-            );
+            Debug.LogError("Assign the gameplay camera.", this);
             return;
         }
 
-        List<Vector2Int> candidates =
-            new List<Vector2Int>(corridorCells);
+        // Stable ordering before runtime position sampling.
+        List<Vector2Int> cells = new(corridorCells);
 
-        // Stable ordering before shuffling allows
-        // fixed dungeon seeds to repeat the placement.
-        candidates.Sort((a, b) =>
+        cells.Sort((a, b) =>
+            a.x != b.x
+                ? a.x.CompareTo(b.x)
+                : a.y.CompareTo(b.y));
+
+        foreach (Vector2Int candidate in cells)
         {
-            int comparison = a.x.CompareTo(b.x);
+            Vector3Int cell =
+                new(candidate.x, candidate.y, 0);
 
-            return comparison != 0
-                ? comparison
-                : a.y.CompareTo(b.y);
-        });
+            if (!floor.HasTile(cell))
+                continue;
 
-        for (int i = candidates.Count - 1; i > 0; i--)
-        {
-            int other = random.Next(i + 1);
+            Vector3 position =
+                floor.GetCellCenterWorld(cell) + spawnOffset;
 
-            Vector2Int temporary = candidates[i];
-            candidates[i] = candidates[other];
-            candidates[other] = temporary;
+            if (!IsOnCorridorFloor(position) ||
+                IsOnRoomFloor(position, rooms))
+            {
+                continue;
+            }
+
+            positions.Add(position);
         }
 
         spawnedEnemyRoot =
             new GameObject("Generated Corridor Enemies");
 
-        // Set references before enabling enemy scripts.
+        spawnedEnemyRoot.transform.SetParent(transform, true);
+
+        // Inactive parent allows player references to be assigned
+        // before enemy OnEnable/Start methods run.
         spawnedEnemyRoot.SetActive(false);
 
-        PlayerController playerController = player != null
-            ? player.GetComponentInChildren<PlayerController>(true)
-            : null;
+        initialized = true;
 
-        List<Vector2> usedPositions =
-            new List<Vector2>();
+        if (!runStarted)
+            BeginNewRun();
+        else
+            nextSpawnTime = elapsedSeconds + spawnInterval;
 
-        foreach (Vector2Int candidate in candidates)
+        if (positions.Count == 0)
         {
-            if (SpawnedCount >= enemyCount)
-                break;
-
-            Vector3Int cell = new Vector3Int(
-                candidate.x,
-                candidate.y,
-                0
+            Debug.LogWarning(
+                "No valid corridor enemy positions were found.",
+                this
             );
+        }
+    }
 
-            if (!corridorFloor.HasTile(cell))
-                continue;
+    // Call this when starting a genuinely new run.
+    // Regenerating the maze alone does not reset difficulty.
+    public void BeginNewRun()
+    {
+        elapsedSeconds = 0f;
+        nextSpawnTime = startingGracePeriod;
+        runStarted = true;
+    }
 
+    private void Update()
+    {
+        if (!initialized ||
+            player == null ||
+            mainCamera == null ||
+            spawnedEnemyRoot == null)
+        {
+            return;
+        }
+
+        // Pausing with Time.timeScale = 0 also pauses difficulty.
+        elapsedSeconds += Time.deltaTime;
+
+        livingEnemies.RemoveAll(
+            enemy => enemy == null || !enemy.activeInHierarchy
+        );
+
+        if (elapsedSeconds < nextSpawnTime)
+            return;
+
+        if (livingEnemies.Count >= maximumLivingEnemies)
+        {
+            nextSpawnTime = elapsedSeconds + retryInterval;
+            return;
+        }
+
+        bool spawned = TrySpawnEnemy();
+
+        nextSpawnTime = elapsedSeconds +
+            (spawned ? spawnInterval : retryInterval);
+    }
+
+    private bool TrySpawnEnemy()
+    {
+        if (positions.Count == 0)
+            return false;
+
+        EnemyEntry entry = ChooseEnemy();
+
+        if (entry == null)
+            return false;
+
+        for (int attempt = 0;
+             attempt < attemptsPerSpawn;
+             attempt++)
+        {
             Vector3 position =
-                corridorFloor.GetCellCenterWorld(cell)
-                + spawnOffset;
+                positions[random.Next(positions.Count)];
 
-            // Exclude room floors.
-            if (IsOnRoomFloor(position, rooms))
-                continue;
+            float distance =
+                Vector2.Distance(position, player.position);
 
-            // Make sure the offset hasn't moved
-            // the spawn position outside the floor.
-            Vector3 floorProbe = new Vector3(
-                position.x,
-                position.y,
-                corridorFloor.CellToWorld(Vector3Int.zero).z
-            );
-
-            if (!corridorFloor.HasTile(
-                corridorFloor.WorldToCell(floorProbe)))
+            if (distance < minimumDistanceFromPlayer ||
+                distance > maximumDistanceFromPlayer)
             {
                 continue;
             }
 
-            if (player != null &&
-                Vector2.Distance(position, player.position)
-                    < minimumDistanceFromPlayer)
+            if (!IsJustOffscreen(position, entry.radius))
+                continue;
+
+            if (!IsOnCorridorFloor(position))
+                continue;
+
+            if (Physics2D.OverlapCircle(
+                position,
+                entry.radius,
+                blockedLayers) != null)
             {
                 continue;
             }
 
             bool tooClose = false;
 
-            foreach (Vector2 used in usedPositions)
+            foreach (GameObject other in livingEnemies)
             {
-                if (Vector2.Distance(position, used)
-                    < minimumDistanceBetweenEnemies)
+                if (Vector2.Distance(
+                    position,
+                    other.transform.position) <
+                    minimumDistanceBetweenEnemies)
                 {
                     tooClose = true;
                     break;
@@ -171,40 +279,149 @@ public class CorridorEnemySpawner : MonoBehaviour
             if (tooClose)
                 continue;
 
-            GameObject prefab =
-                prefabs[random.Next(prefabs.Count)];
+            // Temporarily disable the parent during initialization.
+            // Existing enemies are re-enabled within this method.
+            // Instead, use a separate inactive staging parent so
+            // existing enemies are never interrupted.
+            GameObject staging = new GameObject("Enemy Spawn Staging");
+            staging.SetActive(false);
 
             GameObject enemy = Instantiate(
-                prefab,
+                entry.prefab,
                 position,
-                prefab.transform.rotation,
-                spawnedEnemyRoot.transform
+                entry.prefab.transform.rotation,
+                staging.transform
             );
 
-            enemy.SetActive(true);
-
-            // Your NPCController needs a player reference.
             foreach (NPCController npc in
-                     enemy.GetComponentsInChildren<NPCController>(true))
+                enemy.GetComponentsInChildren<NPCController>(true))
             {
                 npc.SetPlayer(playerController);
             }
 
-            usedPositions.Add(position);
-            SpawnedCount++;
+            enemy.SetActive(true);
+
+            // The main container stays active once spawning begins.
+            spawnedEnemyRoot.SetActive(true);
+            enemy.transform.SetParent(spawnedEnemyRoot.transform, true);
+
+            Destroy(staging);
+
+            livingEnemies.Add(enemy);
+            return true;
         }
 
-        spawnedEnemyRoot.SetActive(true);
+        return false;
+    }
 
-        if (SpawnedCount < enemyCount)
+    private EnemyEntry ChooseEnemy()
+    {
+        eligibleEnemies.Clear();
+        eligibleWeights.Clear();
+
+        float progress = Mathf.Clamp01(
+            MinutesPlayed /
+            Mathf.Max(0.1f, minutesToMaximumDifficulty)
+        );
+
+        float totalWeight = 0f;
+
+        foreach (EnemyEntry entry in enemies)
         {
-            Debug.LogWarning(
-                $"Spawned {SpawnedCount}/{enemyCount} corridor enemies. " +
-                "There were not enough positions satisfying " +
-                "the floor and spacing checks.",
-                this
+            if (entry == null || entry.prefab == null)
+                continue;
+
+            float weight = Mathf.Max(
+                0f,
+                Mathf.Lerp(
+                    entry.startingWeight,
+                    entry.endingWeight,
+                    progress
+                )
             );
+
+            if (weight <= 0f)
+                continue;
+
+            eligibleEnemies.Add(entry);
+            eligibleWeights.Add(weight);
+            totalWeight += weight;
         }
+
+        if (totalWeight <= 0f)
+            return null;
+
+        double roll = random.NextDouble() * totalWeight;
+
+        for (int i = 0; i < eligibleEnemies.Count; i++)
+        {
+            roll -= eligibleWeights[i];
+
+            if (roll < 0d)
+                return eligibleEnemies[i];
+        }
+
+        return eligibleEnemies[eligibleEnemies.Count - 1];
+    }
+
+    private bool IsJustOffscreen(Vector3 position, float radius)
+    {
+        Vector3 center =
+            mainCamera.WorldToViewportPoint(position);
+
+        if (center.z <= 0f)
+            return false;
+
+        float outer = screenBuffer + offscreenBand;
+
+        // Reject positions much farther away than the camera edges.
+        if (center.x < -outer || center.x > 1f + outer ||
+            center.y < -outer || center.y > 1f + outer)
+        {
+            return false;
+        }
+
+        // Project a bounding box so the enemy's sprite/body also
+        // starts outside the buffered view, not just its center.
+        Vector2 minimum =
+            new(float.PositiveInfinity, float.PositiveInfinity);
+
+        Vector2 maximum =
+            new(float.NegativeInfinity, float.NegativeInfinity);
+
+        for (int x = -1; x <= 1; x += 2)
+        {
+            for (int y = -1; y <= 1; y += 2)
+            {
+                Vector3 corner = position +
+                    new Vector3(x * radius, y * radius, 0f);
+
+                Vector3 viewport =
+                    mainCamera.WorldToViewportPoint(corner);
+
+                if (viewport.z <= 0f)
+                    return false;
+
+                minimum = Vector2.Min(minimum, viewport);
+                maximum = Vector2.Max(maximum, viewport);
+            }
+        }
+
+        return maximum.x < -screenBuffer ||
+               minimum.x > 1f + screenBuffer ||
+               maximum.y < -screenBuffer ||
+               minimum.y > 1f + screenBuffer;
+    }
+
+    private bool IsOnCorridorFloor(Vector3 position)
+    {
+        Vector3 probe = position;
+        probe.z = floor.CellToWorld(Vector3Int.zero).z;
+
+        Vector3Int cell = floor.WorldToCell(probe);
+        cell.z = 0;
+
+        return floor.HasTile(cell);
     }
 
     private static bool IsOnRoomFloor(
@@ -216,40 +433,66 @@ public class CorridorEnemySpawner : MonoBehaviour
 
         foreach (RoomDefinition room in rooms)
         {
-            if (room == null ||
-                room.FloorTilemap == null)
-            {
+            if (room == null || room.FloorTilemap == null)
                 continue;
-            }
 
-            Tilemap floor = room.FloorTilemap;
+            Tilemap roomFloor = room.FloorTilemap;
 
             Vector3 probe = position;
-            probe.z = floor.CellToWorld(Vector3Int.zero).z;
+            probe.z = roomFloor.CellToWorld(Vector3Int.zero).z;
 
-            Vector3Int cell = floor.WorldToCell(probe);
+            Vector3Int cell = roomFloor.WorldToCell(probe);
             cell.z = 0;
 
-            if (floor.HasTile(cell))
+            if (roomFloor.HasTile(cell))
                 return true;
         }
 
         return false;
     }
 
+    // Call from enemy death if the corpse stays active.
+    public void NotifyEnemyDied(GameObject enemy)
+    {
+        livingEnemies.Remove(enemy);
+    }
+
     public void ClearSpawnedEnemies()
     {
-        SpawnedCount = 0;
+        initialized = false;
+        positions.Clear();
+        livingEnemies.Clear();
 
-        if (spawnedEnemyRoot == null)
-            return;
+        // Include leftover containers whose references were lost.
+        HashSet<GameObject> roots = new();
 
-        spawnedEnemyRoot.SetActive(false);
+        if (spawnedEnemyRoot != null)
+            roots.Add(spawnedEnemyRoot);
 
-        if (Application.isPlaying)
-            Destroy(spawnedEnemyRoot);
-        else
-            DestroyImmediate(spawnedEnemyRoot);
+        foreach (Transform candidate in
+            UnityEngine.Object.FindObjectsByType<Transform>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None))
+        {
+            if (candidate.gameObject.scene == gameObject.scene &&
+                candidate.name == "Generated Corridor Enemies")
+            {
+                roots.Add(candidate.gameObject);
+            }
+        }
+
+        foreach (GameObject root in roots)
+        {
+            if (root == null)
+                continue;
+
+            root.SetActive(false);
+
+            if (Application.isPlaying)
+                Destroy(root);
+            else
+                DestroyImmediate(root);
+        }
 
         spawnedEnemyRoot = null;
     }
