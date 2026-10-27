@@ -39,9 +39,13 @@ public abstract class MinotaurMelee : BossMove
     private float farChance = 0.7f;
     [SerializeField, Min(0.1f)]
     private float chanceFalloff = 8f;
+    // Past this phase an out of range melee keeps its plain weight, so it doesn't drown out the later moves
+    [SerializeField, Min(0)]
+    private int chanceLastPhase = 0;
 
     public float Reach => MaxRange;
 
+    protected Minotaur Boss { get; private set; }
     protected AxeThrow AxeMove { get; private set; }
 
     protected bool HasAxe => AxeMove == null || AxeMove.HasAxeInHand;
@@ -61,6 +65,7 @@ public abstract class MinotaurMelee : BossMove
     {
         var boss = GetComponentInParent<Minotaur>();
 
+        Boss = boss;
         AxeMove = boss != null
             ? boss.GetComponentInChildren<AxeThrow>(true)
             : GetComponentInChildren<AxeThrow>(true);
@@ -77,7 +82,7 @@ public abstract class MinotaurMelee : BossMove
 
         if (weight <= 0f || !IsAvailable)
             return 0f;
-        if (InRange(distanceToTarget))
+        if (InRange(distanceToTarget) || phaseIndex > chanceLastPhase)
             return weight;
 
         var past = Mathf.Clamp01((distanceToTarget - MaxRange) / chanceFalloff);

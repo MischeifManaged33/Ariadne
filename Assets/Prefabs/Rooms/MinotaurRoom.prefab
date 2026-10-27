@@ -6182,6 +6182,7 @@ GameObject:
   - component: {fileID: 8135807130891560410}
   - component: {fileID: 1300578964181094541}
   - component: {fileID: 5003300028246138106}
+  - component: {fileID: 4139675781175179650}
   m_Layer: 0
   m_Name: PillarBottom
   m_TagString: Untagged
@@ -18894,3 +18895,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6771222144443101055, guid: 825d623d08cd5f5448c728ddf7584967, type: 3}
   m_PrefabInstance: {fileID: 9064902626188723716}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4139675781175179650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4993608547165373987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc01e36b51bf49a4ada3b068f8171005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossPillar

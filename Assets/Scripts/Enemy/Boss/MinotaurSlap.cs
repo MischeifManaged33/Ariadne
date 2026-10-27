@@ -3,7 +3,9 @@ using UnityEngine;
 // Phase 1 move, faster but shorter than swing, also the default
 public class MinotaurSlap : MinotaurMelee
 {
-    protected override bool IsAvailable => AxeMove == null || !HasAxe;
+    protected override bool IsAvailable => AxeMove == null || !HasAxe || AxeRetired;
+
+    private bool AxeRetired => Boss != null && AxeMove.GetWeight(Boss.PhaseIndex) <= 0f;
 
     protected override void Reset()
     {
