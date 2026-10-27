@@ -55,6 +55,31 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
     [SerializeField, HideInInspector]
     private GameObject generatedRoot;
 
+    [Header("Distance Loading")]
+    [SerializeField] private Transform player;
+
+    [SerializeField, Min(0.1f)]
+    private float spawnDistance = 15f;
+
+    [SerializeField, Min(0.1f)]
+    private float hideDistance = 20f;
+
+    [SerializeField, Min(1)]
+    private int maxInstantiationsPerFrame = 2;
+
+    private class PlannedDecoration
+    {
+        public GameObject prefab;
+        public Vector3 position;
+        public Quaternion rotation;
+        public GameObject instance;
+    }
+
+    private readonly List<PlannedDecoration> plannedDecorations =
+        new List<PlannedDecoration>();
+
+    public int PlannedCount => plannedDecorations.Count;
+
     public int SpawnedCount { get; private set; }
 
     private struct Candidate
@@ -200,6 +225,12 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
                     decoration = decoration
                 });
             }
+
+            Debug.Log(
+    $"Decoration locations planned: {plannedDecorations.Count}. " +
+    $"Player assigned: {player != null}",
+    this
+);
         }
 
         // Shuffle locations and matching prefab choices together.
@@ -227,7 +258,7 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
 
         foreach (Candidate candidate in candidates)
         {
-            if (SpawnedCount >= decorationCount)
+            if (plannedDecorations.Count >= decorationCount)
                 break;
 
             if (usedWalls.Contains(candidate.wall))
@@ -251,39 +282,108 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
             if (tooClose)
                 continue;
 
-            GameObject prefab =
-                candidate.decoration.prefab;
+            GameObject prefab = candidate.decoration.prefab;
 
-            GameObject instance = Instantiate(
-                prefab,
-                candidate.mount + candidate.decoration.offset,
-                prefab.transform.rotation,
-                generatedRoot.transform
-            );
-
-            instance.SetActive(true);
+            plannedDecorations.Add(new PlannedDecoration
+            {
+                prefab = prefab,
+                position = candidate.mount + candidate.decoration.offset,
+                rotation = prefab.transform.rotation
+            });
 
             usedPositions.Add(candidate.mount);
             usedWalls.Add(candidate.wall);
-
-            SpawnedCount++;
         }
 
         generatedRoot.SetActive(true);
 
-        if (SpawnedCount < decorationCount)
+        if (plannedDecorations.Count < decorationCount)
         {
             Debug.LogWarning(
-                $"Placed {SpawnedCount}/{decorationCount} " +
+                $"Planned {plannedDecorations.Count}/{decorationCount} " +
                 "wall decorations. Check visible wall Tilemaps, " +
                 "wall sides, room clearance and spacing.",
                 this
             );
         }
+
+        if (Application.isPlaying && player == null)
+        {
+            Debug.LogWarning(
+                "Assign Player on the corridor decoration spawner " +
+                "to enable distance loading.",
+                this
+            );
+        }
+    }
+
+    private void Update()
+    {
+        if (player == null || generatedRoot == null)
+            return;
+
+        float spawnRadius = Mathf.Max(0.1f, spawnDistance);
+
+        // A larger hide radius prevents flickering at the boundary.
+        float hideRadius = Mathf.Max(
+            spawnRadius + 1f,
+            hideDistance
+        );
+
+        float spawnDistanceSquared = spawnRadius * spawnRadius;
+        float hideDistanceSquared = hideRadius * hideRadius;
+
+        int createdThisFrame = 0;
+        int budget = Mathf.Max(1, maxInstantiationsPerFrame);
+
+        Vector2 playerPosition = player.position;
+
+        foreach (PlannedDecoration decoration in plannedDecorations)
+        {
+            float distanceSquared =
+                ((Vector2)decoration.position - playerPosition)
+                .sqrMagnitude;
+
+            if (decoration.instance == null)
+            {
+                if (distanceSquared > spawnDistanceSquared ||
+                    createdThisFrame >= budget)
+                {
+                    continue;
+                }
+
+                decoration.instance = Instantiate(
+                    decoration.prefab,
+                    decoration.position,
+                    decoration.rotation,
+                    generatedRoot.transform
+                );
+
+                decoration.instance.SetActive(true);
+
+                SpawnedCount++;
+                createdThisFrame++;
+                continue;
+            }
+
+            if (distanceSquared > hideDistanceSquared)
+            {
+                if (decoration.instance.activeSelf)
+                    decoration.instance.SetActive(false);
+            }
+            else if (distanceSquared <= spawnDistanceSquared)
+            {
+                if (!decoration.instance.activeSelf)
+                    decoration.instance.SetActive(true);
+            }
+        }
     }
 
     private bool HasVisibleWall(Vector2Int cell)
     {
+        if (visibleWallTilemaps == null)
+            return false;
+
         foreach (Tilemap map in visibleWallTilemaps)
         {
             if (map == null)
@@ -292,9 +392,7 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
             Vector3Int tileCell = Cell3(cell);
 
             if (map.HasTile(tileCell) &&
-                map.GetSprite(tileCell) != null &&
-                map.GetColor(tileCell).a > 0f &&
-                map.color.a > 0f)
+                map.GetSprite(tileCell) != null)
             {
                 return true;
             }
@@ -328,6 +426,7 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
 
     public void ClearSpawned()
     {
+        plannedDecorations.Clear();
         SpawnedCount = 0;
 
         if (generatedRoot == null)

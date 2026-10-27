@@ -16,6 +16,25 @@ public class TransparentWallTilemap : MonoBehaviour
     private void OnEnable()
     {
         wallTilemap = GetComponent<Tilemap>();
+
+        int wallsLayer = LayerMask.NameToLayer("Walls");
+
+        if (wallsLayer >= 0)
+        {
+            gameObject.layer = wallsLayer;
+        }
+        else
+        {
+            Debug.LogError("The GameObject layer 'Walls' is missing.", this);
+        }
+
+        TilemapRenderer wallRenderer = GetComponent<TilemapRenderer>();
+
+        if (wallRenderer != null)
+        {
+            wallRenderer.sortingLayerName = "Walls";
+        }
+
         registeredTilemaps.Add(wallTilemap);
     }
 
