@@ -463,7 +463,7 @@ MonoBehaviour:
   outOfRangeWeight: 0
   minRange: 0
   maxRange: 3.5
-  attackId: 0
+  attackId: 2
   damage: 18
   arc: 120
   windup: 0.45
