@@ -113,6 +113,55 @@ public class DesignedDungeonGenerator : MonoBehaviour
         public Vector2Int destinationAnchor;
     }
 
+    public Vector2Int DebugDungeonSize
+    {
+        get => dungeonSize;
+        set => dungeonSize = value;
+    }
+
+    public int DebugRoomCount
+    {
+        get => roomCount;
+        set => roomCount = value;
+    }
+
+    public int DebugRoomSpacing
+    {
+        get => roomSpacing;
+        set => roomSpacing = value;
+    }
+
+    public int DebugMazeSpacing
+    {
+        get => mazeSpacing;
+        set => mazeSpacing = value;
+    }
+
+    public float DebugLoopChance
+    {
+        get => mazeLoopChance;
+        set => mazeLoopChance = value;
+    }
+
+    public int DebugCorridorRadius
+    {
+        get => corridorRadius;
+        set => corridorRadius = value;
+    }
+
+    public bool DebugUseFixedSeed
+    {
+        get => useFixedSeed;
+        set => useFixedSeed = value;
+    }
+
+    public int DebugSeed
+    {
+        get => seed;
+        set => seed = value;
+    }
+
+
     private void Start()
     {
         RefreshWalkableFloors();
