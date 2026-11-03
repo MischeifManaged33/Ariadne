@@ -71,6 +71,9 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
     {
         public GameObject prefab;
         public Vector3 position;
+        public Vector3 mount;
+        public Vector2Int floorCell;
+        public Vector2Int wallCell;
         public Quaternion rotation;
         public GameObject instance;
     }
@@ -84,6 +87,7 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
 
     private struct Candidate
     {
+        public Vector2Int floor;
         public Vector2Int wall;
         public Vector3 mount;
         public Decoration decoration;
@@ -107,7 +111,56 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
         }
 
         ClearSpawned();
+        PlanDecorations(corridors, floor, rooms, random, null);
+    }
 
+    // Unlike Spawn, this keeps protected instances and their thread connections.
+    public void UpdateAfterShift(
+        HashSet<Vector2Int> corridors,
+        Tilemap floor,
+        List<RoomDefinition> rooms,
+        System.Random random,
+        HashSet<Vector2Int> preservedCells)
+    {
+        if (corridors == null || floor == null || rooms == null ||
+            random == null || preservedCells == null)
+            throw new ArgumentException("Shift decoration update needs floor, rooms, RNG and preserved cells.");
+
+        for (int i = plannedDecorations.Count - 1; i >= 0; i--)
+        {
+            PlannedDecoration decoration = plannedDecorations[i];
+            bool tied = HasTiedThread(decoration.instance);
+            bool protectedMount = preservedCells.Contains(decoration.floorCell) &&
+                preservedCells.Contains(decoration.wallCell);
+            if (tied || protectedMount)
+            {
+                // Never deactivate a tied anchor, including its parent container.
+                if (tied && decoration.instance != null)
+                    decoration.instance.SetActive(true);
+                continue;
+            }
+            if (decoration.instance != null)
+            {
+                decoration.instance.SetActive(false);
+                if (Application.isPlaying) Destroy(decoration.instance);
+                else DestroyImmediate(decoration.instance);
+            }
+            plannedDecorations.RemoveAt(i);
+        }
+
+        SpawnedCount = 0;
+        foreach (PlannedDecoration decoration in plannedDecorations)
+            if (decoration.instance != null) SpawnedCount++;
+        PlanDecorations(corridors, floor, rooms, random, preservedCells);
+    }
+
+    private void PlanDecorations(
+        HashSet<Vector2Int> corridors,
+        Tilemap floor,
+        List<RoomDefinition> rooms,
+        System.Random random,
+        HashSet<Vector2Int> preservedCells)
+    {
         if (decorationCount <= 0)
             return;
 
@@ -168,6 +221,11 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
 
                 Vector2Int wall = cell + direction;
 
+                // Do not add or reshuffle decorations in preserved geometry.
+                if (preservedCells != null &&
+                    (preservedCells.Contains(cell) || preservedCells.Contains(wall)))
+                    continue;
+
                 // A mount must be on a visible wall beside floor.
                 if (corridors.Contains(wall) ||
                     !HasVisibleWall(wall))
@@ -216,6 +274,7 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
 
                 candidates.Add(new Candidate
                 {
+                    floor = cell,
                     wall = wall,
                     mount = Vector3.Lerp(
                         floorCenter,
@@ -226,11 +285,6 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
                 });
             }
 
-            Debug.Log(
-    $"Decoration locations planned: {plannedDecorations.Count}. " +
-    $"Player assigned: {player != null}",
-    this
-);
         }
 
         // Shuffle locations and matching prefab choices together.
@@ -243,18 +297,25 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
             candidates[j] = temporary;
         }
 
-        generatedRoot = new GameObject(
-            "Generated Corridor Decorations"
-        );
-
-        generatedRoot.transform.SetParent(transform, true);
-        generatedRoot.SetActive(false);
+        if (generatedRoot == null)
+        {
+            generatedRoot = new GameObject("Generated Corridor Decorations");
+            generatedRoot.transform.SetParent(transform, true);
+            generatedRoot.SetActive(false);
+        }
 
         List<Vector3> usedPositions =
             new List<Vector3>();
 
         HashSet<Vector2Int> usedWalls =
             new HashSet<Vector2Int>();
+
+        // Existing protected mounts count toward the target and spacing budget.
+        foreach (PlannedDecoration decoration in plannedDecorations)
+        {
+            usedPositions.Add(decoration.mount);
+            usedWalls.Add(decoration.wallCell);
+        }
 
         foreach (Candidate candidate in candidates)
         {
@@ -287,6 +348,9 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
             plannedDecorations.Add(new PlannedDecoration
             {
                 prefab = prefab,
+                mount = candidate.mount,
+                floorCell = candidate.floor,
+                wallCell = candidate.wall,
                 position = candidate.mount + candidate.decoration.offset,
                 rotation = prefab.transform.rotation
             });
@@ -340,6 +404,14 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
 
         foreach (PlannedDecoration decoration in plannedDecorations)
         {
+            // ThreadConnectionPoint.OnDisable detaches the knot, so a tied
+            // decoration must stay active even outside the distance-loading range.
+            if (HasTiedThread(decoration.instance))
+            {
+                decoration.instance.SetActive(true);
+                continue;
+            }
+
             float distanceSquared =
                 ((Vector2)decoration.position - playerPosition)
                 .sqrMagnitude;
@@ -377,6 +449,15 @@ public class CorridorWallDecorationSpawner : MonoBehaviour
                     decoration.instance.SetActive(true);
             }
         }
+    }
+
+    private static bool HasTiedThread(GameObject instance)
+    {
+        if (instance == null) return false;
+        foreach (ThreadConnectionPoint point in
+            instance.GetComponentsInChildren<ThreadConnectionPoint>(true))
+            if (point.IsTied) return true;
+        return false;
     }
 
     private bool HasVisibleWall(Vector2Int cell)

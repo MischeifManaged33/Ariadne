@@ -87,6 +87,14 @@ public class CorridorEnemySpawner : MonoBehaviour
     private bool initialized;
     private bool runStarted;
 
+    private class RoomOccupant
+    {
+        public RoomDefinition room;
+        public Vector3 localPosition;
+    }
+
+    private readonly Dictionary<GameObject, RoomOccupant> shiftRoomOccupants = new();
+
     public int SpawnedCount => livingEnemies.Count;
     public float MinutesPlayed => elapsedSeconds / 60f;
 
@@ -128,6 +136,38 @@ public class CorridorEnemySpawner : MonoBehaviour
             return;
         }
 
+        RebuildSpawnPositions(corridorCells, rooms);
+
+        spawnedEnemyRoot =
+            new GameObject("Generated Corridor Enemies");
+
+        spawnedEnemyRoot.transform.SetParent(transform, true);
+
+        // Inactive parent allows player references to be assigned
+        // before enemy OnEnable/Start methods run.
+        spawnedEnemyRoot.SetActive(false);
+
+        initialized = true;
+
+        if (!runStarted)
+            BeginNewRun();
+        else
+            nextSpawnTime = elapsedSeconds + spawnInterval;
+
+        if (positions.Count == 0)
+        {
+            Debug.LogWarning(
+                "No valid corridor enemy positions were found.",
+                this
+            );
+        }
+    }
+
+    private void RebuildSpawnPositions(
+        HashSet<Vector2Int> corridorCells, List<RoomDefinition> rooms)
+    {
+        positions.Clear();
+
         // Stable ordering before runtime position sampling.
         List<Vector2Int> cells = new(corridorCells);
 
@@ -156,29 +196,98 @@ public class CorridorEnemySpawner : MonoBehaviour
             positions.Add(position);
         }
 
-        spawnedEnemyRoot =
-            new GameObject("Generated Corridor Enemies");
+    }
 
-        spawnedEnemyRoot.transform.SetParent(transform, true);
-
-        // Inactive parent allows player references to be assigned
-        // before enemy OnEnable/Start methods run.
-        spawnedEnemyRoot.SetActive(false);
-
-        initialized = true;
-
-        if (!runStarted)
-            BeginNewRun();
-        else
-            nextSpawnTime = elapsedSeconds + spawnInterval;
-
-        if (positions.Count == 0)
+    // Capture BEFORE moving rooms. These enemies live under the spawner root,
+    // so they would not otherwise move with a room they walked into.
+    public void CaptureRoomOccupants(List<RoomDefinition> rooms)
+    {
+        shiftRoomOccupants.Clear();
+        if (spawnedEnemyRoot == null || rooms == null) return;
+        foreach (Transform child in spawnedEnemyRoot.transform)
         {
-            Debug.LogWarning(
-                "No valid corridor enemy positions were found.",
-                this
-            );
+            if (!child.gameObject.activeInHierarchy) continue;
+            foreach (RoomDefinition room in rooms)
+            {
+                if (!IsOnRoomFloor(child.position, new List<RoomDefinition> { room })) continue;
+                shiftRoomOccupants.Add(child.gameObject, new RoomOccupant
+                {
+                    room = room,
+                    localPosition = room.transform.InverseTransformPoint(child.position)
+                });
+                break;
+            }
         }
+    }
+
+    // Keeps the difficulty clock, remaining spawn cooldown and surviving enemies.
+    // It does not call ClearSpawnedEnemies or BeginNewRun for an initialized run.
+    public void UpdateAfterShift(
+        HashSet<Vector2Int> corridorCells,
+        Tilemap corridorFloor,
+        List<RoomDefinition> rooms,
+        Transform player,
+        System.Random random,
+        HashSet<Vector2Int> preservedCells)
+    {
+        if (corridorCells == null || corridorFloor == null || rooms == null ||
+            player == null || random == null || preservedCells == null)
+            throw new ArgumentException("Shift enemy update needs floor, rooms, player, RNG and preserved cells.");
+
+        if (!initialized || spawnedEnemyRoot == null)
+        {
+            Spawn(corridorCells, corridorFloor, rooms, player, random);
+            return;
+        }
+
+        floor = corridorFloor;
+        this.player = player;
+        playerController = player.GetComponentInChildren<PlayerController>(true);
+        if (mainCamera == null) mainCamera = Camera.main;
+        RebuildSpawnPositions(corridorCells, rooms);
+
+        // Include corpses no longer present in livingEnemies, so they cannot be
+        // left floating at old corridor positions after the floor changes.
+        for (int i = spawnedEnemyRoot.transform.childCount - 1; i >= 0; i--)
+        {
+            GameObject enemy = spawnedEnemyRoot.transform.GetChild(i).gameObject;
+            bool keep = false;
+            if (shiftRoomOccupants.TryGetValue(enemy, out RoomOccupant occupant) &&
+                occupant.room != null)
+            {
+                Vector3 destination = occupant.room.transform.TransformPoint(occupant.localPosition);
+                MoveEnemyWithRoom(enemy, destination);
+                keep = true;
+            }
+            else
+            {
+                Vector3 probe = enemy.transform.position;
+                probe.z = floor.CellToWorld(Vector3Int.zero).z;
+                Vector3Int cell = floor.WorldToCell(probe);
+                keep = preservedCells.Contains(new Vector2Int(cell.x, cell.y)) &&
+                    (IsOnCorridorFloor(probe) || IsOnRoomFloor(probe, rooms));
+            }
+            if (keep) continue;
+            livingEnemies.Remove(enemy);
+            enemy.SetActive(false);
+            if (Application.isPlaying) Destroy(enemy);
+            else DestroyImmediate(enemy);
+        }
+        shiftRoomOccupants.Clear();
+        livingEnemies.RemoveAll(enemy => enemy == null || !enemy.activeInHierarchy);
+        Physics2D.SyncTransforms();
+    }
+
+    private static void MoveEnemyWithRoom(GameObject enemy, Vector3 destination)
+    {
+        Vector3 delta = destination - enemy.transform.position;
+        if (delta.sqrMagnitude < 0.00000001f) return;
+        Rigidbody2D[] bodies = enemy.GetComponentsInChildren<Rigidbody2D>(true);
+        var bodyPositions = new Vector2[bodies.Length];
+        for (int i = 0; i < bodies.Length; i++) bodyPositions[i] = bodies[i].position;
+        enemy.transform.position = destination;
+        for (int i = 0; i < bodies.Length; i++)
+            bodies[i].position = bodyPositions[i] + (Vector2)delta;
     }
 
     // Call this when starting a genuinely new run.
@@ -462,6 +571,7 @@ public class CorridorEnemySpawner : MonoBehaviour
         initialized = false;
         positions.Clear();
         livingEnemies.Clear();
+        shiftRoomOccupants.Clear();
 
         // Include leftover containers whose references were lost.
         HashSet<GameObject> roots = new();

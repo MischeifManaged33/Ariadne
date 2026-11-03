@@ -268,7 +268,7 @@ public partial class DesignedDungeonGenerator
                     continue;
                 }
 
-                CommitShift(layout, spine, floor);
+                CommitShift(layout, spine, floor, lockedCells);
                 changed = true;
                 Debug.Log($"Maze shifted. Kept {pinnedRooms.Count} protected/occupied rooms; " +
                     $"moved {lastShiftMovedRooms} rooms. Candidate {attempt + 1}.", this);
@@ -407,11 +407,16 @@ public partial class DesignedDungeonGenerator
     }
 
     private void CommitShift(
-        List<PlacedRoom> layout, HashSet<Vector2Int> spine, HashSet<Vector2Int> floor)
+        List<PlacedRoom> layout, HashSet<Vector2Int> spine,
+        HashSet<Vector2Int> floor, HashSet<Vector2Int> preservedCells)
     {
         lastShiftMovedRooms = 0;
         for (int i = 0; i < layout.Count; i++)
             if (layout[i].destinationAnchor != shiftLayout[i].destinationAnchor) lastShiftMovedRooms++;
+        // Trial room positions have already been restored. Capture independent
+        // spawned enemies inside rooms before moving the accepted live layout.
+        if (corridorEnemySpawner != null)
+            corridorEnemySpawner.CaptureRoomOccupants(shiftRooms);
         WalkableFloorReady = false;
         try
         {
@@ -440,8 +445,36 @@ public partial class DesignedDungeonGenerator
         shiftSpine = spine;
         shiftFloor = floor;
         RebuildShiftPassages();
-        // Existing corridor spawners are deliberately not called here. Their
-        // global cleanup can destroy tied anchors. See SETUP.md for integration.
+
+        // Geometry is committed. Population updates must not roll it back after
+        // any objects have already been removed; report errors independently.
+        var populationRandom = new System.Random(Guid.NewGuid().GetHashCode());
+        if (corridorDecorations != null)
+        {
+            try
+            {
+                corridorDecorations.UpdateAfterShift(
+                    floor, dungeonFloor, shiftRooms, populationRandom, preservedCells);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("Maze shifted, but updating corridor decorations failed.", this);
+                Debug.LogException(exception, corridorDecorations);
+            }
+        }
+        if (corridorEnemySpawner != null)
+        {
+            try
+            {
+                corridorEnemySpawner.UpdateAfterShift(
+                    floor, dungeonFloor, shiftRooms, player, populationRandom, preservedCells);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("Maze shifted, but updating corridor enemies failed.", this);
+                Debug.LogException(exception, corridorEnemySpawner);
+            }
+        }
     }
 
     private Vector2Int ShiftCell(Vector3 world)
