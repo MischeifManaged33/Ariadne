@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class DesignedDungeonGenerator : MonoBehaviour
+public partial class DesignedDungeonGenerator : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private RoomCatalogue roomCatalogue;
@@ -878,6 +878,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
             new List<RectInt>();
 
         HashSet<Vector2Int> corridors = null;
+        HashSet<Vector2Int> acceptedSpine = null;
 
         bool accepted = false;
         string reason = "No candidate was tested.";
@@ -961,6 +962,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
                     dungeonArea,
                     random
                 );
+
+                acceptedSpine = new HashSet<Vector2Int>(corridors);
 
                 corridors = WidenCorridors(
                     corridors,
@@ -1078,6 +1081,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
             string.Join("; ", report),
             this
         );
+
+        RememberDungeonForShifting(layout, instances, acceptedSpine, corridors);
 
         return true;
     }
