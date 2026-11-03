@@ -627,7 +627,7 @@ TextureImporter:
       name: TileMapGrid_png_test3_15
       rect:
         serializedVersion: 2
-        x: 1665
+        x: 1680
         y: 3517
         width: 280
         height: 280
@@ -649,7 +649,7 @@ TextureImporter:
       name: TileMapGrid_png_test3_16
       rect:
         serializedVersion: 2
-        x: 1952
+        x: 1960
         y: 3540
         width: 280
         height: 280
@@ -4178,7 +4178,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4200,7 +4200,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4222,7 +4222,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4244,7 +4244,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4266,7 +4266,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4288,7 +4288,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4310,7 +4310,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4332,7 +4332,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4354,7 +4354,7 @@ TextureImporter:
         width: 280
         height: 280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4363,6 +4363,50 @@ TextureImporter:
       bones: []
       spriteID: 99ff6eb53dbb18044946d4019e429da3
       internalID: 1765749355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PillarChunk
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 3920
+        width: 280
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fb875213e677ee49b37bd4b5b7163cc
+      internalID: 1304337417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PillarChunkTransparent
+      rect:
+        serializedVersion: 2
+        x: 2800
+        y: 3920
+        width: 280
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc0514d7831204b4e9aabef1e3b67707
+      internalID: 1149087791
       vertices: []
       indices: 
       edges: []
@@ -4383,6 +4427,8 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":280.0,"y":280.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
+      PillarChunk: 1304337417
+      PillarChunkTransparent: 1149087791
       TileMapGrid_png_test3_0: -583226418523120879
       TileMapGrid_png_test3_1: -7888498594990048597
       TileMapGrid_png_test3_10: -5038471485431085531
