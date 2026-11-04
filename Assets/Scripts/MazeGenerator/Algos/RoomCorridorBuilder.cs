@@ -7,267 +7,178 @@ public static class RoomCorridorBuilder
 {
     private static readonly Vector2Int[] directions =
     {
-        Vector2Int.up,
-        Vector2Int.right,
-        Vector2Int.down,
-        Vector2Int.left
+        Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left
     };
 
     private class EntranceStub
     {
-        public Vector2Int outside;
-
-        public readonly List<Vector2Int> cells =
-            new List<Vector2Int>();
+        public readonly List<Vector2Int> cells = new List<Vector2Int>();
     }
 
+    // The optional arguments are used only by ShiftDungeon. Existing calls work.
     public static HashSet<Vector2Int> Build(
-        List<RoomDefinition> rooms,
-        List<RectInt> roomBounds,
-        Tilemap dungeonFloor,
-        RectInt dungeonArea,
-        System.Random random,
-        int mazeSpacing = 6,
-        float mazeLoopChance = 0.08f)
+        List<RoomDefinition> rooms, List<RectInt> roomBounds,
+        Tilemap dungeonFloor, RectInt dungeonArea, System.Random random,
+        int mazeSpacing = 6, float mazeLoopChance = 0.08f,
+        HashSet<Vector2Int> lockedCells = null,
+        HashSet<Vector2Int> retainedFloor = null,
+        HashSet<Vector2Int> retainedSpine = null)
     {
-        if (rooms == null ||
-            roomBounds == null ||
-            rooms.Count == 0 ||
+        if (rooms == null || roomBounds == null || rooms.Count == 0 ||
             rooms.Count != roomBounds.Count)
-        {
-            throw new InvalidOperationException(
-                "Room instances and room bounds do not match."
-            );
-        }
-
+            throw new InvalidOperationException("Room instances and bounds do not match.");
         if (dungeonFloor == null || random == null)
-        {
-            throw new ArgumentException(
-                "Assign the dungeon floor and random generator."
-            );
-        }
+            throw new ArgumentException("Assign the dungeon floor and random generator.");
 
-        HashSet<Vector2Int> blocked =
-            new HashSet<Vector2Int>();
-
+        var blocked = new HashSet<Vector2Int>();
         foreach (RectInt bounds in roomBounds)
             AddRectangle(blocked, Padded(bounds));
 
-        List<EntranceStub> entrances =
-            new List<EntranceStub>();
-
+        var entrances = new List<EntranceStub>();
         for (int i = 0; i < rooms.Count; i++)
         {
             RoomDefinition room = rooms[i];
-
             room.ValidateFloorCompatibility(dungeonFloor);
-
             RoomEntrance[] markers = room.Entrances;
-
             if (markers.Length == 0)
-            {
-                throw new InvalidOperationException(
-                    $"{room.name}: add at least one entrance."
-                );
-            }
+                throw new InvalidOperationException(room.name + ": add at least one entrance.");
 
             foreach (RoomEntrance marker in markers)
             {
                 marker.ValidateSavedCell(room);
-
-                // Verify the entrance using saved cell coordinates.
-                room.ToDungeonCell(
-                    marker.GetRoomCell(),
-                    dungeonFloor
-                );
-
-                EntranceStub entrance = new EntranceStub();
-
-                foreach (Vector3Int localCell in
-                         marker.GetOutwardConnectionCells())
+                room.ToDungeonCell(marker.GetRoomCell(), dungeonFloor);
+                var entrance = new EntranceStub();
+                foreach (Vector3Int local in marker.GetOutwardConnectionCells())
                 {
-                    Vector3Int mapped = room.ToDungeonCell(
-                        localCell,
-                        dungeonFloor
-                    );
-
-                    Vector2Int outsideCell = new Vector2Int(
-                        mapped.x,
-                        mapped.y
-                    );
-
-                    if (!dungeonArea.Contains(outsideCell))
-                    {
-                        throw new InvalidOperationException(
-                            $"{room.name}/{marker.name}: " +
-                            "entrance passage leaves the dungeon area."
-                        );
-                    }
-
+                    Vector3Int mapped = room.ToDungeonCell(local, dungeonFloor);
+                    var cell = new Vector2Int(mapped.x, mapped.y);
+                    if (!dungeonArea.Contains(cell))
+                        throw new InvalidOperationException("An entrance leaves the dungeon area.");
                     for (int j = 0; j < roomBounds.Count; j++)
-                    {
-                        if (j != i &&
-                            Padded(roomBounds[j]).Contains(outsideCell))
-                        {
-                            throw new InvalidOperationException(
-                                $"{room.name}/{marker.name}: " +
-                                "entrance passage is too close " +
-                                "to another room."
-                            );
-                        }
-                    }
+                        if (j != i && Padded(roomBounds[j]).Contains(cell))
+                            throw new InvalidOperationException("An entrance is too close to another room.");
 
-                    entrance.cells.Add(outsideCell);
-                    blocked.Remove(outsideCell);
+                    // A shift may use old floor, but must not open a preserved wall.
+                    if (lockedCells != null && lockedCells.Contains(cell) &&
+                        (retainedFloor == null || !retainedFloor.Contains(cell)))
+                        throw new InvalidOperationException("An entrance would change protected geometry.");
+                    entrance.cells.Add(cell);
+                    blocked.Remove(cell);
                 }
-
                 if (entrance.cells.Count == 0)
-                {
-                    throw new InvalidOperationException(
-                        $"{room.name}/{marker.name}: " +
-                        "no outward passage cells."
-                    );
-                }
-
-                entrance.outside =
-                    entrance.cells[entrance.cells.Count - 1];
-
+                    throw new InvalidOperationException("An entrance has no outward passage cells.");
                 entrances.Add(entrance);
             }
         }
 
-        // Create the branching maze before connecting rooms.
-        HashSet<Vector2Int> corridors =
-            MazeCorridorCarver.Create(
-                blocked,
-                dungeonArea,
-                random,
-                mazeSpacing,
-                mazeLoopChance
-            );
+        if (lockedCells != null)
+            foreach (Vector2Int cell in lockedCells)
+                if (retainedFloor == null || !retainedFloor.Contains(cell))
+                    blocked.Add(cell);
 
-        // Connect every entrance to the same corridor network.
-        for (int i = 0; i < entrances.Count; i++)
-        {
-            // Fallback when there was insufficient room for a maze.
-            if (corridors.Count == 0)
+        HashSet<Vector2Int> corridors = MazeCorridorCarver.Create(
+            blocked, dungeonArea, random, mazeSpacing, mazeLoopChance);
+
+        if (retainedSpine != null)
+            foreach (Vector2Int cell in retainedSpine)
             {
-                corridors.UnionWith(entrances[i].cells);
-                continue;
+                if (!dungeonArea.Contains(cell) || blocked.Contains(cell))
+                    throw new InvalidOperationException("A preserved passage conflicts with a room.");
+                corridors.Add(cell);
             }
 
-            List<Vector2Int> path = FindPath(
-                entrances[i].outside,
-                corridors,
-                blocked,
-                dungeonArea,
-                random
-            );
-
-            if (path == null)
-            {
-                throw new InvalidOperationException(
-                    "An entrance cannot reach the corridor network. " +
-                    "Try more room spacing or another seed."
-                );
-            }
-
-            corridors.UnionWith(path);
-            corridors.UnionWith(entrances[i].cells);
-        }
-
+        // Union all stubs first, then connect every disconnected component.
+        // This also handles several separate protected passages and maze fallback.
+        foreach (EntranceStub entrance in entrances)
+            corridors.UnionWith(entrance.cells);
+        ConnectComponents(corridors, blocked, dungeonArea, random);
         return corridors;
+    }
+
+    private static void ConnectComponents(
+        HashSet<Vector2Int> floor, HashSet<Vector2Int> blocked,
+        RectInt area, System.Random random)
+    {
+        if (floor.Count == 0) return;
+        var ordered = new List<Vector2Int>(floor);
+        ordered.Sort((a, b) => a.x != b.x ? a.x.CompareTo(b.x) : a.y.CompareTo(b.y));
+        HashSet<Vector2Int> connected = Flood(ordered[0], floor);
+        foreach (Vector2Int start in ordered)
+        {
+            if (connected.Contains(start)) continue;
+            List<Vector2Int> path = FindPath(start, connected, blocked, area, random);
+            if (path == null)
+                throw new InvalidOperationException(
+                    "An entrance cannot reach the corridor network. Try more room spacing or another seed.");
+            floor.UnionWith(path);
+            connected = Flood(ordered[0], floor);
+        }
+    }
+
+    private static HashSet<Vector2Int> Flood(Vector2Int start, HashSet<Vector2Int> floor)
+    {
+        var found = new HashSet<Vector2Int> { start };
+        var queue = new Queue<Vector2Int>();
+        queue.Enqueue(start);
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+            foreach (Vector2Int direction in directions)
+            {
+                Vector2Int next = current + direction;
+                if (floor.Contains(next) && found.Add(next)) queue.Enqueue(next);
+            }
+        }
+        return found;
+    }
+
+    private static List<Vector2Int> FindPath(
+        Vector2Int start, HashSet<Vector2Int> target,
+        HashSet<Vector2Int> blocked, RectInt area, System.Random random)
+    {
+        var queue = new Queue<Vector2Int>();
+        var seen = new HashSet<Vector2Int> { start };
+        var previous = new Dictionary<Vector2Int, Vector2Int>();
+        queue.Enqueue(start);
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+            if (target.Contains(current))
+            {
+                var path = new List<Vector2Int> { current };
+                while (current != start)
+                {
+                    current = previous[current];
+                    path.Add(current);
+                }
+                return path;
+            }
+            var shuffled = (Vector2Int[])directions.Clone();
+            for (int i = shuffled.Length - 1; i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                Vector2Int swap = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = swap;
+            }
+            foreach (Vector2Int direction in shuffled)
+            {
+                Vector2Int next = current + direction;
+                if (!area.Contains(next) || blocked.Contains(next) || !seen.Add(next)) continue;
+                previous.Add(next, current);
+                queue.Enqueue(next);
+            }
+        }
+        return null;
     }
 
     private static RectInt Padded(RectInt bounds)
     {
-        return new RectInt(
-            bounds.xMin - 1,
-            bounds.yMin - 1,
-            bounds.width + 2,
-            bounds.height + 2
-        );
+        return new RectInt(bounds.xMin - 1, bounds.yMin - 1, bounds.width + 2, bounds.height + 2);
     }
 
-    private static List<Vector2Int> FindPath(
-        Vector2Int start,
-        HashSet<Vector2Int> connectedCorridors,
-        HashSet<Vector2Int> blocked,
-        RectInt dungeonArea,
-        System.Random random)
-    {
-        Queue<Vector2Int> frontier =
-            new Queue<Vector2Int>();
-
-        HashSet<Vector2Int> visited =
-            new HashSet<Vector2Int>();
-
-        Dictionary<Vector2Int, Vector2Int> previous =
-            new Dictionary<Vector2Int, Vector2Int>();
-
-        frontier.Enqueue(start);
-        visited.Add(start);
-
-        while (frontier.Count > 0)
-        {
-            Vector2Int current = frontier.Dequeue();
-
-            if (connectedCorridors.Contains(current))
-            {
-                List<Vector2Int> path =
-                    new List<Vector2Int>();
-
-                Vector2Int position = current;
-                path.Add(position);
-
-                while (position != start)
-                {
-                    position = previous[position];
-                    path.Add(position);
-                }
-
-                return path;
-            }
-
-            Vector2Int[] shuffled =
-                (Vector2Int[])directions.Clone();
-
-            for (int i = shuffled.Length - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-
-                Vector2Int temporary = shuffled[i];
-                shuffled[i] = shuffled[j];
-                shuffled[j] = temporary;
-            }
-
-            foreach (Vector2Int direction in shuffled)
-            {
-                Vector2Int next = current + direction;
-
-                if (!dungeonArea.Contains(next) ||
-                    blocked.Contains(next) ||
-                    !visited.Add(next))
-                {
-                    continue;
-                }
-
-                previous[next] = current;
-                frontier.Enqueue(next);
-            }
-        }
-
-        return null;
-    }
-
-    private static void AddRectangle(
-        HashSet<Vector2Int> cells,
-        RectInt bounds)
+    private static void AddRectangle(HashSet<Vector2Int> cells, RectInt bounds)
     {
         for (int x = bounds.xMin; x < bounds.xMax; x++)
-        {
             for (int y = bounds.yMin; y < bounds.yMax; y++)
                 cells.Add(new Vector2Int(x, y));
-        }
     }
 }

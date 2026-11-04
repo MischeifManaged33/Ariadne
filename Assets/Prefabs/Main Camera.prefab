@@ -151,6 +151,10 @@ MonoBehaviour:
   lookAheadSmoothTime: 0.35
   idleLookAhead: 0.4
   lookAheadYScale: 0.3
+  shakeDamageThreshold: 10
+  shakeMagnitude: 0.25
+  shakeDuration: 0.25
+  shakeFrequency: 25
 --- !u!114 &977001476052456920
 MonoBehaviour:
   m_ObjectHideFlags: 0

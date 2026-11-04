@@ -703,6 +703,39 @@ public class AriadneThread : MonoBehaviour
         line.SetPositions(renderBuffer);
     }
 
+    public void CopyTiedPath(List<Vector3> destination)
+    {
+        destination.Clear();
+
+        bool hasValidKnot = false;
+        foreach (ThreadKnot knot in knots)
+        {
+            if (knot.point != null && knot.point.Owner == this)
+            {
+                hasValidKnot = true;
+                break;
+            }
+        }
+
+        if (!hasValidKnot)
+            return;
+
+        destination.AddRange(points);
+
+        // Cover the short distance moved since the last laid vertex.
+        if (!detached && !IsWinding && !IsOutOfThread &&
+            followPoint != null && points.Count > 0)
+        {
+            Vector3 last = points[points.Count - 1];
+            Vector3 end = FollowPosition();
+            end.z = last.z;
+            float distance = Vector2.Distance(last, end);
+            if (distance > Epsilon)
+                destination.Add(Vector3.Lerp(
+                    last, end, Mathf.Min(1f, RemainingThread / distance)));
+        }
+    }
+
     private void OnDestroy()
     {
         BreakAllConnections();

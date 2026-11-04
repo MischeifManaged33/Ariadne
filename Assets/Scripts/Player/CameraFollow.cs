@@ -37,6 +37,13 @@ public class CameraFollow : MonoBehaviour
     [SerializeField, Min(0f)]
     private float shakeFrequency = 25f;
 
+    [Header("Maze Warning Shake")]
+    [SerializeField, Min(0f)]
+    private float warningShakeDuration = 0.6f;
+
+    [SerializeField, Min(0f)]
+    private float warningShakeMagnitude = 0.06f;
+
     private Player _player;
     private PlayerHealth _health;
     private Rigidbody2D _targetBody;
@@ -103,6 +110,12 @@ public class CameraFollow : MonoBehaviour
     {
         if (amount > shakeDamageThreshold)
             Shake(shakeDuration, shakeMagnitude);
+    }
+
+    public void PlayWarningShake()
+    {
+        Debug.Log("Maze warning camera shake triggered.", this);
+        Shake(1f, 0.35f);
     }
 
     public void Shake(float duration, float magnitude)

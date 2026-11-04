@@ -53913,6 +53913,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2976674229660184274, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.x
       value: 75.95
@@ -53956,6 +53960,10 @@ PrefabInstance:
     - target: {fileID: 3907533839432596087, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121504570387299883, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6319265570091660172, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_Name
@@ -125658,6 +125666,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ccdc743b989df4c88ce9d931f7f40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DesignedDungeonGenerator
+  enableMazeShifting: 1
+  ariadneThread: {fileID: 1624719838}
+  corridorEntriesBeforeWarning: 2
+  shiftWarningSeconds: 1
+  shiftAttempts: 30
+  keepBossFarthestOnShift: 1
+  onShiftWarning:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1767464698}
+        m_TargetAssemblyTypeName: CameraFollow, Assembly-CSharp
+        m_MethodName: PlayWarningShake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDungeonShifted:
+    m_PersistentCalls:
+      m_Calls: []
+  onShiftFailed:
+    m_PersistentCalls:
+      m_Calls: []
   roomCatalogue: {fileID: 11400000, guid: 97dcde2fe230f8b4799e0544a50f5c61, type: 2}
   dungeonFloor: {fileID: 966417445}
   minotaurRoomPrefab: {fileID: 8084174052593425488, guid: 0b5b5ef0e221f3842b9b0a667a38dff2, type: 3}
@@ -162969,6 +163004,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
   m_PrefabInstance: {fileID: 904031143}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1624719838 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4121504570387299883, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
+  m_PrefabInstance: {fileID: 904031143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186e1699e95fb9240b0da6cb70027992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AriadneThread
 --- !u!1 &1629684613
 GameObject:
   m_ObjectHideFlags: 0
@@ -178222,6 +178268,17 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 5173787824451901751, guid: 26b6d0d9d0e8c424d9743f3eb85dc092, type: 3}
   m_PrefabInstance: {fileID: 15236890}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1767464698 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6695311361821593353, guid: 26b6d0d9d0e8c424d9743f3eb85dc092, type: 3}
+  m_PrefabInstance: {fileID: 15236890}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa83c979a58a0345a7431345d677917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
 --- !u!1 &1781061179
 GameObject:
   m_ObjectHideFlags: 0
@@ -190051,7 +190108,7 @@ MonoBehaviour:
     radius: 0
   maximumLivingEnemies: 20
   startingGracePeriod: 2
-  spawnInterval: 1
+  spawnInterval: 1.5
   retryInterval: 0.5
   mainCamera: {fileID: 1767464696}
   screenBuffer: 0.08

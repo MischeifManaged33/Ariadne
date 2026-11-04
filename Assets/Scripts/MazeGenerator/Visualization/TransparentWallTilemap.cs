@@ -28,13 +28,6 @@ public class TransparentWallTilemap : MonoBehaviour
             Debug.LogError("The GameObject layer 'Walls' is missing.", this);
         }
 
-        TilemapRenderer wallRenderer = GetComponent<TilemapRenderer>();
-
-        if (wallRenderer != null)
-        {
-            wallRenderer.sortingLayerName = "Walls";
-        }
-
         registeredTilemaps.Add(wallTilemap);
     }
 
