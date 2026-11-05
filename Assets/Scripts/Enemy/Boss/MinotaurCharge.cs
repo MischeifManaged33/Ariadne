@@ -101,7 +101,6 @@ public class MinotaurCharge : BossMove
         var direction = Aim(boss, boss.Facing);
 
         sounds.PlayWindup(boss.Position);
-        PlayAttack(boss, windup);
 
         for (var elapsed = 0f; elapsed < windup; elapsed += Time.deltaTime) {
             if (elapsed < windup * trackFraction)
@@ -116,10 +115,10 @@ public class MinotaurCharge : BossMove
             yield return null;
         }
 
-        EndAttack(boss);
-
         lane.Flash();
         sounds.PlaySwing(boss.Position);
+
+        PlayAttack(boss, 0f);
 
         var outcome = Outcome.Timeout;
 
@@ -145,6 +144,7 @@ public class MinotaurCharge : BossMove
             yield return null;
         }
 
+        EndAttack(boss);
         lane.SetVisible(false);
 
         switch (outcome) {

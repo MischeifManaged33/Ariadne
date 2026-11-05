@@ -33,8 +33,11 @@ public class PhoenixDash : PhoenixMove
     private float recovery = 0.7f;
 
     [Header("Fire Trail")]
+    [SerializeField]
+    private PhoenixFireTrail trailPrefab;
     [SerializeField, Min(0.1f)]
     private float trailWidth = 0.8f;
+    // Fraction of the trail art's width between patches
     [SerializeField, Range(0.2f, 1f)]
     private float trailSpacing = 0.75f;
     [SerializeField, Min(0f)]
@@ -45,8 +48,6 @@ public class PhoenixDash : PhoenixMove
     private float trailLifetime = 3f;
     [SerializeField, Min(0.01f)]
     private float trailFadeTime = 0.5f;
-    [SerializeField]
-    private Color trailColor = new Color(0.9f, 0.1f, 0.05f, 0.75f);
 
     [Header("Telegraph")]
     [SerializeField]
@@ -99,7 +100,7 @@ public class PhoenixDash : PhoenixMove
 
         var start = ai.Position;
         var end = start + Isometric.ToScreen(direction * length, ai.YScale);
-        var step = trailWidth * trailSpacing;
+        var step = TrailStep();
         var laid = 0f;
         var hit = false;
 
@@ -132,13 +133,21 @@ public class PhoenixDash : PhoenixMove
             _runtimeIndicator.SetVisible(false);
     }
 
+    // Patches are spaced by the art so they join up, falling back to the burn width without any
+    private float TrailStep()
+    {
+        var art = trailPrefab != null ? trailPrefab.ArtWidth : 0f;
+
+        return (art > 0f ? art : trailWidth) * trailSpacing;
+    }
+
     private float LayTrail(EnemyAI ai, Vector2 start, Vector2 direction, float covered, float laid, float step)
     {
         while (laid <= covered) {
             var point = start + Isometric.ToScreen(direction * laid, ai.YScale);
 
-            PhoenixFireTrail.Spawn(point, trailWidth, ai.YScale, trailDamage, trailTickInterval, trailLifetime,
-                trailFadeTime, targetLayers, trailColor);
+            PhoenixFireTrail.Spawn(trailPrefab, point, trailWidth, ai.YScale, trailDamage, trailTickInterval,
+                trailLifetime, trailFadeTime, targetLayers);
 
             laid += step;
         }
