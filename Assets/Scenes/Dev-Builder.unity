@@ -280,12 +280,11 @@ MonoBehaviour:
   count: 3
   spread: 30
   range: 15
+  fireballPrefab: {fileID: 0}
   speed: 17
   hitRadius: 0.5
   blastRadius: 2.5
   damage: 15
-  color: {r: 1, g: 0.55, b: 0.1, a: 1}
-  size: 0.35
   windup: 0.8
   trackFraction: 0.6
   recovery: 0.6
@@ -452,13 +451,13 @@ MonoBehaviour:
   windup: 0.6
   trackFraction: 0.8
   recovery: 1
+  trailPrefab: {fileID: 0}
   trailWidth: 0.8
   trailSpacing: 0.75
   trailDamage: 4
   trailTickInterval: 0.5
   trailLifetime: 10
   trailFadeTime: 0.5
-  trailColor: {r: 0.9, g: 0.1, b: 0.05, a: 0.75}
   indicator: {fileID: 0}
   sounds:
     windup:
@@ -125666,7 +125665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ccdc743b989df4c88ce9d931f7f40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DesignedDungeonGenerator
-  enableMazeShifting: 1
+  enableMazeShifting: 0
   ariadneThread: {fileID: 1624719838}
   corridorEntriesBeforeWarning: 2
   shiftWarningSeconds: 1
@@ -128014,6 +128013,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TransparentWalls
   player: {fileID: 1624719835}
   mainCamera: {fileID: 1767464696}
+  playerRenderer: {fileID: 0}
   fadeAlpha: 0
   foregroundBufferPixels: 100
   foregroundDepthPixels: 180
@@ -187201,12 +187201,11 @@ MonoBehaviour:
   count: 3
   spread: 30
   range: 15
+  fireballPrefab: {fileID: 0}
   speed: 17
   hitRadius: 0.5
   blastRadius: 2.5
   damage: 15
-  color: {r: 1, g: 0.55, b: 0.1, a: 1}
-  size: 0.35
   windup: 0.8
   trackFraction: 0.6
   recovery: 0.6
@@ -187373,13 +187372,13 @@ MonoBehaviour:
   windup: 0.6
   trackFraction: 0.8
   recovery: 1
+  trailPrefab: {fileID: 0}
   trailWidth: 0.8
   trailSpacing: 0.75
   trailDamage: 4
   trailTickInterval: 0.5
   trailLifetime: 10
   trailFadeTime: 0.5
-  trailColor: {r: 0.9, g: 0.1, b: 0.05, a: 0.75}
   indicator: {fileID: 0}
   sounds:
     windup:
@@ -199170,12 +199169,11 @@ MonoBehaviour:
   count: 3
   spread: 30
   range: 15
+  fireballPrefab: {fileID: 0}
   speed: 17
   hitRadius: 0.5
   blastRadius: 2.5
   damage: 15
-  color: {r: 1, g: 0.55, b: 0.1, a: 1}
-  size: 0.35
   windup: 0.8
   trackFraction: 0.6
   recovery: 0.6
@@ -199342,13 +199340,13 @@ MonoBehaviour:
   windup: 0.6
   trackFraction: 0.8
   recovery: 1
+  trailPrefab: {fileID: 0}
   trailWidth: 0.8
   trailSpacing: 0.75
   trailDamage: 4
   trailTickInterval: 0.5
   trailLifetime: 10
   trailFadeTime: 0.5
-  trailColor: {r: 0.9, g: 0.1, b: 0.05, a: 0.75}
   indicator: {fileID: 0}
   sounds:
     windup:
