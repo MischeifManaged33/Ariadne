@@ -13,9 +13,33 @@ public class TransparentWallTilemap : MonoBehaviour
 
     private Tilemap wallTilemap;
 
+    [SerializeField, HideInInspector]
+    private bool assignWallsLayer = true;
+
+    public bool AssignWallsLayer
+    {
+        get => assignWallsLayer;
+        set => assignWallsLayer = value;
+    }
+
+    [SerializeField, HideInInspector]
+    private bool ignoreSorting;
+
+    public bool IgnoreSorting
+    {
+        get => ignoreSorting;
+        set => ignoreSorting = value;
+    }
+
     private void OnEnable()
     {
         wallTilemap = GetComponent<Tilemap>();
+
+        if (!assignWallsLayer)
+        {
+            registeredTilemaps.Add(wallTilemap);
+            return;
+        }
 
         int wallsLayer = LayerMask.NameToLayer("Walls");
 
