@@ -382,7 +382,7 @@ MonoBehaviour:
   outOfRangeWeight: 0.15
   minRange: 4
   maxRange: 20
-  attackId: 0
+  attackId: 3
   axePrefab: {fileID: -4408054711783455132, guid: b293b77107116de4baccb587090d5df6, type: 3}
   throwOrigin: {fileID: 0}
   spawnOffset: 0.7
@@ -682,7 +682,7 @@ MonoBehaviour:
   outOfRangeWeight: 0
   minRange: 2
   maxRange: 16
-  attackId: 0
+  attackId: 4
   speed: 18
   maxDuration: 1.8
   turnSpeed: 50
