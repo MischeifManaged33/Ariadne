@@ -139,6 +139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Harpy
       objectReference: {fileID: 0}
+    - target: {fileID: 3876905382218478030, guid: d0a071adcdb75464985842c8e5e3c732, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4516260258099715100, guid: d0a071adcdb75464985842c8e5e3c732, type: 3}
       propertyPath: m_Size.x
       value: 3.4133334
@@ -432,7 +436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3876905382218478030, guid: 783f019c66a058f4390dab7d47de27f8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4516260258099715100, guid: 783f019c66a058f4390dab7d47de27f8, type: 3}
       propertyPath: m_Sprite
@@ -8165,7 +8169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.44
+      value: 13.57
       objectReference: {fileID: 0}
     - target: {fileID: 3117194309190071369, guid: 2b7c440e308e59940a688d3ebe8a4c17, type: 3}
       propertyPath: m_LocalPosition.y

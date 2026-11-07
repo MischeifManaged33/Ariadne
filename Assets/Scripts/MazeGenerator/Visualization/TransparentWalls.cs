@@ -171,6 +171,9 @@ public class TransparentWalls : MonoBehaviour
 
     private bool SortsAbovePlayer(Tilemap tilemap)
     {
+        if (tilemap.TryGetComponent(out TransparentWallTilemap wall) && wall.IgnoreSorting)
+            return true;
+
         if (playerRenderer == null || !tilemap.TryGetComponent(out TilemapRenderer wallRenderer))
             return true;
 
