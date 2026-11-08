@@ -13,9 +13,33 @@ public class TransparentWallTilemap : MonoBehaviour
 
     private Tilemap wallTilemap;
 
+    [SerializeField, HideInInspector]
+    private bool assignWallsLayer = true;
+
+    public bool AssignWallsLayer
+    {
+        get => assignWallsLayer;
+        set => assignWallsLayer = value;
+    }
+
+    [SerializeField, HideInInspector]
+    private bool ignoreSorting;
+
+    public bool IgnoreSorting
+    {
+        get => ignoreSorting;
+        set => ignoreSorting = value;
+    }
+
     private void OnEnable()
     {
         wallTilemap = GetComponent<Tilemap>();
+
+        if (!assignWallsLayer)
+        {
+            registeredTilemaps.Add(wallTilemap);
+            return;
+        }
 
         int wallsLayer = LayerMask.NameToLayer("Walls");
 
@@ -26,13 +50,6 @@ public class TransparentWallTilemap : MonoBehaviour
         else
         {
             Debug.LogError("The GameObject layer 'Walls' is missing.", this);
-        }
-
-        TilemapRenderer wallRenderer = GetComponent<TilemapRenderer>();
-
-        if (wallRenderer != null)
-        {
-            wallRenderer.sortingLayerName = "Walls";
         }
 
         registeredTilemaps.Add(wallTilemap);

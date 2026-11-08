@@ -14,6 +14,8 @@ public class PhoenixVolley : PhoenixMove
     private float range = 6f;
 
     [Header("Fireball")]
+    [SerializeField]
+    private PhoenixFireball fireballPrefab;
     [SerializeField, Min(0.1f)]
     private float speed = 8f;
     [SerializeField, Min(0.05f)]
@@ -22,10 +24,6 @@ public class PhoenixVolley : PhoenixMove
     private float blastRadius = 1.2f;
     [SerializeField, Min(0f)]
     private float damage = 15f;
-    [SerializeField]
-    private Color color = new Color(1f, 0.55f, 0.1f, 1f);
-    [SerializeField, Min(0.05f)]
-    private float size = 0.35f;
 
     [Header("Timing")]
     [SerializeField, Min(0.05f)]
@@ -114,8 +112,8 @@ public class PhoenixVolley : PhoenixMove
 
             var end = origin + Isometric.ToScreen(_directions[i] * _lengths[i], ai.YScale);
 
-            PhoenixFireball.Launch(origin, end, speed, hitRadius, blastRadius, damage, ai.YScale, targetLayers,
-                sounds, color, size);
+            PhoenixFireball.Launch(fireballPrefab, origin, end, speed, hitRadius, blastRadius, damage, ai.YScale,
+                targetLayers, sounds);
         }
 
         yield return new WaitForSeconds(recovery);

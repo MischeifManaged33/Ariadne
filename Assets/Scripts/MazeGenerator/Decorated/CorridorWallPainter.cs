@@ -11,7 +11,7 @@ public class CorridorWallPainter : MonoBehaviour
     [SerializeField] private Tilemap wallsAlongY;
     [SerializeField] private Tilemap corners;
 
-    [Header("Wall Pieces — Top or Single Layer")]
+    [Header("Wall Pieces ï¿½ Top or Single Layer")]
     [SerializeField] private TileBase straightAlongX;
     [SerializeField] private TileBase straightAlongY;
     [SerializeField] private TileBase connectorTile;
@@ -20,7 +20,7 @@ public class CorridorWallPainter : MonoBehaviour
     [SerializeField] private Tilemap frontWallsAlongX;
     [SerializeField] private Tilemap frontWallsAlongY;
 
-    [Header("Front Wall Offsets — Local Units")]
+    [Header("Front Wall Offsets ï¿½ Local Units")]
     [SerializeField] private Vector3 frontAlongXOffset;
     [SerializeField] private Vector3 frontAlongYOffset;
 
@@ -44,8 +44,12 @@ public class CorridorWallPainter : MonoBehaviour
     )]
     [SerializeField] private TileBase bodyAlongY;
 
+    [Header("Sorting")]
+    [SerializeField] private string[] heightSortingLayers = { "Wall", "Wall2", "Wall3" };
+    [SerializeField] private int wallSortingOrder = 0;
+
     // Retained to preserve existing Inspector data.
-    [Header("Connector Offsets — Local Units")]
+    [Header("Connector Offsets ï¿½ Local Units")]
     [SerializeField] private Vector3 insideJoinOffset;
     [SerializeField] private Vector3 outsideJoinOffset;
 
@@ -141,6 +145,7 @@ public class CorridorWallPainter : MonoBehaviour
         foreach (Tilemap map in visualWalls)
         {
             map.ClearAllTiles();
+            ApplyWallSorting(map.GetComponent<TilemapRenderer>(), 0, IsBottomLeftFace(map));
 
             // Automatically register all four base wall Tilemaps.
             if (map.GetComponent<TransparentWallTilemap>() == null)
@@ -177,32 +182,90 @@ public class CorridorWallPainter : MonoBehaviour
                 frontYEdges.Add(leftEdge);
         }
 
+        List<Vector2Int> cornerExtensions = new List<Vector2Int>();
+
+        foreach (Vector2Int floor in corridorFloor)
+        {
+            Vector2Int leftEdge = floor + Vector2Int.left;
+
+            if (!frontYEdges.Contains(leftEdge))
+                continue;
+
+            Vector2Int bottomCorner = leftEdge + Vector2Int.down;
+
+            if (frontXEdges.Contains(floor + Vector2Int.down) &&
+                CanPaint(bottomCorner, allFloor, protectedCells))
+            {
+                cornerExtensions.Add(bottomCorner);
+            }
+
+            Vector2Int leftCorner = leftEdge + Vector2Int.up;
+
+            if (backXEdges.Contains(floor + Vector2Int.up) &&
+                CanPaint(leftCorner, allFloor, protectedCells))
+            {
+                cornerExtensions.Add(leftCorner);
+            }
+        }
+
+        frontYEdges.UnionWith(cornerExtensions);
+
+        cornerExtensions.Clear();
+
+        foreach (Vector2Int floor in corridorFloor)
+        {
+            Vector2Int rightEdge = floor + Vector2Int.right;
+            Vector2Int rightCorner = rightEdge + Vector2Int.down;
+
+            if (backYEdges.Contains(rightEdge) &&
+                frontXEdges.Contains(floor + Vector2Int.down) &&
+                CanPaint(rightCorner, allFloor, protectedCells))
+            {
+                cornerExtensions.Add(rightCorner);
+            }
+        }
+
+        backYEdges.UnionWith(cornerExtensions);
+
+        frontXEdges.ExceptWith(frontYEdges);
+        backXEdges.ExceptWith(frontYEdges);
+        backYEdges.ExceptWith(frontYEdges);
+
+        frontXEdges.ExceptWith(backXEdges);
+        backYEdges.ExceptWith(backXEdges);
+
+        backYEdges.ExceptWith(frontXEdges);
+
         PaintFace(
             wallsAlongX,
             straightAlongX,
             bodyAlongX,
-            backXEdges
+            backXEdges,
+            false
         );
 
         PaintFace(
             wallsAlongY,
             straightAlongY,
             bodyAlongY,
-            backYEdges
+            backYEdges,
+            false
         );
 
         PaintFace(
             frontWallsAlongX,
             straightAlongX,
             bodyAlongX,
-            frontXEdges
+            frontXEdges,
+            true
         );
 
         PaintFace(
             frontWallsAlongY,
             straightAlongY,
             bodyAlongY,
-            frontYEdges
+            frontYEdges,
+            true
         );
     }
 
@@ -228,9 +291,19 @@ public class CorridorWallPainter : MonoBehaviour
         Tilemap source,
         TileBase topTile,
         TileBase bodyTile,
-        HashSet<Vector2Int> cells)
+        HashSet<Vector2Int> cells,
+        bool isFront)
     {
         int count = Mathf.Max(1, wallHeight);
+
+        ConfigureWallPhysics(
+            source,
+            hasCollider: true,
+            isTrigger: false,
+            blocksLight: isFront || count == 1
+        );
+
+        SetFadeable(source, isFront);
 
         TileBase body =
             bodyTile != null ? bodyTile : topTile;
@@ -265,7 +338,9 @@ public class CorridorWallPainter : MonoBehaviour
                 source,
                 tile,
                 painted,
-                level
+                level,
+                !isFront && level == count - 1,
+                isFront
             );
         }
     }
@@ -274,17 +349,18 @@ public class CorridorWallPainter : MonoBehaviour
         Tilemap source,
         TileBase tile,
         List<Vector3Int> cells,
-        int level)
+        int level,
+        bool blocksLight,
+        bool canFade)
     {
         GameObject layerObject = new GameObject(
     source.name + " - Height " + (level + 1),
     typeof(Tilemap),
-    typeof(TilemapRenderer),
-    typeof(TilemapCollider2D)
+    typeof(TilemapRenderer)
 );
 
-        layerObject.AddComponent<TransparentWallTilemap>();
-        layerObject.layer = LayerMask.NameToLayer("Walls");
+        // Upper front layers fade, including those sorted below the player.
+        layerObject.AddComponent<TransparentWallTilemap>().IgnoreSorting = true;
 
         Transform layerTransform = layerObject.transform;
 
@@ -334,16 +410,15 @@ public class CorridorWallPainter : MonoBehaviour
             visualRenderer.sortOrder =
                 sourceRenderer.sortOrder;
 
-            visualRenderer.mode = sourceRenderer.mode;
 
             visualRenderer.maskInteraction =
                 sourceRenderer.maskInteraction;
 
             visualRenderer.enabled =
                 sourceRenderer.enabled;
-
-            visualRenderer.sortingLayerName = "Wall";
         }
+
+        ApplyWallSorting(visualRenderer, level, IsBottomLeftFace(source));
 
         foreach (Vector3Int cell in cells)
         {
@@ -376,7 +451,14 @@ public class CorridorWallPainter : MonoBehaviour
             level = level
         });
 
-        // Upper layers have no physics colliders.
+        ConfigureWallPhysics(
+            visual,
+            hasCollider: blocksLight,
+            isTrigger: true,
+            blocksLight: blocksLight
+        );
+
+        SetFadeable(visual, canFade);
     }
 
     private void LateUpdate()
@@ -408,12 +490,13 @@ public class CorridorWallPainter : MonoBehaviour
                     layer.sourceRenderer.enabled;
             }
 
-            // Carry tile-color fading to every height layer.
             foreach (Vector3Int cell in layer.cells)
             {
+                Color current = layer.visual.GetColor(cell);
                 Color color = layer.source.GetColor(cell);
+                color.a = current.a;
 
-                if (layer.visual.GetColor(cell) != color)
+                if (current != color)
                     layer.visual.SetColor(cell, color);
             }
         }
@@ -461,6 +544,68 @@ public class CorridorWallPainter : MonoBehaviour
             $"Painted {boundary.Count} invisible boundary tiles.",
             this
         );
+    }
+
+    private static void ConfigureWallPhysics(
+        Tilemap map,
+        bool hasCollider,
+        bool isTrigger,
+        bool blocksLight)
+    {
+        TilemapCollider2D collider =
+            map.GetComponent<TilemapCollider2D>();
+
+        if (hasCollider)
+        {
+            if (collider == null)
+                collider = map.gameObject.AddComponent<TilemapCollider2D>();
+
+            collider.enabled = true;
+            collider.isTrigger = isTrigger;
+        }
+        else if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
+        // Light and enemy sight raycast against the Walls layer.
+        if (map.TryGetComponent(out TransparentWallTilemap transparent))
+            transparent.AssignWallsLayer = false;
+
+        int wallsLayer = LayerMask.NameToLayer("Walls");
+
+        map.gameObject.layer =
+            blocksLight && wallsLayer >= 0 ? wallsLayer : 0;
+    }
+
+    private static void SetFadeable(Tilemap map, bool canFade)
+    {
+        if (map.TryGetComponent(out TransparentWallTilemap transparent))
+            transparent.enabled = canFade;
+    }
+
+    private bool IsBottomLeftFace(Tilemap map)
+    {
+        return map == frontWallsAlongY;
+    }
+
+    private void ApplyWallSorting(TilemapRenderer renderer, int level, bool isBottomLeft)
+    {
+        if (renderer == null)
+            return;
+
+        string layerName = "Wall";
+
+        if (heightSortingLayers != null && heightSortingLayers.Length > 0)
+        {
+            layerName = heightSortingLayers[
+                Mathf.Clamp(level, 0, heightSortingLayers.Length - 1)
+            ];
+        }
+
+        renderer.mode = TilemapRenderer.Mode.Individual;
+        renderer.sortingLayerName = layerName;
+        renderer.sortingOrder = wallSortingOrder;
     }
 
     private static bool CanPaint(

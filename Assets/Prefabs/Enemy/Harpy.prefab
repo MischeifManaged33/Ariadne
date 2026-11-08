@@ -192,7 +192,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2137789123
-  m_SortingLayer: 22
+  m_SortingLayer: 23
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -498,7 +498,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.32650793, y: 1.0299113}
+  m_Offset: {x: -0.12785777, y: 1.0299113}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -508,7 +508,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.1234419, y: 2.077291}
+  m_Size: {x: 1.5207422, y: 2.077291}
   m_EdgeRadius: 0
 --- !u!95 &3701377046681198117
 Animator:
@@ -579,7 +579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70fb1d52c2390e9469917afc66e4a979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthBar
-  enemy: {fileID: 0}
+  enemy: {fileID: 7310965188765842295}
   frameRenderer: {fileID: 4435882978876071326}
   fillRenderer: {fileID: 7840818265723643482}
   trailRenderer: {fileID: 3615500856040760632}
@@ -700,7 +700,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 23
+  m_SortingLayer: 24
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6726941278072046253, guid: f4011552caeb12e4b8dca6eb17297b90, type: 3}
@@ -792,7 +792,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -993227681
-  m_SortingLayer: 23
+  m_SortingLayer: 24
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8444687031501181442, guid: 1585b1d8de458bf4c9c4e78abde4c8fd, type: 3}

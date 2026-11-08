@@ -118,6 +118,8 @@ public class Basilisk : Enemy
 
     public State CurrentState { get; private set; } = State.Patrol;
     public Vector2 Facing { get; private set; } = Vector2.left;
+    public bool IsTurning { get; private set; }
+    public bool ArtTurned { get; private set; }
 
     private Vector2 Position => Body != null ? Body.position : (Vector2)transform.position;
     private Vector2 EyePosition => eye != null ? (Vector2)eye.position : (Vector2)transform.position;
@@ -126,6 +128,7 @@ public class Basilisk : Enemy
     private bool Gazing => CurrentState is State.Patrol or State.Returning or State.TailSwipe or State.TurnAround;
 
     private EnemyMover _mover;
+    private BasiliskAnimator _animation;
     private Coroutine _routine;
 
     private Vector2[] _route = Array.Empty<Vector2>();
@@ -160,6 +163,7 @@ public class Basilisk : Enemy
         base.Awake();
 
         _mover = GetComponent<EnemyMover>();
+        _animation = GetComponent<BasiliskAnimator>();
 
         if (targetLayers.value == 0)
             targetLayers = LayerMask.GetMask("Player");
@@ -383,6 +387,7 @@ public class Basilisk : Enemy
             return;
 
         var turned = artFacesLeft ? Facing.x > 0f : Facing.x < 0f;
+        ArtTurned = turned;
         visual.flipX = turned != _artFlipped;
 
         if (eye != null && eye.parent != null) {
@@ -466,6 +471,9 @@ public class Basilisk : Enemy
 
         peckSounds.PlayWindup(Position);
 
+        if (_animation != null)
+            _animation.PlayAttack(BasiliskAnimator.Peck, peckWindup);
+
         for (var elapsed = 0f; elapsed < peckWindup; elapsed += Time.deltaTime) {
             if (_target != null)
                 LookAt(TargetPoint());
@@ -474,6 +482,11 @@ public class Basilisk : Enemy
         }
 
         Peck();
+
+        // Lets the land play as the hit happens
+        if (_animation != null)
+            _animation.EndAttack();
+
         ReleaseTarget();
 
         SetState(State.Recovering);
@@ -595,6 +608,8 @@ public class Basilisk : Enemy
             side = Vector2.SignedAngle(start, Isometric.GroundDirection(Position, TargetPoint(), YScale)) >= 0f
                 ? 1f : -1f;
 
+        IsTurning = true;
+
         for (var turned = 0f; turned < 180f; turned += turnAroundSpeed * Time.deltaTime) {
             Facing = Rotate(start, side * turned);
             _desiredFacing = Facing;
@@ -602,6 +617,7 @@ public class Basilisk : Enemy
             yield return null;
         }
 
+        IsTurning = false;
         Facing = -start;
         _desiredFacing = Facing;
 
@@ -636,6 +652,11 @@ public class Basilisk : Enemy
             StopCoroutine(_routine);
             _routine = null;
         }
+
+        IsTurning = false;
+
+        if (_animation != null)
+            _animation.EndAttack();
 
         if (tailIndicator != null)
             tailIndicator.SetVisible(false);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class DesignedDungeonGenerator : MonoBehaviour
+public partial class DesignedDungeonGenerator : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private RoomCatalogue roomCatalogue;
@@ -112,6 +112,55 @@ public class DesignedDungeonGenerator : MonoBehaviour
         public RectInt bounds;
         public Vector2Int destinationAnchor;
     }
+
+    public Vector2Int DebugDungeonSize
+    {
+        get => dungeonSize;
+        set => dungeonSize = value;
+    }
+
+    public int DebugRoomCount
+    {
+        get => roomCount;
+        set => roomCount = value;
+    }
+
+    public int DebugRoomSpacing
+    {
+        get => roomSpacing;
+        set => roomSpacing = value;
+    }
+
+    public int DebugMazeSpacing
+    {
+        get => mazeSpacing;
+        set => mazeSpacing = value;
+    }
+
+    public float DebugLoopChance
+    {
+        get => mazeLoopChance;
+        set => mazeLoopChance = value;
+    }
+
+    public int DebugCorridorRadius
+    {
+        get => corridorRadius;
+        set => corridorRadius = value;
+    }
+
+    public bool DebugUseFixedSeed
+    {
+        get => useFixedSeed;
+        set => useFixedSeed = value;
+    }
+
+    public int DebugSeed
+    {
+        get => seed;
+        set => seed = value;
+    }
+
 
     private void Start()
     {
@@ -878,6 +927,7 @@ public class DesignedDungeonGenerator : MonoBehaviour
             new List<RectInt>();
 
         HashSet<Vector2Int> corridors = null;
+        HashSet<Vector2Int> acceptedSpine = null;
 
         bool accepted = false;
         string reason = "No candidate was tested.";
@@ -961,6 +1011,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
                     dungeonArea,
                     random
                 );
+
+                acceptedSpine = new HashSet<Vector2Int>(corridors);
 
                 corridors = WidenCorridors(
                     corridors,
@@ -1078,6 +1130,8 @@ public class DesignedDungeonGenerator : MonoBehaviour
             string.Join("; ", report),
             this
         );
+
+        RememberDungeonForShifting(layout, instances, acceptedSpine, corridors);
 
         return true;
     }

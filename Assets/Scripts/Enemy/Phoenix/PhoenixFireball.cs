@@ -3,6 +3,16 @@ using UnityEngine;
 // Explosive feathers
 public class PhoenixFireball : MonoBehaviour
 {
+    [Header("Visuals")]
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private bool faceTravel = true;
+    [SerializeField, Range(-180f, 180f)]
+    private float artAngle = -135f;
+    [SerializeField, Min(1f)]
+    private float sortingPrecision = 16f;
+
     private Vector2 _start;
     private Vector2 _end;
     private float _groundLength;
@@ -17,16 +27,16 @@ public class PhoenixFireball : MonoBehaviour
     private AttackSounds _sounds;
 
     private CircleIndicator _blast;
-    private SpriteRenderer _sprite;
     private bool _exploded;
 
-    public static PhoenixFireball Launch(Vector2 start, Vector2 end, float speed, float hitRadius, float blastRadius,
-        float damage, float yScale, LayerMask targets, AttackSounds sounds, Color color, float size)
+    public static PhoenixFireball Launch(PhoenixFireball prefab, Vector2 start, Vector2 end, float speed,
+        float hitRadius, float blastRadius, float damage, float yScale, LayerMask targets, AttackSounds sounds)
     {
-        var host = new GameObject("Phoenix Fireball");
-        host.transform.position = start;
+        var fireball = prefab != null
+            ? Instantiate(prefab, start, Quaternion.identity)
+            : new GameObject("Phoenix Fireball").AddComponent<PhoenixFireball>();
 
-        var fireball = host.AddComponent<PhoenixFireball>();
+        fireball.transform.position = start;
 
         fireball._start = start;
         fireball._end = end;
@@ -39,16 +49,17 @@ public class PhoenixFireball : MonoBehaviour
         fireball._targets = targets;
         fireball._sounds = sounds;
 
-        fireball._sprite = host.AddComponent<SpriteRenderer>();
-        fireball._sprite.sprite = PlaceholderSprite.Square;
-        fireball._sprite.sharedMaterial = PlaceholderSprite.Unlit;
-        fireball._sprite.color = color;
-        fireball._sprite.sortingLayerName = "Enemy";
-        host.transform.localScale = new Vector3(size, size, 1f);
+        if (fireball.spriteRenderer == null)
+            fireball.spriteRenderer = fireball.GetComponentInChildren<SpriteRenderer>();
+
+        var travel = end - start;
+        if (fireball.faceTravel && travel.sqrMagnitude > 0.0001f)
+            fireball.transform.rotation =
+                Quaternion.Euler(0f, 0f, Mathf.Atan2(travel.y, travel.x) * Mathf.Rad2Deg - fireball.artAngle);
 
         var blastHost = new GameObject("Phoenix Fireball Blast");
         fireball._blast = blastHost.AddComponent<CircleIndicator>();
-        blastHost.GetComponent<MeshRenderer>().sortingLayerName = "Enemy";
+        fireball._blast.SetSortingLayer("Enemy");
 
         return fireball;
     }
@@ -64,7 +75,9 @@ public class PhoenixFireball : MonoBehaviour
         var position = Vector2.Lerp(_start, _end, t);
 
         transform.position = new Vector3(position.x, position.y, transform.position.z);
-        _sprite.sortingOrder = Mathf.RoundToInt(-position.y * 16f);
+
+        if (spriteRenderer != null)
+            spriteRenderer.sortingOrder = Mathf.RoundToInt(-position.y * sortingPrecision);
 
         _blast.Aim(_end, _blastRadius, t, _yScale);
         _blast.SetVisible(true);
@@ -108,29 +121,5 @@ public class PhoenixFireball : MonoBehaviour
     {
         if (!_exploded && _blast != null)
             Destroy(_blast.gameObject);
-    }
-}
-
-public static class PlaceholderSprite
-{
-    private static Sprite _square;
-    private static Material _unlit;
-
-    public static Sprite Square {
-        get {
-            if (_square == null)
-                _square = Sprite.Create(Texture2D.whiteTexture, new Rect(0f, 0f, 4f, 4f), new Vector2(0.5f, 0.5f), 4f);
-
-            return _square;
-        }
-    }
-
-    public static Material Unlit {
-        get {
-            if (_unlit == null)
-                _unlit = IndicatorMaterial.CreateDefault();
-
-            return _unlit;
-        }
     }
 }

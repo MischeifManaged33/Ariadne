@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _velocity;
     private Vector2 lastMoveDirection = Vector2.down;
     private bool _wasDashing;
+    private bool _hasDashingParameter;
 
     public Vector2 CurrentInput { get; private set; }
     public Vector2 CurrentVelocity => _velocity;
@@ -62,6 +63,21 @@ public class PlayerController : MonoBehaviour
             );
         }
     }
+    private void UpdateDashAnimation()
+    {
+        if (animator == null || !_hasDashingParameter)
+            return;
+
+        var dashing = dash != null && dash.IsDashing;
+
+        animator.SetBool("Dashing", dashing);
+
+        if (dashing)
+        {
+            animator.SetFloat("MoveX", dash.Direction.x);
+            animator.SetFloat("MoveY", dash.Direction.y);
+        }
+    }
 
     private void Awake()
     {
@@ -72,6 +88,15 @@ public class PlayerController : MonoBehaviour
             player = GetComponent<Player>();
         if (dash == null)
             dash = GetComponent<PlayerDash>();
+
+        if (animator != null)
+        {
+            foreach (var parameter in animator.parameters)
+            {
+                if (parameter.name == "Dashing" && parameter.type == AnimatorControllerParameterType.Bool)
+                    _hasDashingParameter = true;
+            }
+        }
 
         _moveAction = new InputAction(
             "Move",
@@ -138,6 +163,8 @@ public class PlayerController : MonoBehaviour
 
         if (player != null)
             player.OnMovementUpdated(_velocity);
+
+        UpdateDashAnimation();
     }
 
     private Vector2 ReadInput()

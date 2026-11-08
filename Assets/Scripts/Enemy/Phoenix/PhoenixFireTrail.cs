@@ -3,6 +3,14 @@ using UnityEngine;
 // Groundhazard for burning
 public class PhoenixFireTrail : MonoBehaviour
 {
+    [Header("Visuals")]
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private Animator animator;
+    [SerializeField]
+    private bool randomStartFrame = true;
+
     private Vector2 _size;
     private float _damage;
     private float _tickInterval;
@@ -10,16 +18,16 @@ public class PhoenixFireTrail : MonoBehaviour
     private float _expiresAt;
     private float _nextTick;
     private LayerMask _targets;
-    private SpriteRenderer _sprite;
     private Color _color;
 
-    public static PhoenixFireTrail Spawn(Vector2 position, float width, float yScale, float damage, float tickInterval,
-        float lifetime, float fadeTime, LayerMask targets, Color color)
+    public static PhoenixFireTrail Spawn(PhoenixFireTrail prefab, Vector2 position, float width, float yScale,
+        float damage, float tickInterval, float lifetime, float fadeTime, LayerMask targets)
     {
-        var host = new GameObject("Phoenix Fire Trail");
-        host.transform.position = position;
+        var trail = prefab != null
+            ? Instantiate(prefab, position, Quaternion.identity)
+            : new GameObject("Phoenix Fire Trail").AddComponent<PhoenixFireTrail>();
 
-        var trail = host.AddComponent<PhoenixFireTrail>();
+        trail.transform.position = position;
 
         // Square on the ground, so squashed on screen like everything else
         trail._size = new Vector2(width, width * yScale);
@@ -28,16 +36,41 @@ public class PhoenixFireTrail : MonoBehaviour
         trail._fadeTime = Mathf.Max(0.01f, fadeTime);
         trail._expiresAt = Time.time + lifetime;
         trail._targets = targets;
-        trail._color = color;
 
-        trail._sprite = host.AddComponent<SpriteRenderer>();
-        trail._sprite.sprite = PlaceholderSprite.Square;
-        trail._sprite.sharedMaterial = PlaceholderSprite.Unlit;
-        trail._sprite.color = color;
-        trail._sprite.sortingLayerName = "FloorDecor";
-        host.transform.localScale = new Vector3(trail._size.x, trail._size.y, 1f);
+        if (trail.spriteRenderer == null)
+            trail.spriteRenderer = trail.GetComponentInChildren<SpriteRenderer>();
+        if (trail.animator == null)
+            trail.animator = trail.GetComponentInChildren<Animator>();
+
+        if (trail.spriteRenderer != null)
+            trail._color = trail.spriteRenderer.color;
+
+        if (trail.randomStartFrame && trail.animator != null && trail.animator.runtimeAnimatorController != null)
+            trail.animator.Play(0, 0, Random.value);
 
         return trail;
+    }
+
+    // Width of the drawn flames, from the tight sprite mesh so the PNG's empty padding doesn't count
+    public float ArtWidth
+    {
+        get {
+            var renderer = spriteRenderer != null ? spriteRenderer : GetComponentInChildren<SpriteRenderer>();
+            if (renderer == null || renderer.sprite == null)
+                return 0f;
+
+            var vertices = renderer.sprite.vertices;
+            if (vertices.Length == 0)
+                return 0f;
+
+            float min = vertices[0].x, max = vertices[0].x;
+            foreach (var vertex in vertices) {
+                min = Mathf.Min(min, vertex.x);
+                max = Mathf.Max(max, vertex.x);
+            }
+
+            return (max - min) * Mathf.Abs(renderer.transform.lossyScale.x);
+        }
     }
 
     private void Update()
@@ -49,11 +82,13 @@ public class PhoenixFireTrail : MonoBehaviour
             return;
         }
 
-        // Fading patches have stopped burning
         if (remaining < 0f) {
-            var faded = _color;
-            faded.a *= 1f + remaining / _fadeTime;
-            _sprite.color = faded;
+            if (spriteRenderer != null) {
+                var faded = _color;
+                faded.a *= 1f + remaining / _fadeTime;
+                spriteRenderer.color = faded;
+            }
+
             return;
         }
 
