@@ -984,17 +984,15 @@ public partial class DesignedDungeonGenerator : MonoBehaviour
                 try
                 {
                     corridors = RoomCorridorBuilder.Build(
-                        instances,
-                        bounds,
-                        dungeonFloor,
-                        dungeonArea,
-                        random,
-                        Mathf.Max(
-                            mazeSpacing,
-                            corridorRadius * 2 + 2
-                        ),
-                        mazeLoopChance
-                    );
+    instances,
+    bounds,
+    dungeonFloor,
+    dungeonArea,
+    random,
+    Mathf.Max(mazeSpacing, corridorRadius * 2 + 2),
+    mazeLoopChance,
+    roomPadding: RoomWallClearance
+);
                 }
                 catch (InvalidOperationException exception) when (
                     exception.Message.StartsWith(
@@ -1133,6 +1131,13 @@ public partial class DesignedDungeonGenerator : MonoBehaviour
 
         RememberDungeonForShifting(layout, instances, acceptedSpine, corridors);
 
+        GeneratedMazeMusic generatedMusic = GetComponent<GeneratedMazeMusic>();
+
+        if (generatedMusic == null)
+            generatedMusic = gameObject.AddComponent<GeneratedMazeMusic>();
+
+        generatedMusic.Configure(player, instances[bossIndex]);
+
         return true;
     }
 
@@ -1246,11 +1251,12 @@ public partial class DesignedDungeonGenerator : MonoBehaviour
                     if (!tilemap.HasTile(cell))
                         continue;
 
-                    Vector3 worldPosition =
-                        tilemap.GetCellCenterWorld(cell);
-
-                    Vector3Int dungeonCell =
-                        dungeonFloor.WorldToCell(worldPosition);
+                    // Reserve the room's logical cells.
+                    // Visual wall-height offsets must not reserve extra ground space.
+                    Vector3Int dungeonCell = room.ToDungeonCell(
+                        new Vector3Int(cell.x, cell.y, 0),
+                        dungeonFloor
+                    );
 
                     Vector2Int position = new Vector2Int(
                         dungeonCell.x,
@@ -1277,7 +1283,20 @@ public partial class DesignedDungeonGenerator : MonoBehaviour
             allFloorPositions,
             protectedCells
         );
+
+        DungeonGroundCollision groundCollision =
+    GetComponent<DungeonGroundCollision>();
+
+        if (groundCollision == null)
+            groundCollision = gameObject.AddComponent<DungeonGroundCollision>();
+
+        groundCollision.Rebuild(dungeonFloor, corridors, rooms);
     }
+
+    private int RoomWallClearance =>
+    Mathf.Max(0, corridorRadius) +
+    Mathf.Max(0, smoothingPasses) +
+    1;
 
     private void AddRandomBranches(
         HashSet<Vector2Int> corridors,
@@ -1309,17 +1328,15 @@ public partial class DesignedDungeonGenerator : MonoBehaviour
 
         foreach (RectInt room in roomBounds)
         {
-            for (int x = room.xMin - 1;
-                 x < room.xMax + 1;
+            for (int x = room.xMin - RoomWallClearance;
+                 x < room.xMax + RoomWallClearance;
                  x++)
             {
-                for (int y = room.yMin - 1;
-                     y < room.yMax + 1;
+                for (int y = room.yMin - RoomWallClearance;
+                     y < room.yMax + RoomWallClearance;
                      y++)
                 {
-                    protectedCells.Add(
-                        new Vector2Int(x, y)
-                    );
+                    protectedCells.Add(new Vector2Int(x, y));
                 }
             }
         }

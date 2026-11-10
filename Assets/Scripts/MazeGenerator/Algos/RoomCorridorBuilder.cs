@@ -22,7 +22,8 @@ public static class RoomCorridorBuilder
         int mazeSpacing = 6, float mazeLoopChance = 0.08f,
         HashSet<Vector2Int> lockedCells = null,
         HashSet<Vector2Int> retainedFloor = null,
-        HashSet<Vector2Int> retainedSpine = null)
+        HashSet<Vector2Int> retainedSpine = null,
+        int roomPadding = 1)
     {
         if (rooms == null || roomBounds == null || rooms.Count == 0 ||
             rooms.Count != roomBounds.Count)
@@ -30,9 +31,10 @@ public static class RoomCorridorBuilder
         if (dungeonFloor == null || random == null)
             throw new ArgumentException("Assign the dungeon floor and random generator.");
 
+        roomPadding = Mathf.Max(1, roomPadding);
         var blocked = new HashSet<Vector2Int>();
         foreach (RectInt bounds in roomBounds)
-            AddRectangle(blocked, Padded(bounds));
+            AddRectangle(blocked, Padded(bounds, roomPadding));
 
         var entrances = new List<EntranceStub>();
         for (int i = 0; i < rooms.Count; i++)
@@ -53,10 +55,10 @@ public static class RoomCorridorBuilder
                     Vector3Int mapped = room.ToDungeonCell(local, dungeonFloor);
                     var cell = new Vector2Int(mapped.x, mapped.y);
                     if (!dungeonArea.Contains(cell))
-                        throw new InvalidOperationException("An entrance leaves the dungeon area.");
+                        throw new InvalidOperationException("An entrance cannot reach the corridor network: its passage leaves the dungeon area.");
                     for (int j = 0; j < roomBounds.Count; j++)
-                        if (j != i && Padded(roomBounds[j]).Contains(cell))
-                            throw new InvalidOperationException("An entrance is too close to another room.");
+                        if (j != i && Padded(roomBounds[j], roomPadding).Contains(cell))
+                            throw new InvalidOperationException("An entrance cannot reach the corridor network: its passage is too close to another room.");
 
                     // A shift may use old floor, but must not open a preserved wall.
                     if (lockedCells != null && lockedCells.Contains(cell) &&
@@ -67,6 +69,28 @@ public static class RoomCorridorBuilder
                 }
                 if (entrance.cells.Count == 0)
                     throw new InvalidOperationException("An entrance has no outward passage cells.");
+
+                // RoomEntrance ends beyond its original one-cell reservation.
+                // Extend only this doorway's center lane across the wider band.
+                Vector2Int outside = entrance.cells[entrance.cells.Count - 1];
+                RectInt reservation = Padded(roomBounds[i], roomPadding);
+                while (reservation.Contains(outside))
+                {
+                    outside += marker.Direction;
+                    if (!dungeonArea.Contains(outside))
+                        throw new InvalidOperationException(
+                            "An entrance cannot reach the corridor network: room clearance reaches the dungeon edge.");
+                    for (int j = 0; j < roomBounds.Count; j++)
+                        if (j != i && Padded(roomBounds[j], roomPadding).Contains(outside))
+                            throw new InvalidOperationException(
+                                "An entrance cannot reach the corridor network: another room blocks its clearance band.");
+                    if (lockedCells != null && lockedCells.Contains(outside) &&
+                        (retainedFloor == null || !retainedFloor.Contains(outside)))
+                        throw new InvalidOperationException(
+                            "An entrance cannot reach the corridor network without altering protected geometry.");
+                    entrance.cells.Add(outside);
+                    blocked.Remove(outside);
+                }
                 entrances.Add(entrance);
             }
         }
@@ -170,9 +194,10 @@ public static class RoomCorridorBuilder
         return null;
     }
 
-    private static RectInt Padded(RectInt bounds)
+    private static RectInt Padded(RectInt bounds, int padding)
     {
-        return new RectInt(bounds.xMin - 1, bounds.yMin - 1, bounds.width + 2, bounds.height + 2);
+        return new RectInt(bounds.xMin - padding, bounds.yMin - padding,
+            bounds.width + padding * 2, bounds.height + padding * 2);
     }
 
     private static void AddRectangle(HashSet<Vector2Int> cells, RectInt bounds)

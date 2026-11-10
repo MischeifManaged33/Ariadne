@@ -110,16 +110,23 @@ public class RoomCatalogue : ScriptableObject
             List<RoomDefinition> available =
                 new List<RoomDefinition>();
 
-            foreach (RoomDefinition design in category.designs)
+            for (int i = 0; i < category.designs.Length; i++)
             {
+                RoomDefinition design = category.designs[i];
+
                 if (design == null)
                 {
-                    throw new InvalidOperationException(
-                        $"{category.categoryName}: a prefab reference is missing."
-                    );
+                    int categoryIndex = Array.IndexOf(categories, category);
+
+                    string message =
+                        $"{name}: Categories Element {categoryIndex} " +
+                        $"('{category.categoryName}'), Designs Element {i} " +
+                        "has a missing RoomDefinition reference.";
+
+                    Debug.LogError(message, this);
+                    throw new InvalidOperationException(message);
                 }
 
-                // Listing a prefab twice should not bypass duplicate limits.
                 if (!available.Contains(design))
                     available.Add(design);
             }
