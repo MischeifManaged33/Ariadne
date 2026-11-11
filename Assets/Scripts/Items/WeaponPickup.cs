@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Weapon pickup item
+// Weapon pickup item; picking it up drops the currently equipped weapon in its place
 [RequireComponent(typeof(Collider2D))]
 public class WeaponPickup : MonoBehaviour, IInteractable
 {
@@ -30,7 +30,7 @@ public class WeaponPickup : MonoBehaviour, IInteractable
     {
         weapon = newWeapon;
     }
-    
+
     public void Interact(Player player)
     {
         if (!CanInteract || player == null)
@@ -40,10 +40,34 @@ public class WeaponPickup : MonoBehaviour, IInteractable
         if (playerWeapon == null)
             return;
 
+        var previous = playerWeapon.EquippedWeapon;
         playerWeapon.Equip(weapon);
 
-        Destroy(gameObject);
+        if (previous == null || previous == weapon) {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (previous.pickupPrefab != null) {
+            var dropped = Instantiate(previous.pickupPrefab, transform.position, transform.rotation, transform.parent);
+            dropped.SetWeapon(previous);
+            Destroy(gameObject);
+            return;
+        }
+
+        weapon = previous;
+        ShowSprite(previous.sprite);
     }
 
+    private void ShowSprite(Sprite sprite)
+    {
+        if (spriteRenderer == null || sprite == null)
+            return;
 
+        var animator = GetComponentInChildren<Animator>();
+        if (animator != null)
+            animator.enabled = false;
+
+        spriteRenderer.sprite = sprite;
+    }
 }

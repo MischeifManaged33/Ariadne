@@ -9,6 +9,7 @@ public class WeaponData : ScriptableObject
     [Header("Identity")]
     public string weaponName;
     public Sprite sprite;
+    public WeaponPickup pickupPrefab;
 
     [Header("Combat")]
     [Min(0f)] public float damage = 20f;
