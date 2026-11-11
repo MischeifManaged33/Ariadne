@@ -202,9 +202,13 @@ public partial class DesignedDungeonGenerator
                         }
                         bounds.Add(layout[i].bounds);
                     }
-                    spine = RoomCorridorBuilder.Build(candidates, bounds, dungeonFloor, area, random,
-                        Mathf.Max(mazeSpacing, corridorRadius * 2 + 2), mazeLoopChance,
-                        lockedCells, retainedFloor, retainedSpine);
+                    spine = RoomCorridorBuilder.Build(
+    candidates, bounds, dungeonFloor, area, random,
+    Mathf.Max(mazeSpacing, corridorRadius * 2 + 2),
+    mazeLoopChance,
+    lockedCells, retainedFloor, retainedSpine,
+    roomPadding: RoomWallClearance
+);
                     AddRandomBranches(spine, bounds, area, random);
                     // Branches must respect the protected empty cells too.
                     spine.RemoveWhere(cell => lockedCells.Contains(cell) && !retainedFloor.Contains(cell));

@@ -35,6 +35,115 @@ public class RoomDefinition : MonoBehaviour
 
     private const float Tolerance = 0.001f;
 
+    [ContextMenu("Test Floor Tile Transforms - Play Mode")]
+    private void TestFloorTileTransforms()
+    {
+        if (!Application.isPlaying || !isPlaced)
+        {
+            Debug.LogWarning(
+                "Run this on a generated room during Play Mode.",
+                this
+            );
+            return;
+        }
+
+        Tilemap[] maps = { floorTilemap, placedDungeonFloor };
+
+        foreach (Tilemap map in maps)
+        {
+            int changed = 0;
+
+            foreach (Vector3Int cell in
+                     map.cellBounds.allPositionsWithin)
+            {
+                if (!map.HasTile(cell))
+                    continue;
+
+                if (map.GetTransformMatrix(cell) ==
+                    Matrix4x4.identity)
+                    continue;
+
+                TileFlags flags = map.GetTileFlags(cell);
+
+                map.SetTileFlags(
+                    cell,
+                    flags & ~TileFlags.LockTransform
+                );
+
+                map.SetTransformMatrix(
+                    cell,
+                    Matrix4x4.identity
+                );
+
+                map.SetTileFlags(cell, flags);
+                changed++;
+            }
+
+            Debug.Log(
+                $"{map.name}: reset {changed} floor tile transforms.",
+                map
+            );
+        }
+    }
+
+    [ContextMenu("Diagnose Floor Joins - Play Mode")]
+    private void DiagnoseFloorJoins()
+    {
+        if (!Application.isPlaying || !isPlaced)
+            return;
+
+        foreach (RoomEntrance entrance in Entrances)
+        {
+            Vector3Int direction = new Vector3Int(
+                entrance.Direction.x,
+                entrance.Direction.y,
+                0
+            );
+
+            foreach (Vector3Int outside in
+                     entrance.GetOutwardConnectionCells())
+            {
+                Vector3Int inside = outside - direction;
+
+                // Only inspect where room floor ends.
+                if (!floorTilemap.HasTile(inside))
+                    continue;
+
+                Vector3Int corridorCell =
+                    ToDungeonCell(outside, placedDungeonFloor);
+
+                Vector3Int mappedInside =
+                    ToDungeonCell(inside, placedDungeonFloor);
+
+                bool hasCorridor =
+                    placedDungeonFloor.HasTile(corridorCell);
+
+                bool sameTile =
+                    floorTilemap.GetTile(inside) ==
+                    placedDungeonFloor.GetTile(corridorCell);
+
+                bool sameSprite =
+                    floorTilemap.GetSprite(inside) ==
+                    placedDungeonFloor.GetSprite(corridorCell);
+
+                float alignmentError = Vector3.Distance(
+                    floorTilemap.GetCellCenterWorld(inside),
+                    placedDungeonFloor.GetCellCenterWorld(mappedInside)
+                );
+
+                Debug.Log(
+                    $"{name}/{entrance.name}: " +
+                    $"corridor cell {corridorCell}, " +
+                    $"has floor: {hasCorridor}, " +
+                    $"same Tile: {sameTile}, " +
+                    $"same sprite: {sameSprite}, " +
+                    $"alignment error: {alignmentError:F6}",
+                    this
+                );
+            }
+        }
+    }
+
     public Vector3Int GetAnchorCell()
     {
         if (!hasSavedAnchorCell)
