@@ -241,9 +241,9 @@ public class PlayerWeapon : MonoBehaviour
         foreach (var candidate in candidates) {
             var target = candidate.GetComponentInParent<IDamagable>();
 
-            if (target == null || !target.IsAlive || !_struck.Add(target))
+            if (target == null || !target.IsAlive || !Hurtbox.Accepts(target, candidate))
                 continue;
-            if (!InsideFan(origin, groundDirection, halfAngle, candidate))
+            if (!InsideFan(origin, groundDirection, halfAngle, candidate) || !_struck.Add(target))
                 continue;
 
             target.TakeDamage(equippedWeapon.damage);

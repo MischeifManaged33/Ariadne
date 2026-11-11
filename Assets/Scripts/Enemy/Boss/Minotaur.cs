@@ -156,6 +156,8 @@ public class Minotaur : MonoBehaviour, IDamagable
 
         _moves = GetComponentsInChildren<BossMove>(true);
         _hitFlash = HitFlash.GetOrAdd(gameObject);
+        // Adopt the hurtbox now so it records the sprite's facing before anything flips it
+        Hurtbox.Find(this);
         Mover = GetComponent<BossPathfinder>();
         Animation = GetComponent<MinotaurAnimator>();
 

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BowData
   weaponName: Bow
   sprite: {fileID: 0}
+  pickupPrefab: {fileID: 6246725149717156589, guid: 02ce26c669eb072459ba65bc0efa0f47, type: 3}
   damage: 25
   attackCooldown: 0.5
   attackRange: 2
@@ -72,7 +73,7 @@ MonoBehaviour:
   minSpeed: 10
   maxSpeed: 30
   minDistance: 4
-  maxDistance: 12
+  maxDistance: 13
   minKnockback: 0.1
   maxKnockback: 0.75
   indicatorWidth: 0.35

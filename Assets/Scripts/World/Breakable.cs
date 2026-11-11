@@ -11,6 +11,10 @@ public class Breakable : MonoBehaviour, IDamagable, IKnockbackable
     [SerializeField]
     private EventReference breakSound;
 
+    [Header("Drops")]
+    [SerializeField]
+    private DropTable dropTable;
+
     [Header("Shards")]
     [SerializeField]
     private Sprite[] shardSprites;
@@ -85,6 +89,10 @@ public class Breakable : MonoBehaviour, IDamagable, IKnockbackable
         _broken = true;
         Broken?.Invoke();
         Sfx.PlayOneShot(breakSound, transform.position);
+
+        if (dropTable != null)
+            dropTable.Drop(transform.position);
+
         Destroy(gameObject);
     }
 
