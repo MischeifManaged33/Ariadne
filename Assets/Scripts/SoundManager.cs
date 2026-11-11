@@ -74,11 +74,6 @@ public class SoundManager : MonoBehaviour
         CacheBuses();
     }
 
-    private void Start()
-    {
-        PlayMazeMusic();
-    }
-
     private void OnDestroy()
     {
         if (Instance != this)
