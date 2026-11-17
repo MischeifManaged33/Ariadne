@@ -98,6 +98,11 @@ public class CorridorWallPainter : MonoBehaviour
     [Header("Performance Diagnostics")]
     [SerializeField] private bool logWallPaintTiming;
     public float LastWallPaintMilliseconds { get; private set; }
+    private readonly Dictionary<Tilemap, HashSet<Vector3Int>> paintedCells =
+        new Dictionary<Tilemap, HashSet<Vector3Int>>();
+    private readonly List<Vector3Int> changedCells = new List<Vector3Int>();
+    private readonly List<TileBase> changedTiles = new List<TileBase>();
+    private int changedWallCells;
     private int newWallObjects;
     private int reusedWallObjects;
     private readonly HashSet<HeightLayer> usedHeightLayers = new HashSet<HeightLayer>();
@@ -109,14 +114,14 @@ public class CorridorWallPainter : MonoBehaviour
         HashSet<Vector2Int> protectedCells)
     {
         var timer = System.Diagnostics.Stopwatch.StartNew();
-        newWallObjects = reusedWallObjects = 0;
+        newWallObjects = reusedWallObjects = changedWallCells = 0;
         using (PaintMarker.Auto())
             PaintInternal(corridorFloor, allFloor, protectedCells);
         timer.Stop();
         LastWallPaintMilliseconds = (float)timer.Elapsed.TotalMilliseconds;
         if (logWallPaintTiming)
             Debug.Log($"Wall repaint: {LastWallPaintMilliseconds:F1} ms; " +
-                $"created {newWallObjects}, reused {reusedWallObjects} wall objects.", this);
+                $"created {newWallObjects}, reused {reusedWallObjects} wall objects; changed {changedWallCells} tile cells.", this);
     }
 
     private void PaintInternal(
@@ -150,7 +155,6 @@ public class CorridorWallPainter : MonoBehaviour
         ConfigureFrontWall(frontWallsAlongY, wallsAlongX, Vector3.zero);
         foreach (Tilemap map in maps)
         {
-            map.ClearAllTiles();
             TransparentWallTilemap transparent = map.GetComponent<TransparentWallTilemap>();
             if (transparent == null) transparent = map.gameObject.AddComponent<TransparentWallTilemap>();
             transparent.IgnoreSorting = true;
@@ -265,8 +269,7 @@ public class CorridorWallPainter : MonoBehaviour
         }
         else reusedWallObjects++;
         usedCornerMaps.Add(map);
-        // Remove tiles from the previous layout before repainting this source.
-        map.ClearAllTiles();
+        // ApplyTilePlan removes obsolete cells when this pooled source is repainted.
         ConfigureFrontWall(map, wallsAlongX, Vector3.zero);
         map.color = wallsAlongX.color;
         TilemapRenderer source = wallsAlongX.GetComponent<TilemapRenderer>();
@@ -340,23 +343,14 @@ public class CorridorWallPainter : MonoBehaviour
             if (renderer != null) renderer.sortingOrder = wallSortingOrder + 1;
         }
         var topTiles = new Dictionary<Vector3Int, TileBase>();
-        var tileCells = new Vector3Int[plan.Count];
-        var tiles = new TileBase[plan.Count];
-        int index = 0;
+        var baseTiles = new Dictionary<Vector3Int, TileBase>();
         foreach (KeyValuePair<Vector2Int, TileBase> entry in plan)
         {
             Vector3Int cell = new Vector3Int(entry.Key.x, entry.Key.y, 0);
             topTiles[cell] = entry.Value;
-            tileCells[index] = cell;
-            tiles[index++] = LayerTile(entry.Value, count == 1);
+            baseTiles[cell] = LayerTile(entry.Value, count == 1);
         }
-        if (tileCells.Length > 0) source.SetTiles(tileCells, tiles);
-        Matrix4x4 transform = tileTransform ?? Matrix4x4.identity;
-        foreach (Vector3Int cell in tileCells)
-        {
-            source.SetTileFlags(cell, TileFlags.None);
-            source.SetTransformMatrix(cell, transform);
-        }
+        ApplyTilePlan(source, baseTiles, tileTransform ?? Matrix4x4.identity, null);
         if (topTiles.Count == 0) return;
         for (int level = 1; level < count; level++)
             CreateHeightLayer(source, topTiles, level,
@@ -395,7 +389,7 @@ public class CorridorWallPainter : MonoBehaviour
             reusedWallObjects++;
         }
         usedHeightLayers.Add(layer);
-        layer.visual.ClearAllTiles();
+        // Keep unchanged tile data; ApplyTilePlan removes obsolete cells.
 
         Transform layerTransform = layerObject.transform;
 
@@ -459,21 +453,10 @@ public class CorridorWallPainter : MonoBehaviour
         if (sourceRenderer != null)
             visualRenderer.sortingOrder = sourceRenderer.sortingOrder;
 
-        var tileCells = new Vector3Int[topTiles.Count];
-        var tiles = new TileBase[topTiles.Count];
-        int index = 0;
+        var levelTiles = new Dictionary<Vector3Int, TileBase>();
         foreach (KeyValuePair<Vector3Int, TileBase> entry in topTiles)
-        {
-            tileCells[index] = entry.Key;
-            tiles[index++] = LayerTile(entry.Value, level == Mathf.Max(1, wallHeight) - 1);
-        }
-        visual.SetTiles(tileCells, tiles);
-        foreach (Vector3Int cell in tileCells)
-        {
-            visual.SetTileFlags(cell, TileFlags.None);
-            visual.SetTransformMatrix(cell, source.GetTransformMatrix(cell));
-            visual.SetColor(cell, source.GetColor(cell));
-        }
+            levelTiles[entry.Key] = LayerTile(entry.Value, level == Mathf.Max(1, wallHeight) - 1);
+        ApplyTilePlan(visual, levelTiles, Matrix4x4.identity, source);
         layer.sourceRenderer = sourceRenderer;
         layer.visualRenderer = visualRenderer;
         layer.cells = new List<Vector3Int>(topTiles.Keys).ToArray();
@@ -487,6 +470,51 @@ public class CorridorWallPainter : MonoBehaviour
 
         SetFadeable(visual, canFade);
         layerObject.SetActive(true);
+    }
+
+    // These maps are owned by this painter. Compare against actual tile data,
+    // so an external ClearAllTiles (normal generation/rollback) is safe too.
+    private void ApplyTilePlan(Tilemap map, Dictionary<Vector3Int, TileBase> desired,
+        Matrix4x4 commonTransform, Tilemap tintSource)
+    {
+        if (!paintedCells.TryGetValue(map, out HashSet<Vector3Int> previous))
+        {
+            previous = new HashSet<Vector3Int>();
+            foreach (Vector3Int cell in map.cellBounds.allPositionsWithin)
+                if (map.HasTile(cell)) previous.Add(cell);
+            paintedCells.Add(map, previous);
+        }
+        changedCells.Clear();
+        changedTiles.Clear();
+        foreach (Vector3Int cell in previous)
+            if (!desired.ContainsKey(cell) && map.HasTile(cell))
+            { changedCells.Add(cell); changedTiles.Add(null); }
+        foreach (KeyValuePair<Vector3Int, TileBase> entry in desired)
+            if (map.GetTile(entry.Key) != entry.Value)
+            { changedCells.Add(entry.Key); changedTiles.Add(entry.Value); }
+        if (changedCells.Count > 0)
+        {
+            changedWallCells += changedCells.Count;
+            map.SetTiles(changedCells.ToArray(), changedTiles.ToArray());
+            // A reintroduced cell must not inherit stale fade/color metadata
+            // from a previously removed strand of wall.
+            for (int i = 0; i < changedCells.Count; i++)
+                if (changedTiles[i] != null)
+                {
+                    map.SetTileFlags(changedCells[i], TileFlags.None);
+                    map.SetColor(changedCells[i], tintSource != null
+                        ? tintSource.GetColor(changedCells[i]) : Color.white);
+                }
+        }
+        foreach (KeyValuePair<Vector3Int, TileBase> entry in desired)
+        {
+            Vector3Int cell = entry.Key;
+            if (map.GetTileFlags(cell) != TileFlags.None) map.SetTileFlags(cell, TileFlags.None);
+            Matrix4x4 matrix = tintSource != null ? tintSource.GetTransformMatrix(cell) : commonTransform;
+            if (map.GetTransformMatrix(cell) != matrix) map.SetTransformMatrix(cell, matrix);
+        }
+        previous.Clear();
+        foreach (Vector3Int cell in desired.Keys) previous.Add(cell);
     }
 
     private void LateUpdate()
