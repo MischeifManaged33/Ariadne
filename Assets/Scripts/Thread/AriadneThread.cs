@@ -36,6 +36,12 @@ public class AriadneThread : MonoBehaviour
     [SerializeField, Min(0.1f)]
     private float teleportBreakDistance = 5f;
 
+    [Header("Trail Cleanup")]
+    [Tooltip("Merge overlapping passes in the display without changing spool length or tied paths.")]
+    [SerializeField] private bool tidyThreadVisuals = true;
+    private ThreadTrailCleanup trailCleanup;
+    private readonly List<int> renderKnotIndices = new List<int>();
+
     [Header("Appearance")]
     [SerializeField] private Material threadMaterial;
 
@@ -124,6 +130,8 @@ public class AriadneThread : MonoBehaviour
 
         ResolveHealth();
         ConfigureRenderer();
+        trailCleanup = GetComponent<ThreadTrailCleanup>();
+        if (trailCleanup == null) trailCleanup = gameObject.AddComponent<ThreadTrailCleanup>();
 
         line.positionCount = 0;
     }
@@ -568,6 +576,7 @@ public class AriadneThread : MonoBehaviour
 
         if (line != null)
             line.positionCount = 0;
+        if (trailCleanup != null) trailCleanup.Clear();
 
         NotifyAmountChanged();
     }
@@ -582,11 +591,14 @@ public class AriadneThread : MonoBehaviour
 
     private void RenderThread()
     {
+        bool tidy = tidyThreadVisuals && trailCleanup != null && trailCleanup.isActiveAndEnabled;
         if (points.Count < 2)
         {
             line.positionCount = 0;
+            if (trailCleanup != null) trailCleanup.Clear();
             return;
         }
+        if (!tidy && trailCleanup != null) trailCleanup.Clear();
 
         relaxedPoints.Clear();
 
@@ -626,11 +638,21 @@ public class AriadneThread : MonoBehaviour
                             -age / Mathf.Max(0.01f, settlingTime)
                         );
 
-                    point += sideways * motion;
+                    point += sideways * motion * (tidy ? trailCleanup.FlutterMultiplier : 1f);
                 }
             }
 
             relaxedPoints.Add(point);
+        }
+
+        if (tidy)
+        {
+            renderKnotIndices.Clear();
+            foreach (ThreadKnot knot in knots)
+                if (knot.point != null && knot.point.Owner == this)
+                    renderKnotIndices.Add(knot.vertexIndex);
+            trailCleanup.Render(relaxedPoints, renderKnotIndices, line, cornerRounding, cornerSamples);
+            return;
         }
 
         renderPoints.Clear();
@@ -707,17 +729,10 @@ public class AriadneThread : MonoBehaviour
     {
         destination.Clear();
 
-        bool hasValidKnot = false;
-        foreach (ThreadKnot knot in knots)
-        {
-            if (knot.point != null && knot.point.Owner == this)
-            {
-                hasValidKnot = true;
-                break;
-            }
-        }
-
-        if (!hasValidKnot)
+        // Kept under this method name for existing shifting callers.
+        // Every laid strand protects its route, including untied or detached
+        // thread. Only winding/resetting removes that protection.
+        if (points.Count == 0)
             return;
 
         destination.AddRange(points);

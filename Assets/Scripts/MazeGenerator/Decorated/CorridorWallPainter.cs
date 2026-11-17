@@ -95,7 +95,31 @@ public class CorridorWallPainter : MonoBehaviour
     private List<HeightLayer> heightLayers =
         new List<HeightLayer>();
 
-    public void Paint(
+    [Header("Performance Diagnostics")]
+    [SerializeField] private bool logWallPaintTiming;
+    public float LastWallPaintMilliseconds { get; private set; }
+    private int newWallObjects;
+    private int reusedWallObjects;
+    private readonly HashSet<HeightLayer> usedHeightLayers = new HashSet<HeightLayer>();
+    private readonly HashSet<Tilemap> usedCornerMaps = new HashSet<Tilemap>();
+    private static readonly Unity.Profiling.ProfilerMarker PaintMarker =
+        new Unity.Profiling.ProfilerMarker("Ariadne.CorridorWallPainter.Paint");
+
+    public void Paint(HashSet<Vector2Int> corridorFloor, HashSet<Vector2Int> allFloor,
+        HashSet<Vector2Int> protectedCells)
+    {
+        var timer = System.Diagnostics.Stopwatch.StartNew();
+        newWallObjects = reusedWallObjects = 0;
+        using (PaintMarker.Auto())
+            PaintInternal(corridorFloor, allFloor, protectedCells);
+        timer.Stop();
+        LastWallPaintMilliseconds = (float)timer.Elapsed.TotalMilliseconds;
+        if (logWallPaintTiming)
+            Debug.Log($"Wall repaint: {LastWallPaintMilliseconds:F1} ms; " +
+                $"created {newWallObjects}, reused {reusedWallObjects} wall objects.", this);
+    }
+
+    private void PaintInternal(
         HashSet<Vector2Int> corridorFloor,
         HashSet<Vector2Int> allFloor,
         HashSet<Vector2Int> protectedCells)
@@ -119,8 +143,8 @@ public class CorridorWallPainter : MonoBehaviour
             enclosedWall == null || backCornerPost == null || frontCornerPost == null)
             throw new InvalidOperationException("On CorridorWallPainter, run Configure Supplied Artist Wall Set from the component menu before generating.");
 
-        ClearHeightLayers();
-        ClearCornerMaps();
+        usedHeightLayers.Clear();
+        usedCornerMaps.Clear();
         ConfigureFrontWall(wallsAlongY, wallsAlongX, Vector3.zero);
         ConfigureFrontWall(frontWallsAlongX, wallsAlongX, Vector3.zero);
         ConfigureFrontWall(frontWallsAlongY, wallsAlongX, Vector3.zero);
@@ -167,6 +191,14 @@ public class CorridorWallPainter : MonoBehaviour
         // A convex floor corner leaves a small diamond between the two wall
         // end caps. Fill only that diamond, not another full straight wall.
         PaintOutsidePosts(corridorFloor, allFloor, protectedCells);
+        // Retire only objects not needed by this layout. Reused maps stay active,
+        // avoiding collider/registration churn on every shift.
+        foreach (HeightLayer layer in heightLayers)
+            if (layer.visual != null && !usedHeightLayers.Contains(layer))
+                layer.visual.gameObject.SetActive(false);
+        foreach (Tilemap map in generatedCornerMaps)
+            if (map != null && !usedCornerMaps.Contains(map))
+                map.gameObject.SetActive(false);
     }
 
     private TileBase TileFor(FloorSides sides)
@@ -218,23 +250,35 @@ public class CorridorWallPainter : MonoBehaviour
 
     private Tilemap CreateCornerMap(int dx, int dy)
     {
-        GameObject go = new GameObject("Corridor Corner Posts " + dx + "," + dy,
-            typeof(Tilemap), typeof(TilemapRenderer));
-        go.transform.SetParent(wallsAlongX.transform.parent, false);
-        Tilemap map = go.GetComponent<Tilemap>();
+        string name = "Corridor Corner Posts " + dx + "," + dy;
+        Tilemap map = null;
+        foreach (Tilemap cached in generatedCornerMaps)
+            if (cached != null && cached.name == name) { map = cached; break; }
+        if (map == null)
+        {
+            GameObject go = new GameObject(name, typeof(Tilemap), typeof(TilemapRenderer));
+            go.transform.SetParent(wallsAlongX.transform.parent, false);
+            map = go.GetComponent<Tilemap>();
+            go.AddComponent<TransparentWallTilemap>().IgnoreSorting = true;
+            generatedCornerMaps.Add(map);
+            newWallObjects++;
+        }
+        else reusedWallObjects++;
+        usedCornerMaps.Add(map);
+        // Remove tiles from the previous layout before repainting this source.
+        map.ClearAllTiles();
         ConfigureFrontWall(map, wallsAlongX, Vector3.zero);
         map.color = wallsAlongX.color;
         TilemapRenderer source = wallsAlongX.GetComponent<TilemapRenderer>();
-        TilemapRenderer renderer = go.GetComponent<TilemapRenderer>();
+        TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
         if (source != null)
         {
             renderer.sharedMaterials = source.sharedMaterials;
             renderer.sortOrder = source.sortOrder;
             renderer.maskInteraction = source.maskInteraction;
         }
-        go.AddComponent<TransparentWallTilemap>().IgnoreSorting = true;
         ApplyWallSorting(renderer, 0, false);
-        generatedCornerMaps.Add(map);
+        map.gameObject.SetActive(true);
         return map;
     }
 
@@ -296,13 +340,22 @@ public class CorridorWallPainter : MonoBehaviour
             if (renderer != null) renderer.sortingOrder = wallSortingOrder + 1;
         }
         var topTiles = new Dictionary<Vector3Int, TileBase>();
+        var tileCells = new Vector3Int[plan.Count];
+        var tiles = new TileBase[plan.Count];
+        int index = 0;
         foreach (KeyValuePair<Vector2Int, TileBase> entry in plan)
         {
             Vector3Int cell = new Vector3Int(entry.Key.x, entry.Key.y, 0);
             topTiles[cell] = entry.Value;
-            source.SetTile(cell, LayerTile(entry.Value, count == 1));
+            tileCells[index] = cell;
+            tiles[index++] = LayerTile(entry.Value, count == 1);
+        }
+        if (tileCells.Length > 0) source.SetTiles(tileCells, tiles);
+        Matrix4x4 transform = tileTransform ?? Matrix4x4.identity;
+        foreach (Vector3Int cell in tileCells)
+        {
             source.SetTileFlags(cell, TileFlags.None);
-            source.SetTransformMatrix(cell, tileTransform ?? Matrix4x4.identity);
+            source.SetTransformMatrix(cell, transform);
         }
         if (topTiles.Count == 0) return;
         for (int level = 1; level < count; level++)
@@ -317,14 +370,32 @@ public class CorridorWallPainter : MonoBehaviour
         bool blocksLight,
         bool canFade)
     {
-        GameObject layerObject = new GameObject(
-    source.name + " - Height " + (level + 1),
-    typeof(Tilemap),
-    typeof(TilemapRenderer)
-);
-
-        // Upper front layers fade, including those sorted below the player.
-        layerObject.AddComponent<TransparentWallTilemap>().IgnoreSorting = true;
+        HeightLayer layer = null;
+        foreach (HeightLayer cached in heightLayers)
+            if (cached.source == source && cached.level == level && cached.visual != null)
+            { layer = cached; break; }
+        GameObject layerObject;
+        if (layer == null)
+        {
+            layerObject = new GameObject(source.name + " - Height " + (level + 1),
+                typeof(Tilemap), typeof(TilemapRenderer));
+            layerObject.AddComponent<TransparentWallTilemap>().IgnoreSorting = true;
+            layer = new HeightLayer
+            {
+                source = source,
+                level = level,
+                visual = layerObject.GetComponent<Tilemap>()
+            };
+            heightLayers.Add(layer);
+            newWallObjects++;
+        }
+        else
+        {
+            layerObject = layer.visual.gameObject;
+            reusedWallObjects++;
+        }
+        usedHeightLayers.Add(layer);
+        layer.visual.ClearAllTiles();
 
         Transform layerTransform = layerObject.transform;
 
@@ -388,32 +459,24 @@ public class CorridorWallPainter : MonoBehaviour
         if (sourceRenderer != null)
             visualRenderer.sortingOrder = sourceRenderer.sortingOrder;
 
+        var tileCells = new Vector3Int[topTiles.Count];
+        var tiles = new TileBase[topTiles.Count];
+        int index = 0;
         foreach (KeyValuePair<Vector3Int, TileBase> entry in topTiles)
         {
-            Vector3Int cell = entry.Key;
-            TileBase tile = LayerTile(entry.Value, level == Mathf.Max(1, wallHeight) - 1);
-            visual.SetTile(cell, tile);
-
-            // Allow the existing wall fade colors to be copied.
-            visual.SetTileFlags(cell, TileFlags.None);
-
-            visual.SetTransformMatrix(cell, source.GetTransformMatrix(cell));
-
-            visual.SetColor(
-                cell,
-                source.GetColor(cell)
-            );
+            tileCells[index] = entry.Key;
+            tiles[index++] = LayerTile(entry.Value, level == Mathf.Max(1, wallHeight) - 1);
         }
-
-        heightLayers.Add(new HeightLayer
+        visual.SetTiles(tileCells, tiles);
+        foreach (Vector3Int cell in tileCells)
         {
-            source = source,
-            visual = visual,
-            sourceRenderer = sourceRenderer,
-            visualRenderer = visualRenderer,
-            cells = new List<Vector3Int>(topTiles.Keys).ToArray(),
-            level = level
-        });
+            visual.SetTileFlags(cell, TileFlags.None);
+            visual.SetTransformMatrix(cell, source.GetTransformMatrix(cell));
+            visual.SetColor(cell, source.GetColor(cell));
+        }
+        layer.sourceRenderer = sourceRenderer;
+        layer.visualRenderer = visualRenderer;
+        layer.cells = new List<Vector3Int>(topTiles.Keys).ToArray();
 
         ConfigureWallPhysics(
             visual,
@@ -423,6 +486,7 @@ public class CorridorWallPainter : MonoBehaviour
         );
 
         SetFadeable(visual, canFade);
+        layerObject.SetActive(true);
     }
 
     private void LateUpdate()
@@ -430,7 +494,7 @@ public class CorridorWallPainter : MonoBehaviour
         foreach (HeightLayer layer in heightLayers)
         {
             if (layer.source == null ||
-                layer.visual == null)
+                layer.visual == null || !layer.visual.gameObject.activeSelf)
             {
                 continue;
             }
