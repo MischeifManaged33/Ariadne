@@ -10315,7 +10315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: 1b84b861549189d44aff3dfd9f87c1fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.56
+      value: 6.2599998
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: 1b84b861549189d44aff3dfd9f87c1fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10517,7 +10517,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: f0f1aada028298348aac82b07fb35913, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.62
+      value: 7.3199997
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: f0f1aada028298348aac82b07fb35913, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10649,7 +10649,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: 1b84b861549189d44aff3dfd9f87c1fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.51
+      value: 6.21
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: 1b84b861549189d44aff3dfd9f87c1fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10711,7 +10711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: f0f1aada028298348aac82b07fb35913, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6771222144443101055, guid: f0f1aada028298348aac82b07fb35913, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10807,6 +10807,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7133166554203202849, guid: f01f26e96c557e741a5e265b73f9ad5b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 547841412828611622, guid: 59f79545e5dd0bf45a813a1a410db706, type: 3}
     - target: {fileID: 7614131191398130051, guid: f01f26e96c557e741a5e265b73f9ad5b, type: 3}
       propertyPath: m_Name
       value: Connection
