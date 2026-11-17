@@ -591,6 +591,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -9105,6 +9106,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -10516,6 +10518,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -10684,6 +10687,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -10855,6 +10859,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -22575,6 +22580,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -22743,6 +22749,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -24903,6 +24910,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -25073,6 +25081,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -25998,6 +26007,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -84370,6 +84380,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -85102,6 +85113,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -85374,6 +85386,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -85895,6 +85908,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -86151,6 +86165,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -86686,6 +86701,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -87143,6 +87159,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -89768,6 +89785,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -90318,6 +90336,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -90486,6 +90505,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -90656,6 +90676,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -91926,6 +91947,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -98417,6 +98439,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -100762,6 +100785,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -101465,6 +101489,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  dropTable: {fileID: 0}
   shardSprites: []
   minShards: 6
   maxShards: 10
@@ -101626,6 +101651,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -101797,6 +101823,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -102319,6 +102346,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -102959,6 +102987,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -104247,6 +104276,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -104417,6 +104447,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -104587,6 +104618,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -104847,6 +104879,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -107819,6 +107852,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -114226,6 +114260,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -114396,6 +114431,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -114913,6 +114949,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -116122,6 +116159,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -116292,6 +116330,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -175618,6 +175657,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -175789,6 +175829,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -175960,6 +176001,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -178419,6 +178461,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -178590,6 +178633,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -180358,6 +180402,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -195200,6 +195245,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -195578,6 +195624,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -195749,6 +195796,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -196237,6 +196285,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -196407,6 +196456,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -196575,6 +196625,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -207992,6 +208043,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -208615,7 +208667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ccdc743b989df4c88ce9d931f7f40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DesignedDungeonGenerator
-  enableMazeShifting: 0
+  enableMazeShifting: 1
   ariadneThread: {fileID: 1624719838}
   corridorEntriesBeforeWarning: 2
   shiftWarningSeconds: 1
@@ -212341,6 +212393,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -213637,6 +213690,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -214724,6 +214778,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -214892,6 +214947,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -215287,6 +215343,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -215819,6 +215876,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -221929,6 +221987,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -222784,6 +222843,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -223477,6 +223537,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -224080,6 +224141,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -224745,6 +224807,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  dropTable: {fileID: 0}
   shardSprites: []
   minShards: 6
   maxShards: 10
@@ -238502,6 +238565,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -244925,6 +244989,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -245452,6 +245517,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -246134,6 +246200,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -256338,6 +256405,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -257447,6 +257515,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -261068,6 +261137,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -261236,6 +261306,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -265149,6 +265220,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -265411,6 +265483,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -271173,6 +271246,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -283405,6 +283479,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   attemptsPerSpawn: 60
+  despawnAfterAsleep: 20
+  despawnCheckInterval: 1
   spawnedEnemyRoot: {fileID: 792521238}
 --- !u!4 &1974114447
 Transform:
@@ -286855,6 +286931,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -5114366860601798730, guid: 4f6735bad7f810e4ca2284629df3c354, type: 3}
   - {fileID: 334524987140625993, guid: 10ad9c85cffbfcf4096ebc88a3afdbb4, type: 3}
@@ -287023,6 +287100,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -295557,6 +295635,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}
@@ -298581,6 +298660,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -299155,6 +299235,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
@@ -299326,6 +299407,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 0}
   shardSprites:
   - {fileID: 51009155118470407, guid: ba4480ec507b13c4ebb1d2126c98045f, type: 3}
   - {fileID: 7003376579641457912, guid: d00e7bc6fcef2a541bc989aea24f9861, type: 3}
