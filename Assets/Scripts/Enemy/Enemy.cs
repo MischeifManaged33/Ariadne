@@ -86,6 +86,8 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
         _collider = GetComponent<Collider2D>();
         _hitFlash = HitFlash.GetOrAdd(gameObject);
 
+        Hurtbox.Find(this);
+
         if (wallLayers.value == 0)
             wallLayers = LayerMask.GetMask("Walls");
 

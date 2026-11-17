@@ -140,6 +140,8 @@ public class EnemyAI : MonoBehaviour
         _enemy = GetComponent<Enemy>();
         _abilities = GetComponentsInChildren<EnemyAbility>(true);
 
+        EnemyActivation.GetOrAdd(gameObject);
+
         if (sightBlockers.value == 0)
             sightBlockers = LayerMask.GetMask("Walls");
 

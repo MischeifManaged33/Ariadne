@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1267143885
-  m_SortingLayer: 10
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6843364284107314450, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
@@ -150,6 +150,7 @@ MonoBehaviour:
       Data3: 1922644128
       Data4: 2084692225
     Path: event:/SFX/Objects/JarBreak
+  dropTable: {fileID: 11400000, guid: d6e508186557ae640aa4059b1d4117d3, type: 2}
   shardSprites:
   - {fileID: -6129255428216585952, guid: bd106d956fd3f3e4dbecb0639270626f, type: 3}
   - {fileID: 646398069977557328, guid: fd2581b807f27124983c768ce40c69d0, type: 3}

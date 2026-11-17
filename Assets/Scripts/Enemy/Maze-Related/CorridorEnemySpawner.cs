@@ -30,7 +30,7 @@ public class CorridorEnemySpawner : MonoBehaviour
     [SerializeField, Min(1)]
     private int maximumLivingEnemies = 10;
 
-    [Header("Timing — Seconds")]
+    [Header("Timing ï¿½ Seconds")]
     [SerializeField, Min(0f)]
     private float startingGracePeriod = 15f;
 
@@ -51,7 +51,7 @@ public class CorridorEnemySpawner : MonoBehaviour
     [SerializeField, Min(0.01f)]
     private float offscreenBand = 0.3f;
 
-    [Header("Spacing — World Units")]
+    [Header("Spacing ï¿½ World Units")]
     [SerializeField, Min(0f)]
     private float minimumDistanceFromPlayer = 4f;
 
@@ -70,6 +70,13 @@ public class CorridorEnemySpawner : MonoBehaviour
     [SerializeField, Min(1)]
     private int attemptsPerSpawn = 60;
 
+    [Header("Despawning")]
+    [SerializeField, Min(0f)]
+    private float despawnAfterAsleep = 20f;
+
+    [SerializeField, Min(0.1f)]
+    private float despawnCheckInterval = 1f;
+
     private readonly List<Vector3> positions = new();
     private readonly List<GameObject> livingEnemies = new();
     private readonly List<EnemyEntry> eligibleEnemies = new();
@@ -84,6 +91,7 @@ public class CorridorEnemySpawner : MonoBehaviour
 
     private float elapsedSeconds;
     private float nextSpawnTime;
+    private float nextDespawnCheckTime;
     private bool initialized;
     private bool runStarted;
 
@@ -316,6 +324,8 @@ public class CorridorEnemySpawner : MonoBehaviour
             enemy => enemy == null || !enemy.activeInHierarchy
         );
 
+        DespawnForgottenEnemies();
+
         if (elapsedSeconds < nextSpawnTime)
             return;
 
@@ -421,6 +431,30 @@ public class CorridorEnemySpawner : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void DespawnForgottenEnemies()
+    {
+        if (despawnAfterAsleep <= 0f || elapsedSeconds < nextDespawnCheckTime)
+            return;
+
+        nextDespawnCheckTime = elapsedSeconds + despawnCheckInterval;
+
+        for (int i = livingEnemies.Count - 1; i >= 0; i--)
+        {
+            GameObject enemy = livingEnemies[i];
+            EnemyActivation activation = enemy.GetComponent<EnemyActivation>();
+
+            if (activation == null ||
+                activation.SleepingFor < despawnAfterAsleep)
+            {
+                continue;
+            }
+
+            livingEnemies.RemoveAt(i);
+            enemy.SetActive(false);
+            Destroy(enemy);
+        }
     }
 
     private EnemyEntry ChooseEnemy()

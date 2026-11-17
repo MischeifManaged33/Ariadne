@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: 
   sprite: {fileID: 0}
+  pickupPrefab: {fileID: 6246725149717156589, guid: 100ca4b65e184a94d9e7932e19d7ccd0, type: 3}
   damage: 20
   attackCooldown: 0.5
-  attackRange: 2.3
+  attackRange: 2.5
   attackAngle: 90
   hitRadius: 0.5
   sounds:

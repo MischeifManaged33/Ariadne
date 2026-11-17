@@ -24,6 +24,7 @@ public class Harpy : Enemy
     private Color[] _baseColors;
     private HitFlash _flash;
     private Collider2D _hurtbox;
+    private Collider2D _hitbox;
 
     private Vector3 _visualHome;
     private bool _canLift;
@@ -36,6 +37,9 @@ public class Harpy : Enemy
 
         _flash = HitFlash.GetOrAdd(gameObject);
         _hurtbox = GetComponent<Collider2D>();
+
+        var hitbox = Hurtbox.Find(this);
+        _hitbox = hitbox != null ? hitbox.Collider : null;
 
         CacheVisual();
 
@@ -59,8 +63,12 @@ public class Harpy : Enemy
         SetAlpha(Mathf.Lerp(1f, flightAlpha, eased));
         var solid = !IsAirborne;
 
-        if (_hurtbox != null && solid != _hurtboxOn) {
-            _hurtbox.enabled = solid;
+        if (solid != _hurtboxOn) {
+            if (_hurtbox != null)
+                _hurtbox.enabled = solid;
+            if (_hitbox != null)
+                _hitbox.enabled = solid;
+
             _hurtboxOn = solid;
         }
     }

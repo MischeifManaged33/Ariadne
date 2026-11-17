@@ -143,3 +143,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Breakable
   hitsToBreak: 1
+  dropTable: {fileID: 11400000, guid: 1756a9be9a03460a963ec7167131329e, type: 2}
