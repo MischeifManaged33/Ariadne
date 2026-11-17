@@ -17,13 +17,18 @@ public partial class DesignedDungeonGenerator
     [Tooltip("Keep the Minotaur farthest after a shift, using the existing distance settings.")]
     [SerializeField] private bool keepBossFarthestOnShift = true;
 
+    [Header("Shift Performance")]
+    [SerializeField, Range(1, 4)] private int shiftAttemptsPerFrame = 1;
+    [SerializeField, Min(1)] private int shiftPlacementSamplesPerRoom = 400;
+    [SerializeField] private bool logShiftTiming;
+
     [Header("Shift Sound / Effects Events")]
     [SerializeField] private UnityEvent onShiftWarning = new UnityEvent();
     [SerializeField] private UnityEvent onDungeonShifted = new UnityEvent();
     [SerializeField] private UnityEvent onShiftFailed = new UnityEvent();
 
     public int CorridorEntriesSinceShift => shiftEntryCount;
-    public bool ShiftPending => shiftWarningRoutine != null;
+    public bool ShiftPending => shiftWarningRoutine != null || shiftBusy;
 
     private List<RoomDefinition> shiftRooms = new List<RoomDefinition>();
     private List<PlacedRoom> shiftLayout = new List<PlacedRoom>();
@@ -31,6 +36,13 @@ public partial class DesignedDungeonGenerator
     private HashSet<Vector2Int> shiftSpine = new HashSet<Vector2Int>();
     private DungeonPassageMap shiftPassages;
     private Coroutine shiftWarningRoutine;
+    private Coroutine shiftWorkRoutine;
+    private int shiftWorkVersion;
+    private bool shiftRequiresEnabled;
+    private static readonly Unity.Profiling.ProfilerMarker ShiftAttemptMarker =
+        new Unity.Profiling.ProfilerMarker("Ariadne.Shift.Attempt");
+    private static readonly Unity.Profiling.ProfilerMarker ShiftCommitMarker =
+        new Unity.Profiling.ProfilerMarker("Ariadne.Shift.Commit");
     private int shiftEntryCount;
     private int currentShiftPassage = -1;
     private bool shiftBusy;
@@ -45,6 +57,7 @@ public partial class DesignedDungeonGenerator
         HashSet<Vector2Int> spine, HashSet<Vector2Int> floor)
     {
         CancelShiftWarning();
+        CancelShiftWork();
         shiftRooms = new List<RoomDefinition>(rooms);
         shiftLayout = new List<PlacedRoom>(layout);
         shiftFloor = new HashSet<Vector2Int>(floor);
@@ -69,6 +82,7 @@ public partial class DesignedDungeonGenerator
         if (!enableMazeShifting)
         {
             CancelShiftWarning();
+            if (shiftBusy && shiftRequiresEnabled) CancelShiftWork();
             shiftHasPlayerPosition = false;
             return;
         }
@@ -136,13 +150,35 @@ public partial class DesignedDungeonGenerator
     private void OnDisable()
     {
         CancelShiftWarning();
+        CancelShiftWork();
+        shiftHasPlayerPosition = false;
+    }
+
+    private sealed class ShiftCandidate
+    {
+        public List<PlacedRoom> layout;
+        public HashSet<Vector2Int> spine;
+        public HashSet<Vector2Int> floor;
+        public HashSet<Vector2Int> locked;
+    }
+
+    private void CancelShiftWork()
+    {
+        // Invalidate first: disposing an iterator must not publish completion
+        // events for a shift which was cancelled by regeneration/disable.
+        shiftWorkVersion++;
+        Coroutine running = shiftWorkRoutine;
+        shiftWorkRoutine = null;
+        if (running != null) StopCoroutine(running);
+        shiftBusy = false;
+        shiftEntryCount = 0;
         shiftHasPlayerPosition = false;
     }
 
     [ContextMenu("Shift Dungeon (Play Mode)")]
     public void ShiftDungeon()
     {
-        if (!Application.isPlaying || shiftBusy) return;
+        if (!Application.isPlaying || !isActiveAndEnabled || shiftBusy) return;
         CancelShiftWarning();
         if (shiftRooms.Count == 0 || shiftPassages == null || player == null ||
             tilemapVisualizer == null || corridorWallPainter == null)
@@ -150,148 +186,220 @@ public partial class DesignedDungeonGenerator
             Debug.LogError("Generate a dungeon first and assign Player and the corridor references.", this);
             return;
         }
-        if (shiftLayout.Count != shiftRooms.Count ||
-            shiftRooms.Exists(room => room == null))
+        if (shiftLayout.Count != shiftRooms.Count || shiftRooms.Exists(room => room == null))
         {
             Debug.LogError("The generated room list changed. Generate the dungeon again before shifting.", this);
             return;
         }
-
         shiftBusy = true;
+        // An explicit context-menu shift also works when automatic shifting
+        // was already disabled. Turning automatic shifting OFF cancels work
+        // which started while it was enabled.
+        shiftRequiresEnabled = enableMazeShifting;
+        int version = ++shiftWorkVersion;
+        shiftWorkRoutine = StartCoroutine(ShiftOverFrames(version));
+    }
+
+    private bool CanContinueShift(int version)
+    {
+        return version == shiftWorkVersion && isActiveAndEnabled &&
+            (!shiftRequiresEnabled || enableMazeShifting) && player != null &&
+            shiftLayout.Count == shiftRooms.Count && !shiftRooms.Exists(room => room == null);
+    }
+
+    private IEnumerator ShiftOverFrames(int version)
+    {
         bool changed = false;
+        bool cancelled = false;
+        string reason = "No candidate fitted around the protected areas.";
+        int attempted = 0;
+        int attemptsThisFrame = 0;
+        double planningMs = 0, validationMs = 0, commitMs = 0, largestAttemptMs = 0;
+        var elapsed = System.Diagnostics.Stopwatch.StartNew();
+        var random = new System.Random(Guid.NewGuid().GetHashCode());
         try
         {
-            var pinnedRooms = new HashSet<int>();
-            var lockedCells = new HashSet<Vector2Int>();
-            CollectShiftProtection(pinnedRooms, lockedCells);
-            var retainedFloor = new HashSet<Vector2Int>(shiftFloor);
-            retainedFloor.IntersectWith(lockedCells);
-            var retainedSpine = new HashSet<Vector2Int>(shiftSpine);
-            retainedSpine.IntersectWith(lockedCells);
-
-            // Keep the original, active Grid hierarchy. Inactive validation
-            // clones can have a null Tilemap.layoutGrid. Evaluate synchronously
-            // and restore each trial in finally, before accepting or rejecting it.
-            var candidates = shiftRooms;
-
-            var selected = new List<SelectedRoom>();
-            foreach (PlacedRoom placement in shiftLayout) selected.Add(placement.selected);
-            FindSpecialRoomIndices(selected, out int tutorialIndex, out int bossIndex);
-
-            var area = new RectInt(dungeonOrigin, dungeonSize);
-            var random = new System.Random(Guid.NewGuid().GetHashCode());
-            string reason = "No candidate fitted around the protected areas.";
+            // Ensure the coroutine handle is stored before any completion path.
+            yield return null;
             for (int attempt = 0; attempt < Mathf.Max(1, shiftAttempts); attempt++)
             {
-                List<PlacedRoom> layout = CreateShiftLayout(pinnedRooms, lockedCells, area, random);
-                if (layout == null) continue;
-                var bounds = new List<RectInt>();
-                var trialMovedRooms = new List<int>();
-                HashSet<Vector2Int> spine = null;
-                HashSet<Vector2Int> floor = null;
+                while (CanContinueShift(version) && Time.deltaTime <= 0f) yield return null;
+                if (!CanContinueShift(version)) { cancelled = true; yield break; }
+                ShiftCandidate candidate = null;
+                bool fatal = false;
+                var timer = System.Diagnostics.Stopwatch.StartNew();
                 try
                 {
-                    for (int i = 0; i < layout.Count; i++)
-                    {
-                        if (layout[i].destinationAnchor != shiftLayout[i].destinationAnchor)
-                        {
-                            // Record before PlaceAt so even a partial failure
-                            // attempts to restore this room to its old anchor.
-                            trialMovedRooms.Add(i);
-                            candidates[i].PlaceAt(dungeonFloor, layout[i].destinationAnchor);
-                        }
-                        bounds.Add(layout[i].bounds);
-                    }
-                    spine = RoomCorridorBuilder.Build(
-    candidates, bounds, dungeonFloor, area, random,
-    Mathf.Max(mazeSpacing, corridorRadius * 2 + 2),
-    mazeLoopChance,
-    lockedCells, retainedFloor, retainedSpine,
-    roomPadding: RoomWallClearance
-);
-                    AddRandomBranches(spine, bounds, area, random);
-                    // Branches must respect the protected empty cells too.
-                    spine.RemoveWhere(cell => lockedCells.Contains(cell) && !retainedFloor.Contains(cell));
-                    floor = WidenCorridors(spine, bounds, area);
-                    for (int pass = 0; pass < smoothingPasses; pass++)
-                        floor = SmoothCorridorFloor(floor, bounds, area);
-                    floor.ExceptWith(lockedCells);
-                    floor.UnionWith(retainedFloor);
-
-                    int[] distances = RoomRouteDistances.Calculate(
-                        candidates, tutorialIndex, floor, dungeonFloor);
-                    if (Array.Exists(distances, distance => distance < 0))
-                    {
-                        reason = "A room would be unreachable.";
-                        continue;
-                    }
-                    if (keepBossFarthestOnShift &&
-                        !BossIsFarthest(distances, tutorialIndex, bossIndex, out reason)) continue;
-                    if (!ShiftFloorIsConnected(candidates, floor))
-                    {
-                        reason = "The new floor would leave a disconnected corridor or strand the player.";
-                        continue;
-                    }
+                    using (ShiftAttemptMarker.Auto())
+                        candidate = BuildShiftCandidate(random, out reason);
                 }
-                catch (InvalidOperationException exception)
+                catch (Exception exception) { Debug.LogException(exception, this); fatal = true; }
+                timer.Stop();
+                planningMs += timer.Elapsed.TotalMilliseconds;
+                largestAttemptMs = Math.Max(largestAttemptMs, timer.Elapsed.TotalMilliseconds);
+                attempted++;
+                if (fatal) break;
+                if (candidate == null)
                 {
-                    reason = exception.Message;
-                    continue;
-                }
-                finally
-                {
-                    // No yield, physics step, or activation occurs during a
-                    // trial. Restore all moved rooms, including on rejection.
-                    // Do not call SyncTransforms here; only the committed
-                    // layout should be submitted to physics.
-                    Exception restoreFailure = null;
-                    foreach (int i in trialMovedRooms)
-                    {
-                        try
-                        {
-                            candidates[i].PlaceAt(dungeonFloor, shiftLayout[i].destinationAnchor);
-                        }
-                        catch (Exception exception)
-                        {
-                            if (restoreFailure == null) restoreFailure = exception;
-                        }
-                    }
-                    if (restoreFailure != null)
-                        throw new InvalidOperationException(
-                            "A room could not be restored after shift validation. " +
-                            "Check its Grid and anchor references.", restoreFailure);
-                }
-
-                // No-op candidates do not count as a successful shift.
-                bool movedRoom = false;
-                for (int i = 0; i < layout.Count; i++)
-                    movedRoom |= layout[i].destinationAnchor != shiftLayout[i].destinationAnchor;
-                if (!movedRoom && floor.SetEquals(shiftFloor))
-                {
-                    reason = "The protected areas left no different valid layout.";
+                    attemptsThisFrame++;
+                    if (attemptsThisFrame >= Mathf.Max(1, shiftAttemptsPerFrame))
+                    { attemptsThisFrame = 0; yield return null; }
                     continue;
                 }
 
-                CommitShift(layout, spine, floor, lockedCells);
-                changed = true;
-                Debug.Log($"Maze shifted. Kept {pinnedRooms.Count} protected/occupied rooms; " +
-                    $"moved {lastShiftMovedRooms} rooms. Candidate {attempt + 1}.", this);
+                // A valid trial was fully restored before returning. Present
+                // that original maze for a frame before the expensive commit.
+                yield return null;
+                attemptsThisFrame = 0;
+                while (CanContinueShift(version) && Time.deltaTime <= 0f) yield return null;
+                if (!CanContinueShift(version)) { cancelled = true; yield break; }
+                bool stillSafe = false;
+                timer.Restart();
+                try { stillSafe = RefreshCandidateProtection(candidate, out reason); }
+                catch (Exception exception) { Debug.LogException(exception, this); fatal = true; }
+                timer.Stop();
+                validationMs += timer.Elapsed.TotalMilliseconds;
+                if (fatal) break;
+                if (!stillSafe)
+                {
+                    // The player/thread changed while we yielded. Do not edit
+                    // the old candidate into a new, unvalidated layout.
+                    yield return null;
+                    continue;
+                }
+                timer.Restart();
+                try
+                {
+                    using (ShiftCommitMarker.Auto())
+                        CommitShift(candidate.layout, candidate.spine, candidate.floor, candidate.locked);
+                    changed = true;
+                }
+                catch (Exception exception) { Debug.LogException(exception, this); }
+                timer.Stop();
+                commitMs = timer.Elapsed.TotalMilliseconds;
                 break;
             }
             if (!changed) Debug.LogWarning("Maze shift skipped; current dungeon kept. " + reason, this);
         }
-        catch (Exception exception)
-        {
-            Debug.LogException(exception, this);
-        }
         finally
         {
-            shiftBusy = false;
-            shiftEntryCount = 0;
-            shiftHasPlayerPosition = false;
+            elapsed.Stop();
+            if (version == shiftWorkVersion)
+            {
+                shiftWorkRoutine = null;
+                shiftBusy = false;
+                shiftEntryCount = 0;
+                shiftHasPlayerPosition = false;
+                if (!cancelled)
+                {
+                    if (logShiftTiming)
+                        Debug.Log($"Shift timing: {attempted} attempts; planning {planningMs:F1} ms total, " +
+                            $"largest attempt {largestAttemptMs:F1} ms; protection check {validationMs:F1} ms; " +
+                            $"commit {commitMs:F1} ms; elapsed {elapsed.Elapsed.TotalMilliseconds:F1} ms.", this);
+                    if (changed)
+                    {
+                        Debug.Log($"Maze shifted over frames. Moved {lastShiftMovedRooms} rooms. Candidate {attempted}.", this);
+                        onDungeonShifted.Invoke();
+                    }
+                    else onShiftFailed.Invoke();
+                }
+            }
         }
-        if (changed) onDungeonShifted.Invoke();
-        else onShiftFailed.Invoke();
+    }
+
+    // This entire method is synchronous. There is no yield, physics step or
+    // activation while artist rooms occupy trial positions.
+    private ShiftCandidate BuildShiftCandidate(System.Random random, out string reason)
+    {
+        reason = "No candidate fitted around the protected areas.";
+        var pinnedRooms = new HashSet<int>();
+        var lockedCells = new HashSet<Vector2Int>();
+        CollectShiftProtection(pinnedRooms, lockedCells);
+        var retainedFloor = new HashSet<Vector2Int>(shiftFloor);
+        retainedFloor.IntersectWith(lockedCells);
+        var retainedSpine = new HashSet<Vector2Int>(shiftSpine);
+        retainedSpine.IntersectWith(lockedCells);
+        var selected = new List<SelectedRoom>();
+        foreach (PlacedRoom placement in shiftLayout) selected.Add(placement.selected);
+        FindSpecialRoomIndices(selected, out int tutorialIndex, out int bossIndex);
+        var area = new RectInt(dungeonOrigin, dungeonSize);
+        List<PlacedRoom> layout = CreateShiftLayout(pinnedRooms, lockedCells, area, random);
+        if (layout == null) return null;
+        var bounds = new List<RectInt>();
+        var trialMovedRooms = new List<int>();
+        HashSet<Vector2Int> spine = null;
+        HashSet<Vector2Int> floor = null;
+        try
+        {
+            for (int i = 0; i < layout.Count; i++)
+            {
+                if (layout[i].destinationAnchor != shiftLayout[i].destinationAnchor)
+                {
+                    trialMovedRooms.Add(i);
+                    shiftRooms[i].PlaceAt(dungeonFloor, layout[i].destinationAnchor);
+                }
+                bounds.Add(layout[i].bounds);
+            }
+            spine = RoomCorridorBuilder.Build(shiftRooms, bounds, dungeonFloor, area, random,
+                Mathf.Max(mazeSpacing, corridorRadius * 2 + 2), mazeLoopChance,
+                lockedCells, retainedFloor, retainedSpine, roomPadding: RoomWallClearance);
+            AddRandomBranches(spine, bounds, area, random);
+            spine.RemoveWhere(cell => lockedCells.Contains(cell) && !retainedFloor.Contains(cell));
+            floor = WidenCorridors(spine, bounds, area);
+            for (int pass = 0; pass < smoothingPasses; pass++)
+                floor = SmoothCorridorFloor(floor, bounds, area);
+            floor.ExceptWith(lockedCells);
+            floor.UnionWith(retainedFloor);
+            int[] distances = RoomRouteDistances.Calculate(shiftRooms, tutorialIndex, floor, dungeonFloor);
+            if (Array.Exists(distances, distance => distance < 0))
+            { reason = "A room would be unreachable."; return null; }
+            if (keepBossFarthestOnShift && !BossIsFarthest(distances, tutorialIndex, bossIndex, out reason)) return null;
+            if (!ShiftFloorIsConnected(shiftRooms, floor))
+            { reason = "The new floor would leave a disconnected corridor or strand the player."; return null; }
+        }
+        catch (InvalidOperationException exception) { reason = exception.Message; return null; }
+        finally
+        {
+            Exception restoreFailure = null;
+            foreach (int i in trialMovedRooms)
+            {
+                try { shiftRooms[i].PlaceAt(dungeonFloor, shiftLayout[i].destinationAnchor); }
+                catch (Exception exception) { if (restoreFailure == null) restoreFailure = exception; }
+            }
+            if (restoreFailure != null)
+                throw new InvalidOperationException("A room could not be restored after shift validation. " +
+                    "Check its Grid and anchor references.", restoreFailure);
+        }
+        bool movedRoom = false;
+        for (int i = 0; i < layout.Count; i++)
+            movedRoom |= layout[i].destinationAnchor != shiftLayout[i].destinationAnchor;
+        if (!movedRoom && floor.SetEquals(shiftFloor))
+        { reason = "The protected areas left no different valid layout."; return null; }
+        return new ShiftCandidate { layout = layout, floor = floor, spine = spine, locked = lockedCells };
+    }
+
+    private bool RefreshCandidateProtection(ShiftCandidate candidate, out string reason)
+    {
+        reason = "The player or thread entered an area that this candidate would change.";
+        var pinned = new HashSet<int>();
+        var locked = new HashSet<Vector2Int>();
+        CollectShiftProtection(pinned, locked);
+        foreach (int i in pinned)
+            if (candidate.layout[i].destinationAnchor != shiftLayout[i].destinationAnchor) return false;
+        foreach (Vector2Int cell in locked)
+            if (candidate.floor.Contains(cell) != shiftFloor.Contains(cell)) return false;
+        // A moved room must not bring new art into a freshly protected wall area.
+        for (int i = 0; i < candidate.layout.Count; i++)
+        {
+            if (candidate.layout[i].destinationAnchor == shiftLayout[i].destinationAnchor) continue;
+            RectInt bounds = candidate.layout[i].bounds;
+            for (int x = bounds.xMin - 1; x < bounds.xMax + 1; x++)
+                for (int y = bounds.yMin - 1; y < bounds.yMax + 1; y++)
+                    if (locked.Contains(new Vector2Int(x, y))) return false;
+        }
+        // Population preservation is conservative across both snapshots.
+        candidate.locked.UnionWith(locked);
+        return true;
     }
 
     private int lastShiftMovedRooms;
@@ -341,36 +449,73 @@ public partial class DesignedDungeonGenerator
         }
     }
 
-    private List<PlacedRoom> CreateShiftLayout(
-        HashSet<int> pinned, HashSet<Vector2Int> locked,
+    // A summed-area index makes each proposed room's protection query O(1).
+    private sealed class ShiftLockIndex
+    {
+        private readonly RectInt area;
+        private readonly int[,] sum;
+        public ShiftLockIndex(RectInt bounds, HashSet<Vector2Int> cells)
+        {
+            area = bounds;
+            sum = new int[area.width + 1, area.height + 1];
+            foreach (Vector2Int cell in cells)
+                if (area.Contains(cell)) sum[cell.x - area.xMin + 1, cell.y - area.yMin + 1] = 1;
+            for (int x = 1; x <= area.width; x++)
+                for (int y = 1; y <= area.height; y++)
+                    sum[x, y] += sum[x - 1, y] + sum[x, y - 1] - sum[x - 1, y - 1];
+        }
+        public bool Intersects(RectInt bounds)
+        {
+            int x0 = Mathf.Clamp(bounds.xMin - area.xMin, 0, area.width);
+            int y0 = Mathf.Clamp(bounds.yMin - area.yMin, 0, area.height);
+            int x1 = Mathf.Clamp(bounds.xMax - area.xMin, 0, area.width);
+            int y1 = Mathf.Clamp(bounds.yMax - area.yMin, 0, area.height);
+            return sum[x1, y1] - sum[x0, y1] - sum[x1, y0] + sum[x0, y0] > 0;
+        }
+    }
+
+    private List<PlacedRoom> CreateShiftLayout(HashSet<int> pinned, HashSet<Vector2Int> locked,
         RectInt area, System.Random random)
     {
+        var index = new ShiftLockIndex(area, locked);
         var result = new List<PlacedRoom>(new PlacedRoom[shiftLayout.Count]);
         var placed = new List<PlacedRoom>();
-        foreach (int index in pinned)
+        foreach (int i in pinned)
         {
-            PlacedRoom placement = shiftLayout[index];
-            if (!area.Contains(placement.bounds.min) ||
-                !area.Contains(placement.bounds.max - Vector2Int.one)) return null;
-            result[index] = placement;
+            PlacedRoom placement = shiftLayout[i];
+            if (!area.Contains(placement.bounds.min) || !area.Contains(placement.bounds.max - Vector2Int.one)) return null;
+            result[i] = placement;
             placed.Add(placement);
         }
-        // The original list is sorted largest-first.
         for (int i = 0; i < shiftLayout.Count; i++)
         {
             if (pinned.Contains(i)) continue;
+            SelectedRoom room = shiftLayout[i].selected;
+            int width = room.localBounds.size.x, height = room.localBounds.size.y;
+            int minX = area.xMin + roomSpacing, minY = area.yMin + roomSpacing;
+            int maxX = area.xMax - roomSpacing - width, maxY = area.yMax - roomSpacing - height;
+            if (maxX < minX || maxY < minY) return null;
             PlacedRoom chosen = null;
-            for (int attempt = 0; attempt < Mathf.Max(1, attemptsPerRoom); attempt++)
+            // A single, explicit bound replaces attemptsPerRoom nested inside
+            // another attemptsPerRoom loop (potentially 200 x 200 samples).
+            for (int attempt = 0; attempt < Mathf.Max(1, shiftPlacementSamplesPerRoom); attempt++)
             {
-                PlacedRoom candidate = FindPlacement(shiftLayout[i].selected, placed, area, random);
-                if (candidate == null) break;
-                bool overlapsLock = false;
-                // This extra margin keeps changed room art outside preserved walls.
-                RectInt bounds = candidate.bounds;
-                for (int x = bounds.xMin - 1; x < bounds.xMax + 1 && !overlapsLock; x++)
-                    for (int y = bounds.yMin - 1; y < bounds.yMax + 1; y++)
-                        if (locked.Contains(new Vector2Int(x, y))) { overlapsLock = true; break; }
-                if (!overlapsLock) { chosen = candidate; break; }
+                int x = random.Next(minX, maxX + 1), y = random.Next(minY, maxY + 1);
+                var bounds = new RectInt(x, y, width, height);
+                var padded = new RectInt(x - roomSpacing, y - roomSpacing,
+                    width + roomSpacing * 2, height + roomSpacing * 2);
+                bool overlap = false;
+                foreach (PlacedRoom other in placed)
+                    if (padded.Overlaps(other.bounds)) { overlap = true; break; }
+                if (overlap || index.Intersects(new RectInt(x - 1, y - 1, width + 2, height + 2))) continue;
+                chosen = new PlacedRoom
+                {
+                    selected = room,
+                    bounds = bounds,
+                    destinationAnchor = bounds.position + room.localAnchor -
+                        new Vector2Int(room.localBounds.xMin, room.localBounds.yMin)
+                };
+                break;
             }
             if (chosen == null) return null;
             result[i] = chosen;
