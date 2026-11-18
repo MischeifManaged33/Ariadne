@@ -26,6 +26,8 @@ public class AriadneThread : MonoBehaviour
 
     [SerializeField, Min(0f)]
     private float healthPerUnitRecovered = 0.5f;
+    [SerializeField, Range(0f, 1f)]
+    private float windRecoveryFraction = 0.5f;
 
     [Tooltip(
         "Disable when your existing interaction manager " +
@@ -35,6 +37,12 @@ public class AriadneThread : MonoBehaviour
 
     [SerializeField, Min(0.1f)]
     private float teleportBreakDistance = 5f;
+
+    [Header("Reattach")]
+    [SerializeField] private bool allowReattach = true;
+
+    [SerializeField, Min(0.01f)]
+    private float reattachDistance = 0.6f;
 
     [Header("Trail Cleanup")]
     [Tooltip("Merge overlapping passes in the display without changing spool length or tied paths.")]
@@ -72,9 +80,8 @@ public class AriadneThread : MonoBehaviour
     private float flutterSpeed = 8f;
 
     public float UsedThread => usedThread;
-
-    public float RemainingThread =>
-        Mathf.Max(0f, threadLength - usedThread);
+    public float ThreadLength => threadLength;
+    public float RemainingThread => Mathf.Max(0f, spoolThread);
 
     public float RemainingFraction =>
         threadLength > 0f
@@ -117,6 +124,7 @@ public class AriadneThread : MonoBehaviour
     private LineRenderer line;
 
     private float usedThread;
+    private float spoolThread;
     private bool detached;
     private bool hasLastFollowPosition;
     private Vector3 lastFollowPosition;
@@ -124,6 +132,7 @@ public class AriadneThread : MonoBehaviour
     private void Awake()
     {
         line = GetComponent<LineRenderer>();
+        spoolThread = threadLength;
 
         if (followPoint == null)
             followPoint = transform;
@@ -247,9 +256,30 @@ public class AriadneThread : MonoBehaviour
             {
                 LayThread(position);
             }
+            else if (TryReattach(position))
+            {
+                LayThread(position);
+            }
         }
 
         RenderThread();
+    }
+
+    public bool CanReattach =>
+        allowReattach && detached && !IsWinding &&
+        !IsOutOfThread && points.Count > 0;
+
+    private bool TryReattach(Vector3 position)
+    {
+        if (!CanReattach)
+            return false;
+
+        Vector3 end = points[points.Count - 1];
+        if (Vector2.Distance(end, position) > reattachDistance)
+            return false;
+
+        detached = false;
+        return true;
     }
 
     public void StopWinding()
@@ -290,10 +320,8 @@ public class AriadneThread : MonoBehaviour
 
         pointTimes.Add(Time.time);
 
-        usedThread = Mathf.Min(
-            threadLength,
-            usedThread + length
-        );
+        usedThread += length;
+        spoolThread = Mathf.Max(0f, spoolThread - length);
 
         if (IsOutOfThread)
             detached = true;
@@ -374,10 +402,8 @@ public class AriadneThread : MonoBehaviour
             points.Add(target);
             pointTimes.Add(Time.time);
 
-            usedThread = Mathf.Min(
-                threadLength,
-                usedThread + length
-            );
+            usedThread += length;
+            spoolThread = Mathf.Max(0f, spoolThread - length);
         }
 
         knots.Add(new ThreadKnot
@@ -503,6 +529,8 @@ public class AriadneThread : MonoBehaviour
         recovered = Mathf.Min(recovered, usedThread);
         usedThread = Mathf.Max(0f, usedThread - recovered);
 
+        spoolThread += recovered * windRecoveryFraction;
+
         ReleaseRewoundConnections(recovered, removedVertices);
 
         if (recovered > 0f)
@@ -562,6 +590,15 @@ public class AriadneThread : MonoBehaviour
         }
     }
 
+    public void AddThread(float amount)
+    {
+        if (amount <= 0f)
+            return;
+
+        spoolThread += amount;
+        NotifyAmountChanged();
+    }
+
     public void ResetSpool()
     {
         BreakAllConnections();
@@ -570,6 +607,7 @@ public class AriadneThread : MonoBehaviour
         pointTimes.Clear();
 
         usedThread = 0f;
+        spoolThread = Mathf.Max(spoolThread, threadLength);
         detached = false;
         IsWinding = false;
         hasLastFollowPosition = false;
@@ -761,6 +799,7 @@ public class AriadneThread : MonoBehaviour
         threadLength = Mathf.Max(0.1f, threadLength);
         pointSpacing = Mathf.Max(0.01f, pointSpacing);
         windingSpeed = Mathf.Max(0.01f, windingSpeed);
+        reattachDistance = Mathf.Max(0.01f, reattachDistance);
 
         healthPerUnitRecovered =
             Mathf.Max(0f, healthPerUnitRecovered);
