@@ -73,6 +73,22 @@ public class CorridorWallPainter : MonoBehaviour
     [SerializeField] private string[] heightSortingLayers = { "Wall", "Wall2", "Wall3" };
     [SerializeField] private int wallSortingOrder = 0;
 
+    [Header("Artist Room Front Sorting")]
+    [Tooltip("Drag a room prefab here, then run Copy Front Sorting From Reference Room in this component's menu.")]
+    [SerializeField] private RoomDefinition artistSortingReference;
+    [Tooltip("Overrides for the corresponding FRONT wall heights only. Empty entries and later heights " +
+        "use Height Sorting Layers. Copy the actual Sorting Layer names, not Tilemap object names.")]
+    [SerializeField] private string[] frontHeightSortingLayers = new string[0];
+    private readonly HashSet<Tilemap> frontWallSources = new HashSet<Tilemap>();
+    private struct WallSortKey
+    {
+        public int id, value, order;
+        public WallSortKey(int layer, int sortingOrder)
+        { id = layer; value = SortingLayer.GetLayerValueFromID(layer); order = sortingOrder; }
+    }
+    private WallSortKey[] backSortKeys = new WallSortKey[0];
+    private WallSortKey[] frontSortKeys = new WallSortKey[0];
+
     // Retained to preserve existing Inspector data.
     [Header("Connector Offsets - Local Units")]
     [SerializeField] private Vector3 insideJoinOffset;
@@ -150,6 +166,8 @@ public class CorridorWallPainter : MonoBehaviour
 
         usedHeightLayers.Clear();
         usedCornerMaps.Clear();
+        frontWallSources.Clear();
+        PrepareWallSortKeys();
         ConfigureFrontWall(wallsAlongY, wallsAlongX, Vector3.zero);
         ConfigureFrontWall(frontWallsAlongX, wallsAlongX, Vector3.zero);
         ConfigureFrontWall(frontWallsAlongY, wallsAlongX, Vector3.zero);
@@ -158,12 +176,15 @@ public class CorridorWallPainter : MonoBehaviour
             TransparentWallTilemap transparent = map.GetComponent<TransparentWallTilemap>();
             if (transparent == null) transparent = map.gameObject.AddComponent<TransparentWallTilemap>();
             transparent.IgnoreSorting = true;
-            ApplyWallSorting(map.GetComponent<TilemapRenderer>(), 0, false);
+            ApplyWallSorting(map.GetComponent<TilemapRenderer>(), 0,
+                map == frontWallsAlongX || map == frontWallsAlongY);
         }
-        if (corners != null) corners.ClearAllTiles();
+        if (corners != null && corners.transform.parent != wallsAlongX.transform.parent)
+            throw new InvalidOperationException("The Corners Tilemap must share the wall Grid parent.");
 
         var plans = new Dictionary<Vector2Int, TileBase>[4];
         for (int i = 0; i < plans.Length; i++) plans[i] = new Dictionary<Vector2Int, TileBase>();
+        var mixedJoins = new Dictionary<Vector2Int, TileBase>();
         HashSet<Vector2Int> candidates = new HashSet<Vector2Int>();
         foreach (Vector2Int floor in corridorFloor)
         {
@@ -184,6 +205,15 @@ public class CorridorWallPainter : MonoBehaviour
             if (tile == null) continue;
             // Each cell has exactly one owner. A meeting of two edges gets a
             // corner sprite rather than deleting either edge by priority.
+            // These pieces contain both a front and back face. Sorting them as
+            // an entire front strip lets a little end face punch through the
+            // adjoining back wall. Give them their own back-depth render map.
+            if (sides == (FloorSides.Up | FloorSides.Left) ||
+                sides == (FloorSides.Down | FloorSides.Right))
+            {
+                mixedJoins.Add(cell, tile);
+                continue;
+            }
             int owner = (sides & FloorSides.Up) != 0 ? 2 :
                 (sides & FloorSides.Right) != 0 ? 3 :
                 (sides & FloorSides.Down) != 0 ? 0 : 1;
@@ -191,6 +221,17 @@ public class CorridorWallPainter : MonoBehaviour
         }
         for (int i = 0; i < maps.Length; i++)
             PaintFace(maps[i], plans[i], i >= 2);
+        Tilemap joinTarget = corners;
+        bool usableJoinTarget = joinTarget != null && joinTarget.gameObject.activeInHierarchy &&
+            joinTarget.GetComponent<TilemapRenderer>() != null && joinTarget.GetComponent<TilemapRenderer>().enabled;
+        if (usableJoinTarget || mixedJoins.Count > 0)
+        {
+            Tilemap joins = usableJoinTarget ? joinTarget : GetPooledCornerMap("Corridor Mixed Wall Joins");
+            ConfigureCornerVisual(joins);
+            // Preserve front fading and base collision; only render depth is
+            // back-facing for these two mixed corner shapes.
+            PaintFace(joins, mixedJoins, true, null, false, false);
+        }
 
         // A convex floor corner leaves a small diamond between the two wall
         // end caps. Fill only that diamond, not another full straight wall.
@@ -243,7 +284,7 @@ public class CorridorWallPainter : MonoBehaviour
                     posts[cell] = tile;
                 }
                 if (posts.Count == 0) continue;
-                Tilemap map = CreateCornerMap(dx, dy);
+                Tilemap map = GetPooledCornerMap("Corridor Corner Posts " + dx + "," + dy);
                 Vector3 origin = map.CellToLocal(Vector3Int.zero);
                 Vector3 shift = Vector3.zero;
                 if (dx > 0) shift += (map.CellToLocal(Vector3Int.right) - origin) * PostStep;
@@ -252,9 +293,8 @@ public class CorridorWallPainter : MonoBehaviour
             }
     }
 
-    private Tilemap CreateCornerMap(int dx, int dy)
+    private Tilemap GetPooledCornerMap(string name)
     {
-        string name = "Corridor Corner Posts " + dx + "," + dy;
         Tilemap map = null;
         foreach (Tilemap cached in generatedCornerMaps)
             if (cached != null && cached.name == name) { map = cached; break; }
@@ -269,20 +309,26 @@ public class CorridorWallPainter : MonoBehaviour
         }
         else reusedWallObjects++;
         usedCornerMaps.Add(map);
-        // ApplyTilePlan removes obsolete cells when this pooled source is repainted.
+        ConfigureCornerVisual(map);
+        map.gameObject.SetActive(true);
+        return map;
+    }
+
+    private void ConfigureCornerVisual(Tilemap map)
+    {
         ConfigureFrontWall(map, wallsAlongX, Vector3.zero);
         map.color = wallsAlongX.color;
+        TransparentWallTilemap transparent = map.GetComponent<TransparentWallTilemap>();
+        if (transparent == null) transparent = map.gameObject.AddComponent<TransparentWallTilemap>();
+        transparent.IgnoreSorting = true;
         TilemapRenderer source = wallsAlongX.GetComponent<TilemapRenderer>();
         TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
-        if (source != null)
+        if (source != null && renderer != null)
         {
             renderer.sharedMaterials = source.sharedMaterials;
             renderer.sortOrder = source.sortOrder;
             renderer.maskInteraction = source.maskInteraction;
         }
-        ApplyWallSorting(renderer, 0, false);
-        map.gameObject.SetActive(true);
-        return map;
     }
 
     private void ClearCornerMaps()
@@ -327,9 +373,13 @@ public class CorridorWallPainter : MonoBehaviour
     }
 
     private void PaintFace(Tilemap source, Dictionary<Vector2Int, TileBase> plan,
-        bool isFront, Matrix4x4? tileTransform = null, bool isPost = false)
+        bool isFront, Matrix4x4? tileTransform = null, bool isPost = false, bool? frontSorting = null)
     {
         int count = Mathf.Max(1, wallHeight);
+        bool sortAsFront = frontSorting ?? isFront;
+        if (sortAsFront) frontWallSources.Add(source);
+        else frontWallSources.Remove(source);
+        ApplyWallSorting(source.GetComponent<TilemapRenderer>(), 0, sortAsFront);
         // The transformed post sprite must not receive a transformed full-cell
         // collision shape. DungeonGroundCollision owns those outside cells.
         ConfigureWallPhysics(source, !isPost, false, !isPost && (isFront || count == 1));
@@ -447,11 +497,11 @@ public class CorridorWallPainter : MonoBehaviour
                 sourceRenderer.enabled;
         }
 
-        ApplyWallSorting(visualRenderer, level, IsBottomLeftFace(source));
+        ApplyWallSorting(visualRenderer, level, frontWallSources.Contains(source));
         // Retain the front-post bias on every stacked height, while keeping
         // each height on its existing sorting layer.
         if (sourceRenderer != null)
-            visualRenderer.sortingOrder = sourceRenderer.sortingOrder;
+            visualRenderer.sortingOrder += sourceRenderer.sortingOrder - wallSortingOrder;
 
         var levelTiles = new Dictionary<Vector3Int, TileBase>();
         foreach (KeyValuePair<Vector3Int, TileBase> entry in topTiles)
@@ -596,28 +646,58 @@ public class CorridorWallPainter : MonoBehaviour
             transparent.enabled = canFade;
     }
 
-    private bool IsBottomLeftFace(Tilemap map)
+    private string RequestedWallLayer(int level, bool front)
     {
-        return map == frontWallsAlongY;
+        if (front && frontHeightSortingLayers != null && level < frontHeightSortingLayers.Length &&
+            !string.IsNullOrEmpty(frontHeightSortingLayers[level])) return frontHeightSortingLayers[level];
+        if (heightSortingLayers != null && heightSortingLayers.Length > 0)
+            return heightSortingLayers[Mathf.Clamp(level, 0, heightSortingLayers.Length - 1)];
+        return "Wall";
     }
 
-    private void ApplyWallSorting(TilemapRenderer renderer, int level, bool isBottomLeft)
+    private static WallSortKey AtLeast(WallSortKey key, WallSortKey minimum)
     {
-        if (renderer == null)
-            return;
+        if (key.value < minimum.value) return minimum;
+        if (key.value == minimum.value) key.order = Mathf.Max(key.order, minimum.order);
+        return key;
+    }
 
-        string layerName = "Wall";
-
-        if (heightSortingLayers != null && heightSortingLayers.Length > 0)
+    private void PrepareWallSortKeys()
+    {
+        int count = Mathf.Max(1, wallHeight);
+        if (backSortKeys.Length != count)
+        { backSortKeys = new WallSortKey[count]; frontSortKeys = new WallSortKey[count]; }
+        WallSortKey previous = new WallSortKey();
+        for (int level = 0; level < count; level++)
         {
-            layerName = heightSortingLayers[
-                Mathf.Clamp(level, 0, heightSortingLayers.Length - 1)
-            ];
+            var back = new WallSortKey(SortingLayer.NameToID(RequestedWallLayer(level, false)), wallSortingOrder);
+            var front = new WallSortKey(SortingLayer.NameToID(RequestedWallLayer(level, true)), wallSortingOrder);
+            if (level > 0)
+            {
+                // Reserve +1 for the closing front post on the previous course.
+                // Every next course must sort later than ALL lower courses,
+                // even when the artist's Frontwall layers are much higher.
+                WallSortKey minimum = previous;
+                minimum.order += 2;
+                back = AtLeast(back, minimum);
+                front = AtLeast(front, minimum);
+            }
+            front = AtLeast(front, back);
+            backSortKeys[level] = back;
+            frontSortKeys[level] = front;
+            previous = front;
         }
+    }
 
+    private void ApplyWallSorting(TilemapRenderer renderer, int level, bool isFront)
+    {
+        if (renderer == null) return;
+        if (backSortKeys.Length == 0) PrepareWallSortKeys();
+        int index = Mathf.Clamp(level, 0, backSortKeys.Length - 1);
+        WallSortKey key = isFront ? frontSortKeys[index] : backSortKeys[index];
         renderer.mode = TilemapRenderer.Mode.Individual;
-        renderer.sortingLayerName = layerName;
-        renderer.sortingOrder = wallSortingOrder;
+        renderer.sortingLayerID = key.id;
+        renderer.sortingOrder = key.order;
     }
 
     private static bool CanPaint(
@@ -659,6 +739,37 @@ public class CorridorWallPainter : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+    [ContextMenu("Copy Front Sorting From Reference Room")]
+    private void CopyFrontSortingFromReferenceRoom()
+    {
+        if (artistSortingReference == null)
+        {
+            Debug.LogWarning("Assign Artist Sorting Reference to a room prefab, such as SPARoom.", this);
+            return;
+        }
+        var ids = new List<int>();
+        foreach (TilemapRenderer renderer in artistSortingReference.GetComponentsInChildren<TilemapRenderer>(true))
+        {
+            string name = renderer.gameObject.name;
+            if (name.IndexOf("Front", StringComparison.OrdinalIgnoreCase) < 0 ||
+                name.IndexOf("Wall", StringComparison.OrdinalIgnoreCase) < 0) continue;
+            if (!ids.Contains(renderer.sortingLayerID)) ids.Add(renderer.sortingLayerID);
+        }
+        if (ids.Count == 0)
+        {
+            Debug.LogWarning("The reference room has no TilemapRenderers named Front...Wall. " +
+                "Enter its front Sorting Layer names in Front Height Sorting Layers manually.", this);
+            return;
+        }
+        ids.Sort((a, b) => SortingLayer.GetLayerValueFromID(a).CompareTo(SortingLayer.GetLayerValueFromID(b)));
+        UnityEditor.Undo.RecordObject(this, "Copy Artist Front Sorting");
+        frontHeightSortingLayers = new string[ids.Count];
+        for (int i = 0; i < ids.Count; i++) frontHeightSortingLayers[i] = SortingLayer.IDToName(ids[i]);
+        UnityEditor.EditorUtility.SetDirty(this);
+        Debug.Log("Copied front Sorting Layers: " + string.Join(", ", frontHeightSortingLayers) +
+            ". Save the scene and regenerate. Existing height/anchor settings were kept.", this);
+    }
+
     [ContextMenu("Configure Supplied Artist Wall Set")]
     private void ConfigureSuppliedArtistWallSet()
     {
