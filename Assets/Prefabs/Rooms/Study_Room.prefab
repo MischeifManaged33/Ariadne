@@ -1484,7 +1484,7 @@ Transform:
   m_GameObject: {fileID: 3304068900354271814}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.56, y: 8.79, z: 0}
+  m_LocalPosition: {x: 15.4, y: 7.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1503,10 +1503,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomEntrance
   roomFloor: {fileID: 6525425387360333593}
-  outwardDirection: 2
+  outwardDirection: 0
   entranceWidth: 3
-  savedEntranceCell: {x: 0, y: 0, z: 0}
-  hasSavedEntranceCell: 0
+  savedEntranceCell: {x: 11, y: 0, z: 0}
+  hasSavedEntranceCell: 1
 --- !u!1 &4495763386833753014
 GameObject:
   m_ObjectHideFlags: 0
@@ -3629,7 +3629,7 @@ Transform:
   m_GameObject: {fileID: 5648107267194874157}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.29, y: 2, z: 0}
+  m_LocalPosition: {x: 9.8, y: 2.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4348,7 +4348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomDefinition
   floorTilemap: {fileID: 6525425387360333593}
   placementAnchor: {fileID: 8070709278310143189}
-  savedAnchorCell: {x: 8, y: -1, z: 0}
+  savedAnchorCell: {x: 5, y: -2, z: 0}
   hasSavedAnchorCell: 1
   blockingTilemaps:
   - {fileID: 6428986428701613934}

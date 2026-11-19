@@ -60,6 +60,10 @@ public class ThreadTrailCleanup : MonoBehaviour
     private LineRenderer primary;
     private int strokeCount;
     private float cellSize;
+    private bool cleanupThisRender;
+    private readonly HashSet<int> inputBreaks = new HashSet<int>();
+    private readonly HashSet<int> simplifiedBreaks = new HashSet<int>();
+    private readonly HashSet<int> smoothBreaks = new HashSet<int>();
 
     private void Awake()
     {
@@ -75,8 +79,9 @@ public class ThreadTrailCleanup : MonoBehaviour
     }
 
     public void Render(List<Vector3> path, List<int> knotIndices, LineRenderer source,
-        float rounding, int cornerSamples)
+        float rounding, int cornerSamples, List<int> breakIndices = null, bool cleanVisuals = true)
     {
+        cleanupThisRender = cleanVisuals;
         primary = source;
         strokeCount = 0;
         stroke.Clear();
@@ -91,6 +96,12 @@ public class ThreadTrailCleanup : MonoBehaviour
         Array.Clear(keep, 0, path.Count);
         Array.Clear(pinned, 0, path.Count);
         pinned[0] = pinned[path.Count - 1] = true;
+        keep[0] = true; // Also preserve a first run consisting of a single knot.
+        inputBreaks.Clear();
+        if (breakIndices != null)
+            foreach (int index in breakIndices)
+                if (index > 0 && index < path.Count)
+                { inputBreaks.Add(index); pinned[index - 1] = pinned[index] = true; }
         foreach (int index in knotIndices)
         {
             if (index < 0 || index >= path.Count) continue;
@@ -101,21 +112,31 @@ public class ThreadTrailCleanup : MonoBehaviour
         for (int end = 1; end < path.Count; end++)
         {
             if (!pinned[end]) continue;
+            if (inputBreaks.Contains(end)) { keep[end] = true; start = end; continue; }
             Simplify(path, start, end);
             start = end;
         }
         simplified.Clear();
+        simplifiedBreaks.Clear();
         // Store protected positions separately, so subsequent corner rounding
         // and overlap clipping cannot erase an actual tied vertex.
         for (int i = 0; i < path.Count; i++)
-            if (keep[i]) simplified.Add(path[i]);
+            if (keep[i])
+            {
+                if (inputBreaks.Contains(i)) simplifiedBreaks.Add(simplified.Count);
+                simplified.Add(path[i]);
+            }
         RoundCorners(rounding, cornerSamples);
 
         canonical.Clear();
         foreach (List<int> bucket in grid.Values) { bucket.Clear(); bucketPool.Push(bucket); }
         grid.Clear();
         cellSize = Mathf.Max(0.05f, mergeDistance * 2f);
-        for (int i = 1; i < smooth.Count; i++) DrawSegment(smooth[i - 1], smooth[i]);
+        for (int i = 1; i < smooth.Count; i++)
+        {
+            if (smoothBreaks.Contains(i)) { Flush(); continue; }
+            DrawSegment(smooth[i - 1], smooth[i]);
+        }
         Flush();
         if (strokeCount == 0) primary.positionCount = 0;
         for (int i = Mathf.Max(0, strokeCount - 1); i < renderers.Count; i++)
@@ -124,6 +145,8 @@ public class ThreadTrailCleanup : MonoBehaviour
 
     private void Simplify(List<Vector3> path, int start, int end)
     {
+        if (!cleanupThisRender)
+        { for (int i = start; i <= end; i++) keep[i] = true; return; }
         ranges.Clear();
         ranges.Push(new IndexRange(start, end));
         while (ranges.Count > 0)
@@ -167,11 +190,15 @@ public class ThreadTrailCleanup : MonoBehaviour
     private void RoundCorners(float amount, int samples)
     {
         smooth.Clear();
+        smoothBreaks.Clear();
         smooth.Add(simplified[0]);
         for (int i = 1; i < simplified.Count - 1; i++)
         {
             Vector3 p = simplified[i], previous = simplified[i - 1], next = simplified[i + 1];
             float before = Vector3.Distance(previous, p), after = Vector3.Distance(p, next);
+            if (simplifiedBreaks.Contains(i))
+            { smoothBreaks.Add(smooth.Count); smooth.Add(p); continue; }
+            if (simplifiedBreaks.Contains(i + 1)) { smooth.Add(p); continue; }
             if (amount <= 0f || IsAnchor(p) || before < Small || after < Small)
             { smooth.Add(p); continue; }
             Vector3 entry = Vector3.Lerp(p, previous, Mathf.Min(0.45f, amount / before));
@@ -192,6 +219,7 @@ public class ThreadTrailCleanup : MonoBehaviour
             if (safe) smooth.AddRange(rounded);
             else smooth.Add(p);
         }
+        if (simplifiedBreaks.Contains(simplified.Count - 1)) smoothBreaks.Add(smooth.Count);
         smooth.Add(simplified[simplified.Count - 1]);
     }
 
@@ -201,7 +229,7 @@ public class ThreadTrailCleanup : MonoBehaviour
         if (length <= Small) return;
         Vector3 direction = (b - a) / length;
         coverage.Clear();
-        if (mergeDistance > 0f)
+        if (cleanupThisRender && mergeDistance > 0f)
         {
             Gather(a, b, false, -1);
             float alignment = Mathf.Cos(mergeAngle * Mathf.Deg2Rad);
@@ -225,16 +253,16 @@ public class ThreadTrailCleanup : MonoBehaviour
         // Preserve a small neighbourhood of every knot, even if its path was
         // already represented by an earlier pass through this corridor.
         if (knotKeepRadius > 0f)
-        foreach (Vector3 anchor in anchors)
-        {
-            float centre = Vector2.Dot(anchor - a, direction);
-            Vector3 projected = a + direction * centre;
-            float distance = ((Vector2)(projected - anchor)).sqrMagnitude;
-            float radiusSquared = knotKeepRadius * knotKeepRadius;
-            if (distance > radiusSquared) continue;
-            float half = Mathf.Sqrt(radiusSquared - distance);
-            SubtractCoverage(centre - half, centre + half);
-        }
+            foreach (Vector3 anchor in anchors)
+            {
+                float centre = Vector2.Dot(anchor - a, direction);
+                Vector3 projected = a + direction * centre;
+                float distance = ((Vector2)(projected - anchor)).sqrMagnitude;
+                float radiusSquared = knotKeepRadius * knotKeepRadius;
+                if (distance > radiusSquared) continue;
+                float half = Mathf.Sqrt(radiusSquared - distance);
+                SubtractCoverage(centre - half, centre + half);
+            }
         coverage.Sort((x, y) => x.start.CompareTo(y.start));
         float cursor = 0f;
         foreach (Span covered in coverage)
@@ -293,9 +321,9 @@ public class ThreadTrailCleanup : MonoBehaviour
             else
             {
                 for (int x = -1; x <= 1; x++)
-                for (int y = -1; y <= 1; y++)
-                    if (grid.TryGetValue(cell + new Vector2Int(x, y), out List<int> bucket))
-                        foreach (int candidate in bucket) nearby.Add(candidate);
+                    for (int y = -1; y <= 1; y++)
+                        if (grid.TryGetValue(cell + new Vector2Int(x, y), out List<int> bucket))
+                            foreach (int candidate in bucket) nearby.Add(candidate);
             }
         }
     }

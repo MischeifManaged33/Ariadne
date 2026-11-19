@@ -49,6 +49,7 @@ public partial class DesignedDungeonGenerator
     private bool shiftHasPlayerPosition;
     private Vector3 shiftPreviousPlayerPosition;
     private readonly List<Vector3> shiftThreadPoints = new List<Vector3>();
+    private readonly List<int> shiftThreadBreaks = new List<int>();
     private readonly List<Vector2Int> shiftTraceCells = new List<Vector2Int>();
 
     // Called once, after a normal GenerateDungeon succeeds.
@@ -406,12 +407,22 @@ public partial class DesignedDungeonGenerator
 
     private void CollectShiftProtection(HashSet<int> pinned, HashSet<Vector2Int> locked)
     {
+        // The Minotaur room is a permanent landmark for this generated maze.
+        // Pin it in both planning and the fresh pre-commit protection check.
+        for (int i = 0; i < shiftLayout.Count; i++)
+            if (shiftLayout[i].selected.prefab == minotaurRoomPrefab)
+                pinned.Add(i);
+
         shiftThreadPoints.Clear();
-        if (ariadneThread != null) ariadneThread.CopyTiedPath(shiftThreadPoints);
+        shiftThreadBreaks.Clear();
+        if (ariadneThread != null) ariadneThread.CopyProtectedPath(shiftThreadPoints, shiftThreadBreaks);
         shiftTraceCells.Clear();
+        int nextBreak = 0;
         for (int i = 0; i < shiftThreadPoints.Count; i++)
         {
-            if (i == 0) shiftTraceCells.Add(ShiftCell(shiftThreadPoints[i]));
+            bool startsRun = nextBreak < shiftThreadBreaks.Count && shiftThreadBreaks[nextBreak] == i;
+            if (startsRun) nextBreak++;
+            if (i == 0 || startsRun) shiftTraceCells.Add(ShiftCell(shiftThreadPoints[i]));
             else TraceShiftLine(shiftThreadPoints[i - 1], shiftThreadPoints[i], shiftTraceCells);
         }
         // A room's knot marker may sit outside its painted tile bounds.
