@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Bow
   sprite: {fileID: 0}
   pickupPrefab: {fileID: 6246725149717156589, guid: 02ce26c669eb072459ba65bc0efa0f47, type: 3}
-  damage: 25
+  damage: 28
   attackCooldown: 0.5
   attackRange: 2
   attackAngle: 90
@@ -43,7 +43,8 @@ MonoBehaviour:
         Data4: 0
       Path: 
   arrowPrefab: {fileID: 7962461102716392359, guid: 25d63bf7b6600e34fad29c8e3d194f04, type: 3}
-  spawnOffset: 0.4
+  spawnOffset: 0
+  rotationOffset: 30
   chargeTime: 1.5
   chargeCurve:
     serializedVersion: 2
@@ -69,7 +70,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minDamage: 3
+  minDamage: 2
   minSpeed: 10
   maxSpeed: 30
   minDistance: 4

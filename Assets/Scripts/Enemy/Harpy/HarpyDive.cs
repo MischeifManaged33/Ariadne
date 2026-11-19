@@ -1,7 +1,5 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        using System.Collections;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Playables;
 
 public class HarpyDive : EnemyAbility
 {
@@ -40,18 +38,10 @@ public class HarpyDive : EnemyAbility
     [SerializeField]
     private AttackSounds sounds = new AttackSounds();
 
-    [Header("Animation")]
-    [SerializeField]
-    private AnimationClip windupClip;
-    [SerializeField]
-    private AnimationClip landClip;
-
     private Harpy _harpy;
     private CircleIndicator _runtimeIndicator;
     private WaitForSeconds _recoveryWait;
     private float _waitFor = -1f;
-    private Animator _animator;
-    private PlayableGraph _clipGraph;
 
     private void Reset()
     {
@@ -65,7 +55,6 @@ public class HarpyDive : EnemyAbility
     private void Awake()
     {
         _harpy = GetComponentInParent<Harpy>();
-        _animator = GetComponentInParent<Animator>();
 
         if (targetLayers.value == 0)
             targetLayers = PlayerMask();
@@ -73,8 +62,6 @@ public class HarpyDive : EnemyAbility
 
     private void OnDestroy()
     {
-        StopClip();
-
         if (_runtimeIndicator != null)
             Destroy(_runtimeIndicator.gameObject);
     }
@@ -89,7 +76,7 @@ public class HarpyDive : EnemyAbility
         var circle = ResolveIndicator();
 
         sounds.PlayWindup(ai.Position);
-        PlayClip(windupClip);
+        PlayWindup();
 
         for (var elapsed = 0f; elapsed < ascendDuration; elapsed += Time.deltaTime) {
             SetFlight(elapsed / ascendDuration);
@@ -123,7 +110,7 @@ public class HarpyDive : EnemyAbility
         var from = ai.Position;
 
         sounds.PlaySwing(from);
-        PlayClip(landClip);
+        PlayLaunch();
 
         for (var elapsed = 0f; elapsed < diveDuration; elapsed += Time.deltaTime) {
             var t = Mathf.Clamp01(elapsed / diveDuration);
@@ -144,8 +131,6 @@ public class HarpyDive : EnemyAbility
 
         // Grounded and open
         yield return RecoveryWait();
-
-        StopClip();
     }
 
     private WaitForSeconds RecoveryWait()
@@ -161,28 +146,11 @@ public class HarpyDive : EnemyAbility
     public override void Cancel()
     {
         SetFlight(0f);
-        StopClip();
 
         if (indicator != null)
             indicator.SetVisible(false);
         if (_runtimeIndicator != null)
             _runtimeIndicator.SetVisible(false);
-    }
-
-    // Plays a clip over the animator controller until StopClip
-    private void PlayClip(AnimationClip clip)
-    {
-        if (clip == null || _animator == null)
-            return;
-
-        StopClip();
-        AnimationPlayableUtilities.PlayClip(_animator, clip, out _clipGraph);
-    }
-
-    private void StopClip()
-    {
-        if (_clipGraph.IsValid())
-            _clipGraph.Destroy();
     }
 
     private void Hover(EnemyAI ai, Vector2 mark)

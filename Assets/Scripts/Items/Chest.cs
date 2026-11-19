@@ -16,6 +16,10 @@ public class Chest : MonoBehaviour, IInteractable
     [Header("Contents")]
     [SerializeField]
     private GameObject itemPrefab;
+    [SerializeField]
+    private DropTable dropTable;
+    [SerializeField]
+    private bool neverEmpty = true;
 
     [Header("Pop Out")]
     [SerializeField]
@@ -58,13 +62,24 @@ public class Chest : MonoBehaviour, IInteractable
 
     private void SpawnItem()
     {
-        if (itemPrefab == null)
+        var prefab = ResolveContents();
+        if (prefab == null)
             return;
 
-        var item = Instantiate(itemPrefab, transform.position, Quaternion.identity);
-
+        var item = Instantiate(prefab, transform.position, Quaternion.identity);
 
         StartCoroutine(PopOut(item.transform));
+    }
+
+    private GameObject ResolveContents()
+    {
+        if (itemPrefab != null)
+            return itemPrefab;
+
+        if (dropTable == null)
+            return null;
+
+        return neverEmpty ? dropTable.RollGuaranteed() : dropTable.Roll();
     }
 
     private IEnumerator PopOut(Transform item)

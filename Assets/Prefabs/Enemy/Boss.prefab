@@ -775,7 +775,7 @@ MonoBehaviour:
   maxDuration: 1.8
   turnSpeed: 50
   damage: 25
-  bodyRadius: 0.5
+  bodyRadius: 0.75
   skin: 0.05
   targetLayers:
     serializedVersion: 2

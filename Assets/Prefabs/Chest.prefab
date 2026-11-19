@@ -163,6 +163,8 @@ MonoBehaviour:
   closedSprite: {fileID: 2105504302921150959, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
   openSprite: {fileID: 2607120031577715440, guid: 290a10e032ca50a47832e38b9b081c00, type: 3}
   itemPrefab: {fileID: 1378728296616829523, guid: 9b1f4b021494aa747864c1eff3090200, type: 3}
+  dropTable: {fileID: 11400000, guid: cc3f4f44445f46cf8e3d5af3a10eee9e, type: 2}
+  neverEmpty: 1
   landingOffset: {x: 0, y: -0.6}
   popHeight: 0.5
   popDuration: 0.35

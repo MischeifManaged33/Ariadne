@@ -374,9 +374,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.023328543, y: 0.35253358}
+    - - {x: 0.5973246, y: 0.024085045}
+      - {x: 0.5079465, y: 0.5998051}
+      - {x: -0.023328543, y: 0.35253358}
       - {x: -0.2698226, y: 0.8113587}
-      - {x: -0.5619085, y: 0.2882905}
+      - {x: -0.47762728, y: 0.23332429}
+      - {x: -0.89180064, y: 0.7888162}
+      - {x: -1.0126035, y: 0.00072979927}
       - {x: -0.33123773, y: -0.56712925}
       - {x: 0.09667981, y: -0.56712985}
   m_UseDelaunayMesh: 1
@@ -398,6 +402,7 @@ GameObject:
   - component: {fileID: 7406182829615431268}
   - component: {fileID: 7688368160947103617}
   - component: {fileID: 7077738448930041599}
+  - component: {fileID: 2432401922085127299}
   m_Layer: 0
   m_Name: Pheonix
   m_TagString: Untagged
@@ -651,6 +656,9 @@ MonoBehaviour:
   minRange: 0
   maxRange: 11
   needsLineOfSight: 1
+  windupClip: {fileID: 7400000, guid: 2bcb57dea1680da4cb1c5c2ee76f1c01, type: 2}
+  launchClip: {fileID: 7400000, guid: 3b248255683561146bb88cd59c0e073a, type: 2}
+  fitWindupToTiming: 1
   targetLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -716,6 +724,9 @@ MonoBehaviour:
   minRange: 0
   maxRange: 3
   needsLineOfSight: 0
+  windupClip: {fileID: 0}
+  launchClip: {fileID: 7400000, guid: 3b248255683561146bb88cd59c0e073a, type: 2}
+  fitWindupToTiming: 1
   targetLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -769,6 +780,9 @@ MonoBehaviour:
   minRange: 0
   maxRange: 100
   needsLineOfSight: 0
+  windupClip: {fileID: 7400000, guid: 6aaefeb4f1e02c54f977afbe5cf1e0d2, type: 2}
+  launchClip: {fileID: 7400000, guid: c5bed10f728b6674fa6b23ab07f70127, type: 2}
+  fitWindupToTiming: 1
   targetLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -821,6 +835,9 @@ MonoBehaviour:
   minRange: 0
   maxRange: 9
   needsLineOfSight: 1
+  windupClip: {fileID: 7400000, guid: 6aaefeb4f1e02c54f977afbe5cf1e0d2, type: 2}
+  launchClip: {fileID: 7400000, guid: c5bed10f728b6674fa6b23ab07f70127, type: 2}
+  fitWindupToTiming: 1
   targetLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -861,6 +878,28 @@ MonoBehaviour:
         Data3: 0
         Data4: 0
       Path: 
+--- !u!95 &2432401922085127299
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3876905382218478030}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 23ada6879f456d947a196c7e4366d6fa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4094580980873722165
 GameObject:
   m_ObjectHideFlags: 0

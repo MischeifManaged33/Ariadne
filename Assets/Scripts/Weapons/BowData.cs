@@ -10,6 +10,7 @@ public class BowData : WeaponData
     [Header("Arrow")]
     public Arrow arrowPrefab;
     [Min(0f)] public float spawnOffset = 0.4f;
+    [Range(-180f, 180f)] public float rotationOffset = 0f;
 
     [Header("Charge")]
     [Min(0.01f)] public float chargeTime = 1f;

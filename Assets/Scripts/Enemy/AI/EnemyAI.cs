@@ -244,6 +244,10 @@ public class EnemyAI : MonoBehaviour
 
         if (CurrentAbility != null) {
             CurrentAbility.Cancel();
+            CurrentAbility.StopAnimation();
+
+            if (_enemy != null)
+                _enemy.EndAttackMovement();
             CurrentAbility.BeginCooldown();
             CurrentAbility = null;
         }
@@ -424,7 +428,11 @@ public class EnemyAI : MonoBehaviour
     {
         yield return ability.Execute(this);
 
+        ability.StopAnimation();
         ability.BeginCooldown();
+
+        if (_enemy != null)
+            _enemy.EndAttackMovement();
         CurrentAbility = null;
         _abilityRoutine = null;
     }
