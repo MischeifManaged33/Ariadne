@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FMODUnity;
 using UnityEngine;
 
@@ -41,6 +42,14 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     [SerializeField, Min(0f)]
     private float wallSkin = 0.02f;
 
+    [Header("Attack Movement")]
+    [Tooltip("While an attack moves this enemy, it passes through the player instead of shoving them.")]
+    [SerializeField]
+    private bool phaseThroughPlayer = true;
+    [Tooltip("How fast the enemy backs off the player after an attack leaves them overlapping.")]
+    [SerializeField, Min(0f)]
+    private float separationSpeed = 6f;
+
 
     public event Action<float, float> HealthChanged;
     public event Action<float> Damaged;
@@ -68,6 +77,14 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     private Vector2 _knockback;
     private ContactFilter2D _wallFilter;
     private readonly RaycastHit2D[] _castHits = new RaycastHit2D[4];
+    private readonly Collider2D[] _overlapHits = new Collider2D[8];
+
+    private readonly List<Collider2D> _ownColliders = new List<Collider2D>();
+    private readonly List<Collider2D> _ignoredPlayer = new List<Collider2D>();
+    private bool _phasing;
+    private bool _separating;
+
+    public bool IsPhasingThroughPlayer => _ignoredPlayer.Count > 0;
 
     private Vector2 Position => Body != null ? Body.position : (Vector2)transform.position;
 
@@ -84,6 +101,11 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
         ConfigureBody(Body);
 
         _collider = GetComponent<Collider2D>();
+
+        foreach (var own in GetComponents<Collider2D>()) {
+            if (!own.isTrigger)
+                _ownColliders.Add(own);
+        }
         _hitFlash = HitFlash.GetOrAdd(gameObject);
 
         Hurtbox.Find(this);
@@ -108,6 +130,165 @@ public class Enemy : MonoBehaviour, IDamagable, IKnockbackable
     protected virtual void FixedUpdate()
     {
         StepKnockback(Time.fixedDeltaTime);
+        StepSeparation(Time.fixedDeltaTime);
+    }
+
+    protected virtual void OnDisable() => RestorePlayerCollision();
+
+    // Attack movement: never ends inside a wall and never shoves the player.
+    // Returns where the enemy actually ended up.
+    public Vector2 SetGroundPosition(Vector2 position)
+    {
+        BeginPhasing();
+
+        // Transforms moved this frame aren't in the physics scene until synced
+        Physics2D.SyncTransforms();
+        ResolveWallOverlap();
+
+        var from = Position;
+        var delta = position - from;
+        var distance = delta.magnitude;
+
+        if (distance > 0.0001f) {
+            var direction = delta / distance;
+            position = from + direction * Mathf.Min(distance, FreeDistance(direction, distance));
+        } else {
+            position = from;
+        }
+
+        Teleport(position);
+        return position;
+    }
+
+    // Called by EnemyAI once a move is over; collisions come back once clear of the player
+    public void EndAttackMovement()
+    {
+        if (!_phasing)
+            return;
+
+        _phasing = false;
+        _separating = true;
+    }
+
+    private void BeginPhasing()
+    {
+        _separating = false;
+
+        if (_phasing || !phaseThroughPlayer)
+            return;
+
+        _phasing = true;
+
+        var player = PlayerHealth.Current;
+        if (player == null || _ignoredPlayer.Count > 0)
+            return;
+
+        foreach (var other in player.GetComponentsInChildren<Collider2D>()) {
+            if (other.isTrigger)
+                continue;
+
+            foreach (var own in _ownColliders)
+                Physics2D.IgnoreCollision(own, other, true);
+
+            _ignoredPlayer.Add(other);
+        }
+    }
+
+    // Backs off the player (not the other way round), then turns collisions back on
+    private void StepSeparation(float deltaTime)
+    {
+        if (!_separating)
+            return;
+
+        if (_ignoredPlayer.Count == 0 || _collider == null) {
+            _separating = false;
+            return;
+        }
+
+        var push = Vector2.zero;
+        var overlapping = false;
+
+        foreach (var other in _ignoredPlayer) {
+            if (other == null || !other.enabled)
+                continue;
+
+            var gap = _collider.Distance(other);
+            if (!gap.isValid || !gap.isOverlapped)
+                continue;
+
+            overlapping = true;
+            push += gap.normal * gap.distance;
+        }
+
+        if (!overlapping) {
+            RestorePlayerCollision();
+            return;
+        }
+
+        if (push.sqrMagnitude <= 0.000001f)
+            push = Vector2.up * -0.01f;
+
+        var step = Mathf.Min(push.magnitude + wallSkin, separationSpeed * deltaTime);
+        var direction = push.normalized;
+        var travel = Mathf.Min(step, FreeDistance(direction, step));
+
+        // Pinned against a wall: stay phased so the player can simply walk off
+        if (travel > 0f)
+            MoveTo(Position + direction * travel);
+    }
+
+    private void RestorePlayerCollision()
+    {
+        _separating = false;
+        _phasing = false;
+
+        foreach (var other in _ignoredPlayer) {
+            if (other == null)
+                continue;
+
+            foreach (var own in _ownColliders) {
+                if (own != null)
+                    Physics2D.IgnoreCollision(own, other, false);
+            }
+        }
+
+        _ignoredPlayer.Clear();
+    }
+
+    // Pushes the enemy back out if it is already inside a wall (e.g. the maze shifted)
+    private void ResolveWallOverlap()
+    {
+        if (_collider == null || wallLayers.value == 0)
+            return;
+
+        for (var pass = 0; pass < 3; pass++) {
+            var count = _collider.Overlap(_wallFilter, _overlapHits);
+            var push = Vector2.zero;
+
+            for (var i = 0; i < count; i++) {
+                var wall = _overlapHits[i];
+                if (wall == null || wall.transform.IsChildOf(transform))
+                    continue;
+
+                var gap = _collider.Distance(wall);
+                if (gap.isValid && gap.isOverlapped)
+                    push += gap.normal * (gap.distance - wallSkin);
+            }
+
+            if (push.sqrMagnitude <= 0.000001f)
+                return;
+
+            Teleport(Position + push);
+            Physics2D.SyncTransforms();
+        }
+    }
+
+    private void Teleport(Vector2 position)
+    {
+        transform.position = new Vector3(position.x, position.y, transform.position.z);
+
+        if (Body != null && Body.bodyType != RigidbodyType2D.Static)
+            Body.position = position;
     }
 
     public virtual float TakeDamage(float amount)

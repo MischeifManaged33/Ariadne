@@ -73,14 +73,6 @@ public class Harpy : Enemy
         }
     }
 
-    public void SetGroundPosition(Vector2 position)
-    {
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
-
-        if (Body != null && Body.bodyType != RigidbodyType2D.Static)
-            Body.position = position;
-    }
-
     public override float TakeDamage(float amount)
     {
         return IsVulnerable ? base.TakeDamage(amount) : 0f;

@@ -90,6 +90,7 @@ public class PhoenixVolley : PhoenixMove
         Spread(ai, aim);
 
         sounds.PlayWindup(ai.Position);
+        PlayWindup(windup);
 
         for (var elapsed = 0f; elapsed < windup; elapsed += Time.deltaTime) {
             if (elapsed < windup * trackFraction) {
@@ -106,6 +107,7 @@ public class PhoenixVolley : PhoenixMove
         Telegraph(ai, false);
 
         var origin = ai.Position;
+        PlayLaunch();
 
         for (var i = 0; i < count; i++) {
             _lines[i].Flash();

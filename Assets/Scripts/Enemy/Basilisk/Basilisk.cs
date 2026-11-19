@@ -199,8 +199,10 @@ public class Basilisk : Enemy
         _mover.FacingChanged += OnMoverFacing;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         Damaged -= OnStruck;
         _mover.FacingChanged -= OnMoverFacing;
 

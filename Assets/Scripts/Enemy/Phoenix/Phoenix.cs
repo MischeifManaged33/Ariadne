@@ -25,12 +25,17 @@ public class Phoenix : Enemy
     public EnemyAI AI { get; private set; }
 
     private bool _artFlipped;
+    private Animator _animator;
 
     protected override void Awake()
     {
         base.Awake();
 
         AI = GetComponent<EnemyAI>();
+        
+        _animator = GetComponentInChildren<Animator>();
+        if (_animator != null)
+            _animator.enabled = IsRevealed;
 
         if (visual == null)
             visual = GetComponentInChildren<SpriteRenderer>();
@@ -61,6 +66,9 @@ public class Phoenix : Enemy
 
         if (visual != null && flyingSprite != null)
             visual.sprite = flyingSprite;
+
+        if (_animator != null)
+            _animator.enabled = true;
     }
 
     public void MarkErupted()
@@ -99,13 +107,5 @@ public class Phoenix : Enemy
             yield return new WaitForSeconds(deathLinger);
 
         base.Die();
-    }
-
-    public void SetGroundPosition(Vector2 position)
-    {
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
-
-        if (Body != null && Body.bodyType != RigidbodyType2D.Static)
-            Body.position = position;
     }
 }

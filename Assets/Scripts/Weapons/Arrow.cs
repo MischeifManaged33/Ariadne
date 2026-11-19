@@ -57,7 +57,7 @@ public class Arrow : MonoBehaviour
     }
 
     public void Launch(Vector2 groundDirection, float yScale, float damage, float speed, float maxDistance,
-        float knockback, LayerMask targetLayers, AttackSounds sounds)
+        float knockback, LayerMask targetLayers, AttackSounds sounds, float rotationOffset = 0f)
     {
         _groundDirection = groundDirection.sqrMagnitude > 0.0001f ? groundDirection.normalized : Vector2.right;
         _yScale = yScale;
@@ -72,7 +72,7 @@ public class Arrow : MonoBehaviour
 
         var screen = _velocity.sqrMagnitude > 0.0001f ? _velocity.normalized : Vector2.right;
         var degrees = Mathf.Atan2(screen.y, screen.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, degrees);
+        transform.rotation = Quaternion.Euler(0f, 0f, degrees + rotationOffset);
 
         IsFlying = true;
     }

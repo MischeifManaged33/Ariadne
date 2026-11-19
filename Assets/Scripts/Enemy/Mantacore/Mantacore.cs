@@ -38,12 +38,4 @@ public class Mantacore : Enemy
             visual.flipX = turned != _artFlipped;
 
     }
-
-    public void SetGroundPosition(Vector2 position)
-    {
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
-
-        if (Body != null && Body.bodyType != RigidbodyType2D.Static)
-            Body.position = position;
-    }
 }

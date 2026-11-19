@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// Cut one head off and more may grow back: on "death" each stage has a chance to regrow into the next,
-// which lunges more times per attack. Only dies for good when the roll fails or it runs out of stages
+// Regrowing hydra
 [RequireComponent(typeof(EnemyAI))]
 public class Hydra : Enemy
 {
@@ -78,14 +77,6 @@ public class Hydra : Enemy
         visual.flipX = turned != _artFlipped;
     }
 
-    public void SetGroundPosition(Vector2 position)
-    {
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
-
-        if (Body != null && Body.bodyType != RigidbodyType2D.Static)
-            Body.position = position;
-    }
-
     public override float TakeDamage(float amount)
     {
         return IsRegrowing ? 0f : base.TakeDamage(amount);
@@ -114,11 +105,9 @@ public class Hydra : Enemy
     {
         IsRegrowing = true;
 
-        // Back to full straight away so nothing else treats it as dead in the meantime
         ResetHealth();
         CancelKnockback();
 
-        // Disabling the AI cancels any lunge in progress and keeps it still while the heads grow
         _ai.enabled = false;
         if (_mover != null)
             _mover.Stop();

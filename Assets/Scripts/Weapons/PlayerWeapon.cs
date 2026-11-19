@@ -74,6 +74,22 @@ public class PlayerWeapon : MonoBehaviour
 
     public bool CanAttack => equippedWeapon != null && Time.time >= _nextAttackTime;
 
+    private PlayerHealth _health;
+
+    private void HealOnKill()
+    {
+        if (equippedWeapon == null || equippedWeapon.healOnKill <= 0f)
+            return;
+
+        if (_health == null)
+            _health = GetComponentInParent<PlayerHealth>();
+        if (_health == null)
+            _health = PlayerHealth.Current;
+
+        if (_health != null && _health.CurrentHealth > 0f)
+            _health.Heal(equippedWeapon.healOnKill);
+    }
+
     private void Awake()
     {
         if (player == null)
@@ -118,7 +134,6 @@ public class PlayerWeapon : MonoBehaviour
     private void Update()
     {
         if (PauseMenu.IsPaused) {
-            // Drop the draw, and make the click that unpauses not start a new one
             CancelCharge();
             _pressBlockedByUI = true;
             return;
@@ -220,7 +235,6 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Attack(Vector2 groundDirection)
     {
-        // Stick releases arrive as UI events, so Update's pause check doesn't cover them
         if (!CanAttack || PauseMenu.IsPaused)
             return;
 
@@ -248,6 +262,9 @@ public class PlayerWeapon : MonoBehaviour
 
             target.TakeDamage(equippedWeapon.damage);
 
+            if (!target.IsAlive && target is Enemy)
+                HealOnKill();
+
             if (!connected) {
                 impactPoint = candidate.ClosestPoint(origin);
                 connected = true;
@@ -267,8 +284,7 @@ public class PlayerWeapon : MonoBehaviour
         Attacked?.Invoke(groundDirection);
     }
 
-    // Charging starts whenever the button or stick is held and the bow is ready,
-    // so holding through the cooldown starts the next draw straight away
+    // Bow charge
     private void UpdateBow()
     {
         var bow = Bow;
@@ -290,7 +306,6 @@ public class PlayerWeapon : MonoBehaviour
         }
 
         if (_chargedByStick) {
-            // Release normally arrives through OnStickReleased; this covers losing the stick mid draw
             if (!StickHeld)
                 CancelCharge();
         }
@@ -346,10 +361,9 @@ public class PlayerWeapon : MonoBehaviour
             var arrow = Instantiate(bow.arrowPrefab, new Vector3(spawn.x, spawn.y, transform.position.z),
                 Quaternion.identity);
 
-            // The indicator measures from the origin, so take off the part covered by the spawn offset
             arrow.Launch(groundDirection, isometricYScale, bow.DamageAt(charge), bow.SpeedAt(charge),
                 Mathf.Max(0f, bow.DistanceAt(charge) - bow.spawnOffset), bow.KnockbackAt(charge),
-                enemyLayers, bow.sounds);
+                enemyLayers, bow.sounds, bow.rotationOffset);
         }
         else {
             Debug.LogWarning($"{bow.name} has no arrow prefab assigned.", bow);

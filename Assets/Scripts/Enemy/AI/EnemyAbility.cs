@@ -1,5 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 // Same as boss' move
 public abstract class EnemyAbility : MonoBehaviour
@@ -20,6 +23,14 @@ public abstract class EnemyAbility : MonoBehaviour
     [SerializeField]
     private bool needsLineOfSight = true;
 
+    [Header("Animation")]
+    [SerializeField]
+    private AnimationClip windupClip;
+    [SerializeField, FormerlySerializedAs("landClip")]
+    private AnimationClip launchClip;
+    [SerializeField]
+    private bool fitWindupToTiming = true;
+
     public bool IsOnCooldown => Time.time < _nextUsableTime;
 
     public float Weight { get => weight; protected set => weight = Mathf.Max(0f, value); }
@@ -30,10 +41,16 @@ public abstract class EnemyAbility : MonoBehaviour
 
     private float _nextUsableTime;
 
+    private Animator _animator;
+    private bool _animatorResolved;
+    private PlayableGraph _clipGraph;
+
     protected virtual void OnEnable()
     {
         _nextUsableTime = Mathf.Max(_nextUsableTime, Time.time + firstUseDelay);
     }
+
+    protected virtual void OnDisable() => StopAnimation();
 
     public bool InRange(float distanceToTarget)
     {
@@ -59,6 +76,48 @@ public abstract class EnemyAbility : MonoBehaviour
 
     public virtual void Cancel()
     {
+    }
+
+    // Consolidated the animation playing logic
+    protected void PlayWindup(float duration = 0f) =>
+        PlayClip(windupClip, fitWindupToTiming ? duration : 0f);
+
+    protected void PlayLaunch() => PlayClip(launchClip);
+
+    protected void PlayClip(AnimationClip clip, float fitDuration = 0f)
+    {
+        var animator = ResolveAnimator();
+        if (clip == null || animator == null || !animator.isActiveAndEnabled)
+            return;
+
+        StopAnimation();
+
+        var playable = AnimationPlayableUtilities.PlayClip(animator, clip, out _clipGraph);
+        if (fitDuration > 0f && clip.length > 0f)
+            playable.SetSpeed(clip.length / fitDuration);
+    }
+
+    public void StopAnimation()
+    {
+        if (_clipGraph.IsValid())
+            _clipGraph.Destroy();
+    }
+
+    private Animator ResolveAnimator()
+    {
+        if (_animatorResolved)
+            return _animator;
+
+        _animatorResolved = true;
+        _animator = GetComponentInParent<Animator>();
+
+        if (_animator == null) {
+            var enemy = GetComponentInParent<Enemy>();
+            if (enemy != null)
+                _animator = enemy.GetComponentInChildren<Animator>();
+        }
+
+        return _animator;
     }
 
     public void BeginCooldown() => _nextUsableTime = Time.time + cooldown;

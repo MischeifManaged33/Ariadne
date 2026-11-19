@@ -82,6 +82,7 @@ public class PhoenixDash : PhoenixMove
 
         Plan(ai, out var direction, out var length);
         sounds.PlayWindup(ai.Position);
+        PlayWindup(windup);
 
         for (var elapsed = 0f; elapsed < windup; elapsed += Time.deltaTime) {
             if (elapsed < windup * trackFraction)
@@ -105,6 +106,7 @@ public class PhoenixDash : PhoenixMove
         var hit = false;
 
         sounds.PlaySwing(start);
+        PlayLaunch();
 
         for (var elapsed = 0f; elapsed < dashDuration; elapsed += Time.deltaTime) {
             var t = Mathf.Clamp01(elapsed / dashDuration);
