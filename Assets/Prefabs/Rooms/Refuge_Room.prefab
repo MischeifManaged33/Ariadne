@@ -760,7 +760,7 @@ Transform:
   m_GameObject: {fileID: 2332151594220374085}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21, y: 2.8, z: 0}
+  m_LocalPosition: {x: 21, y: 2.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -781,8 +781,8 @@ MonoBehaviour:
   roomFloor: {fileID: 6525425387360333593}
   outwardDirection: 2
   entranceWidth: 3
-  savedEntranceCell: {x: 0, y: 0, z: 0}
-  hasSavedEntranceCell: 0
+  savedEntranceCell: {x: 9, y: -6, z: 0}
+  hasSavedEntranceCell: 1
 --- !u!1 &2637100574408819244
 GameObject:
   m_ObjectHideFlags: 0
@@ -4652,7 +4652,7 @@ MonoBehaviour:
   floorTilemap: {fileID: 6525425387360333593}
   placementAnchor: {fileID: 6856615762025733334}
   savedAnchorCell: {x: 0, y: 0, z: 0}
-  hasSavedAnchorCell: 0
+  hasSavedAnchorCell: 1
   blockingTilemaps:
   - {fileID: 6428986428701613934}
   - {fileID: 5039164926847068870}

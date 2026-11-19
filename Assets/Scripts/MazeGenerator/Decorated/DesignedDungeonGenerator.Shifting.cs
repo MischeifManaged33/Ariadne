@@ -406,6 +406,12 @@ public partial class DesignedDungeonGenerator
 
     private void CollectShiftProtection(HashSet<int> pinned, HashSet<Vector2Int> locked)
     {
+        // The Minotaur room is a permanent landmark for this generated maze.
+        // Pin it in both planning and the fresh pre-commit protection check.
+        for (int i = 0; i < shiftLayout.Count; i++)
+            if (shiftLayout[i].selected.prefab == minotaurRoomPrefab)
+                pinned.Add(i);
+
         shiftThreadPoints.Clear();
         if (ariadneThread != null) ariadneThread.CopyTiedPath(shiftThreadPoints);
         shiftTraceCells.Clear();

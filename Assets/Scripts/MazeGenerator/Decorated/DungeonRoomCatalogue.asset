@@ -15,9 +15,9 @@ MonoBehaviour:
   categories:
   - categoryName: Special
     minimumRooms: 0
-    maximumRooms: 0
+    maximumRooms: 10
     weight: 0.7
-    allowDuplicateDesigns: 0
+    allowDuplicateDesigns: 1
     designs:
     - {fileID: 5523358972298957273, guid: 5257626b4c19f0948be1ac7de8fc5aa9, type: 3}
     - {fileID: 5348679523876645825, guid: 59f6c28f080c1c4418fdc6758622e30a, type: 3}
