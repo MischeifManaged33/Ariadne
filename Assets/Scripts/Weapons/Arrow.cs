@@ -22,6 +22,10 @@ public class Arrow : MonoBehaviour
     private bool sortByDepth = true;
     [SerializeField, Min(1f)]
     private float sortingPrecision = 16f;
+    [SerializeField]
+    private Sprite restingSprite;
+    [SerializeField]
+    private Animator animator;
 
     public bool IsFlying { get; private set; }
 
@@ -43,6 +47,7 @@ public class Arrow : MonoBehaviour
     {
         wallLayers = LayerMask.GetMask("Walls", "PushBlock");
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Awake()
@@ -52,8 +57,15 @@ public class Arrow : MonoBehaviour
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        if (spriteRenderer != null)
+        if (spriteRenderer != null) {
             _baseColor = spriteRenderer.color;
+
+            if (restingSprite == null)
+                restingSprite = spriteRenderer.sprite;
+        }
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
     }
 
     public void Launch(Vector2 groundDirection, float yScale, float damage, float speed, float maxDistance,
@@ -151,7 +163,18 @@ public class Arrow : MonoBehaviour
         IsFlying = false;
         _landedAt = Time.time;
 
+        StopAnimating();
+
         Destroy(gameObject, lingerTime + fadeTime);
+    }
+
+    private void StopAnimating()
+    {
+        if (animator != null)
+            animator.enabled = false;
+
+        if (spriteRenderer != null && restingSprite != null)
+            spriteRenderer.sprite = restingSprite;
     }
 
     private void LateUpdate()

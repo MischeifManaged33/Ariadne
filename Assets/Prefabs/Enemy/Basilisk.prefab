@@ -639,6 +639,8 @@ MonoBehaviour:
   attacks:
   - id: 1
     windupClip: {fileID: 7400000, guid: 575fafd1a0bfff1489c8008f62d26922, type: 2}
+  - id: 2
+    windupClip: {fileID: 7400000, guid: 725a1ba202d4e644dab017431806aca0, type: 2}
 --- !u!1 &3879830695955224385
 GameObject:
   m_ObjectHideFlags: 0
