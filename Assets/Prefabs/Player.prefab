@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 1494036083608487961}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -462,7 +462,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1267143885
-  m_SortingLayer: 11
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 90b74bf3ed9a34749911c858e57f3a77, type: 3}
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
   player: {fileID: 7641320799291343612}
-  radius: 1
+  radius: 1.5
   interactableLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -695,7 +695,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6319265570091660172}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -804,7 +804,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6319265570091660172}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186e1699e95fb9240b0da6cb70027992, type: 3}
   m_Name: 
@@ -816,7 +816,9 @@ MonoBehaviour:
   windingSpeed: 8
   healthPerUnitRecovered: 0.5
   listenForE: 1
+  rewindHoldThreshold: 0.5
   teleportBreakDistance: 5
+  tidyThreadVisuals: 1
   threadMaterial: {fileID: 2100000, guid: ade03373ff7698c419344b8b21dde3ea, type: 2}
   threadColor: {r: 1, g: 0, b: 0.97837186, a: 1}
   width: 0.3

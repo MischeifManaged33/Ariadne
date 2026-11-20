@@ -1,14 +1,17 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-// On screen interact button
+// On screen interact button: tap to interact, hold to rewind the thread
 [RequireComponent(typeof(Button))]
-public class InteractButton : MonoBehaviour
+public class InteractButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField]
     private bool mobileOnly = true;
 
     private Button _button;
+    private AriadneThread _thread;
+    private bool _holding;
 
     private void Awake()
     {
@@ -18,19 +21,55 @@ public class InteractButton : MonoBehaviour
         }
 
         _button = GetComponent<Button>();
-        _button.onClick.AddListener(Press);
     }
+
+    private void OnDisable() => Release();
 
     private void Update()
     {
         var interactor = PlayerInteractor.Active;
-        _button.interactable = interactor != null && interactor.Target != null;
+        var thread = ResolveThread();
+
+        // Usable when there is something to open, or thread laid out to rewind
+        _button.interactable = _holding ||
+            (interactor != null && interactor.Target != null) ||
+            (thread != null && thread.UsedThread > 0f);
     }
 
-    private void Press()
+    public void OnPointerDown(PointerEventData eventData)
     {
+        if (_holding || !_button.interactable)
+            return;
+
+        _holding = true;
+
         var interactor = PlayerInteractor.Active;
         if (interactor != null)
             interactor.Interact();
+
+        var thread = ResolveThread();
+        if (thread != null)
+            thread.PressInteract();
+    }
+
+    public void OnPointerUp(PointerEventData eventData) => Release();
+
+    private void Release()
+    {
+        if (!_holding)
+            return;
+
+        _holding = false;
+
+        if (_thread != null)
+            _thread.ReleaseInteract();
+    }
+
+    private AriadneThread ResolveThread()
+    {
+        if (_thread == null)
+            _thread = FindAnyObjectByType<AriadneThread>();
+
+        return _thread;
     }
 }

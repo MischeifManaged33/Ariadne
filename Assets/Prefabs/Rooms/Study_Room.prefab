@@ -1410,7 +1410,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1563029167
-  m_SortingLayer: 13
+  m_SortingLayer: 12
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -1585,7 +1585,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1429553387
-  m_SortingLayer: 10
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6237617977150851887, guid: 6fd32319e31a33f4989eedb1eae3a0df, type: 3}
@@ -4907,7 +4907,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1738492429
-  m_SortingLayer: 14
+  m_SortingLayer: 13
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -6077,11 +6077,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1291531361673382586, guid: 66018c4060160484fa1d47e59add54e5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.54
+      value: 23.97
       objectReference: {fileID: 0}
     - target: {fileID: 1291531361673382586, guid: 66018c4060160484fa1d47e59add54e5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.58
+      value: 8.38
       objectReference: {fileID: 0}
     - target: {fileID: 1291531361673382586, guid: 66018c4060160484fa1d47e59add54e5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6118,7 +6118,7 @@ PrefabInstance:
     - target: {fileID: 8164979889548008196, guid: 66018c4060160484fa1d47e59add54e5, type: 3}
       propertyPath: itemPrefab
       value: 
-      objectReference: {fileID: 3188847009514546267, guid: e71469432eab40538a674bd0a2ebbf5c, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8857284717051327631, guid: 66018c4060160484fa1d47e59add54e5, type: 3}
       propertyPath: m_Name
       value: Chest

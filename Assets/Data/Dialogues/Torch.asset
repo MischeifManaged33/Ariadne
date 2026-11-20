@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a0a2b7d84bb4e46a35db5253d11c4a7, type: 3}
+  m_Name: Torch
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  displayName: Daedalus
+  lines:
+  - Torches burn brighter when the bull-son is near.
+  - Mind the light, have no fear.
+  - The goal draws close, prepare for battle;
+  - All will end once you slay the cattle.

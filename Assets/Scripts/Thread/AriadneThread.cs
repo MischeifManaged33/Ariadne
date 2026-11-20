@@ -33,6 +33,9 @@ public class AriadneThread : MonoBehaviour
     )]
     [SerializeField] private bool listenForE = true;
 
+    [SerializeField, Min(0f)]
+    private float rewindHoldThreshold = 0.5f;
+
     [SerializeField, Min(0.1f)]
     private float teleportBreakDistance = 5f;
 
@@ -117,6 +120,11 @@ public class AriadneThread : MonoBehaviour
     private LineRenderer line;
 
     private float usedThread;
+    private bool rewindPending;
+    private bool externalPressed;
+    private bool externalHeld;
+    private bool externalReleased;
+    private float rewindPressTime;
     private bool detached;
     private bool resumeAfterEmpty;
     // A start index marks a gap before this point, not a length of thread.
@@ -226,22 +234,7 @@ public class AriadneThread : MonoBehaviour
         lastFollowPosition = position;
         hasLastFollowPosition = true;
 
-        if (listenForE)
-        {
-            var keyboard = Keyboard.current;
-
-            if (keyboard != null &&
-                keyboard.eKey.wasPressedThisFrame)
-            {
-                Interact();
-            }
-
-            // Stop immediately when E is no longer held.
-            if (keyboard == null || !keyboard.eKey.isPressed)
-            {
-                StopWinding();
-            }
-        }
+        UpdateInteractInput();
 
         if (Time.deltaTime > 0f)
         {
@@ -256,6 +249,53 @@ public class AriadneThread : MonoBehaviour
         }
 
         RenderThread();
+    }
+    private void UpdateInteractInput()
+    {
+        var keyboard = listenForE ? Keyboard.current : null;
+
+        bool pressed = externalPressed ||
+            (keyboard != null && keyboard.eKey.wasPressedThisFrame);
+        bool held = externalHeld ||
+            (keyboard != null && keyboard.eKey.isPressed);
+        bool released = externalReleased;
+
+        externalPressed = false;
+        externalReleased = false;
+
+        if (pressed)
+        {
+            rewindPending = !TryTieNearest();
+            rewindPressTime = Time.time;
+        }
+
+        if (held && rewindPending &&
+            Time.time - rewindPressTime >= rewindHoldThreshold)
+        {
+            rewindPending = false;
+            TryStartWinding();
+        }
+
+        if (!held && (listenForE || released))
+        {
+            rewindPending = false;
+            StopWinding();
+        }
+    }
+
+    public void PressInteract()
+    {
+        externalPressed = true;
+        externalHeld = true;
+    }
+
+    public void ReleaseInteract()
+    {
+        if (!externalHeld)
+            return;
+
+        externalHeld = false;
+        externalReleased = true;
     }
 
     public void StopWinding()
@@ -348,21 +388,27 @@ public class AriadneThread : MonoBehaviour
     // Call this from your existing interaction manager if needed.
     public void Interact()
     {
-        if (IsWinding)
+        if (IsWinding || TryTieNearest())
             return;
+
+        TryStartWinding();
+    }
+
+    private bool TryTieNearest()
+    {
+        if (IsWinding)
+            return false;
 
         ThreadConnectionPoint point =
             ThreadConnectionPoint.FindNearestAvailable(
                 FollowPosition()
             );
 
-        if (point != null)
-        {
-            TryTieAt(point);
-            return;
-        }
+        if (point == null)
+            return false;
 
-        TryStartWinding();
+        TryTieAt(point);
+        return true;
     }
 
     public bool TryTieAt(ThreadConnectionPoint connection)

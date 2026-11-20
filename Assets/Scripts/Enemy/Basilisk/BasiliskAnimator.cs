@@ -6,6 +6,7 @@ public class BasiliskAnimator : MonoBehaviour
 {
     // Matches AttackId in the controller
     public const int Peck = 1;
+    public const int TailSwipe = 2;
 
     [Serializable]
     private struct AttackAnimation
@@ -28,7 +29,10 @@ public class BasiliskAnimator : MonoBehaviour
 
     [Header("Attacks")]
     [SerializeField]
-    private AttackAnimation[] attacks = { new AttackAnimation { id = Peck } };
+    private AttackAnimation[] attacks = {
+        new AttackAnimation { id = Peck },
+        new AttackAnimation { id = TailSwipe }
+    };
 
     private static readonly int AttackHash = Animator.StringToHash("Attack");
     private static readonly int AttackIdHash = Animator.StringToHash("AttackId");

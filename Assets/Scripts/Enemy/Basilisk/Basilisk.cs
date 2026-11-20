@@ -546,6 +546,9 @@ public class Basilisk : Enemy
 
         tailSounds.PlayWindup(Position);
 
+        if (_animation != null)
+            _animation.PlayAttack(BasiliskAnimator.TailSwipe, tailWindup);
+
         for (var elapsed = 0f; elapsed < tailWindup; elapsed += Time.deltaTime) {
             indicator.Aim(transform.position, direction, tailReach, tailArc, YScale);
             indicator.SetReady(true);
@@ -555,6 +558,9 @@ public class Basilisk : Enemy
         }
 
         TailStrike(direction);
+
+        if (_animation != null)
+            _animation.EndAttack();
 
         indicator.Aim(transform.position, direction, tailReach, tailArc, YScale);
         indicator.Flash();
